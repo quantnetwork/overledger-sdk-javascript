@@ -4,7 +4,9 @@
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "prepublish": "npm run build",
+    "build": "babel . --presets babel-preset-es2015 --presets babel-preset-stage-0 --plugins babel-plugin-transform-runtime --out-dir dist"
   },
   "repository": {
     "type": "git",
