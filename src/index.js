@@ -172,4 +172,4 @@ class OverledgerSDK {
   }
 }
 
-export default OverledgerSDK;
+module.exports = OverledgerSDK;
