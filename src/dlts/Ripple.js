@@ -49,14 +49,14 @@ class Ripple extends AbstractDlt {
     const payment = {
       source: {
         address: fromAddress,
-        maxAmount: {
+        amount: {
           value: options.amount,
           currency: 'drops',
         },
       },
       destination: {
         address: toAddress,
-        amount: {
+        minAmount: {
           value: options.amount,
           currency: 'drops',
         },
