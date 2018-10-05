@@ -1,5 +1,5 @@
 import axios from 'axios';
-import OverledgerSdk from '../';
+import OverledgerSDK from '../src';
 
 jest.mock('axios');
 
@@ -9,7 +9,7 @@ describe('Dlt/Bitcoin', () => {
   let signedTransaction;
 
   beforeAll(() => {
-    overledger = new OverledgerSdk('testmappid', 'testbpikey', {
+    overledger = new OverledgerSDK('testmappid', 'testbpikey', {
       dlts: [{
         dlt: 'bitcoin',
         network: 'testnet',

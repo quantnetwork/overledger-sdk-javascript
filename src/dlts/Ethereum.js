@@ -1,6 +1,6 @@
 import web3Utils from 'web3-utils';
 import Accounts from 'web3-eth-accounts';
-import AbstractDLT from './AbstractDLT';
+import AbstractDLT from './AbstractDlt';
 
 class Ethereum extends AbstractDLT {
   /**

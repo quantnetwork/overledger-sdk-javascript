@@ -93,9 +93,9 @@ class OverledgerSDK {
    * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
    */
   send(signedTransactions) {
-    const apiCall = signedTransactions.map((dlt) => {
-      return this.dlts[dlt.dlt].buildApiCall(dlt.signedTransaction);
-    });
+    const apiCall = signedTransactions.map(
+      dlt => this.dlts[dlt.dlt].buildApiCall(dlt.signedTransaction),
+    );
 
     return axios.post(`${this.overledgerUri}/transactions`, this.buildWrapperApiCall(apiCall));
   }

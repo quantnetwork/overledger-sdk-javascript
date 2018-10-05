@@ -5,7 +5,8 @@ module.exports = {
     "env": {
         "es6": true,
         "browser": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
     "rules": {
         "class-methods-use-this": ["off"],

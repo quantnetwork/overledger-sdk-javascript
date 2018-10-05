@@ -1,12 +1,12 @@
 import axios from 'axios';
-import OverledgerSdk from '..';
+import OverledgerSDK from '../src';
 
 jest.mock('axios');
 
 describe('Dlt/BitcoinAndEthereum', () => {
   describe('Main read functions', () => {
     test('Can read transactions from mappId', async () => {
-      const overledger = new OverledgerSdk('testmappid', 'testbpikey', {
+      const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
             dlt: 'bitcoin',
@@ -19,16 +19,16 @@ describe('Dlt/BitcoinAndEthereum', () => {
 
       axios.get.mockResolvedValue([
         {
-          "mappId": "mappTestId",
-          "overledgerTransactionId": "c2559f8d-d181-4ba3-9012-a47d6b6c6111",
-          "timestamp": "2018-09-07T10:29:50.695Z",
-          "dltData": [
+          mappId: 'mappTestId',
+          overledgerTransactionId: 'c2559f8d-d181-4ba3-9012-a47d6b6c6111',
+          timestamp: '2018-09-07T10:29:50.695Z',
+          dltData: [
             {
-              "dlt": "ethereum",
-              "transactionHash": "0xa3f8277dd54f1341dec3dfae3ad844ad8a226faa511e05b7dfe1e9de55481111",
-              "status": "broadcasted",
-              "errorReason": null,
-              "links": [],
+              dlt: 'ethereum',
+              transactionHash: '0xa3f8277dd54f1341dec3dfae3ad844ad8a226faa511e05b7dfe1e9de55481111',
+              status: 'broadcasted',
+              errorReason: null,
+              links: [],
             },
           ],
         },
@@ -40,7 +40,7 @@ describe('Dlt/BitcoinAndEthereum', () => {
     });
 
     test('Can read transactions by overledger transaction id', async () => {
-      const overledger = new OverledgerSdk('testmappid', 'testbpikey', {
+      const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
             dlt: 'bitcoin',
@@ -52,18 +52,18 @@ describe('Dlt/BitcoinAndEthereum', () => {
       });
 
       axios.get.mockResolvedValue({
-        "mappId": "mappTestId",
-        "overledgerTransactionId": "70cb4832-bbd0-400f-a6d8-2add51deb111",
-        "timestamp": "2018-09-07T23:36:49.832Z",
-        "dltData": [
+        mappId: 'mappTestId',
+        overledgerTransactionId: '70cb4832-bbd0-400f-a6d8-2add51deb111',
+        timestamp: '2018-09-07T23:36:49.832Z',
+        dltData: [
           {
-            "dlt": "ethereum",
-            "transactionHash": "0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631111",
-            "status": "broadcasted",
-            "errorReason": null,
-            "links": []
-          }
-        ]
+            dlt: 'ethereum',
+            transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631111',
+            status: 'broadcasted',
+            errorReason: null,
+            links: [],
+          },
+        ],
       });
 
       const transactionId = '70cb4832-bbd0-400f-a6d8-2add51deb111';
@@ -78,7 +78,7 @@ describe('Dlt/BitcoinAndEthereum', () => {
     let signedTransactions;
 
     test('Load bitcoin and ethereum DLTs', async () => {
-      overledger = new OverledgerSdk('testmappid', 'testbpikey', {
+      overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
             dlt: 'bitcoin',
@@ -177,7 +177,7 @@ describe('Dlt/BitcoinAndEthereum', () => {
               message: '',
               toAddress: '',
               signedTransaction: expect.any(String),
-            }
+            },
           ],
       });
     });
@@ -188,7 +188,7 @@ describe('Dlt/BitcoinAndEthereum', () => {
     let signedTransactions;
 
     test('Load bitcoin and ethereum DLTs', async () => {
-      overledger = new OverledgerSdk('testmappid', 'testbpikey', {
+      overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
             dlt: 'bitcoin', privateKey: 'cR6RJbsZWKdSu18MhFp6vJnBMXx1syHjMmhfVSfZAqjCakB8SBg5',
@@ -287,7 +287,7 @@ describe('Dlt/BitcoinAndEthereum', () => {
               message: '',
               toAddress: '',
               signedTransaction: expect.any(String),
-            }
+            },
           ],
       });
     });

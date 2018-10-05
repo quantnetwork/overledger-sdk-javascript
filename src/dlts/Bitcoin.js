@@ -1,5 +1,5 @@
 import bitcoin from 'bitcoinjs-lib';
-import AbstractDLT from './AbstractDLT';
+import AbstractDLT from './AbstractDlt';
 
 class Bitcoin extends AbstractDLT {
   NON_DUST_AMOUNT = 546;

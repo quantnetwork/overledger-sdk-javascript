@@ -1,5 +1,5 @@
 import axios from 'axios';
-import OverledgerSdk from '..';
+import OverledgerSDK from '../src';
 
 jest.mock('axios');
 
@@ -9,7 +9,7 @@ describe('Dlt/Ethereum', () => {
   let signedTransaction;
 
   beforeAll(() => {
-    overledger = new OverledgerSdk('testmappid', 'testbpikey', {
+    overledger = new OverledgerSDK('testmappid', 'testbpikey', {
       dlts: [{
         dlt: 'ethereum',
       }],
@@ -21,14 +21,14 @@ describe('Dlt/Ethereum', () => {
     expect(overledger.dlts.ethereum.symbol).toBe('ETH');
   });
 
-  test('Can create a account', () => {
+  test('Can create an account', () => {
     account = overledger.dlts.ethereum.createAccount();
 
     expect(account.privateKey.length).toBe(66);
     expect(account.address.length).toBe(42);
   });
 
-  test('Cannot sign an ethereum transaction without a account setup', () => {
+  test('Cannot sign an ethereum transaction without an account setup', () => {
     expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('The account must be setup');
   });
 
@@ -43,19 +43,27 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Cannot sign an ethereum transaction without specifying an feeLimit', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', { amount: 0 })).toThrow('options.feeLimit must be setup');
+    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+      amount: 0,
+    })).toThrow('options.feeLimit must be setup');
   });
 
   test('Cannot sign an ethereum transaction without specifying an feePrice', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', { amount: 0, feeLimit: 100 })).toThrow('options.feePrice must be setup');
+    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+      amount: 0, feeLimit: 100,
+    })).toThrow('options.feePrice must be setup');
   });
 
   test('Cannot sign an ethereum transaction without specifying a sequence', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', { amount: 0, feeLimit: 100, feePrice: 1 })).toThrow('options.sequence must be setup');
+    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+      amount: 0, feeLimit: 100, feePrice: 1,
+    })).toThrow('options.sequence must be setup');
   });
 
   test('Can sign an ethereum transaction', async () => {
-    signedTransaction = await overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', { amount: 0, feeLimit: 100, feePrice: 1, sequence: 1 });
+    signedTransaction = await overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+      amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
+    });
 
     expect(signedTransaction.length).toBeGreaterThan(200);
     expect(signedTransaction.startsWith('0x')).toBe(true);
@@ -85,7 +93,9 @@ describe('Dlt/Ethereum', () => {
 
   test('Can sendAndSign an ethereum transaction', async () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
-    await overledger.dlts.ethereum.sendAndSign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', { amount: 0, feeLimit: 100, feePrice: 1, sequence: 1 });
+    await overledger.dlts.ethereum.sendAndSign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+      amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
+    });
 
     expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
       mappId: 'testmappid',
@@ -105,4 +115,3 @@ describe('Dlt/Ethereum', () => {
     });
   });
 });
-
