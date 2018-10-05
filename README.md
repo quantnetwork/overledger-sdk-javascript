@@ -71,8 +71,7 @@ The SDK provides following functions:
 
 ## OverledgerSDK
 
-configure
--
+###configure
 Configure DLTs.
 
 Usage: `configure(options)`
@@ -125,8 +124,7 @@ Example of DLT transaction data:
 This function returns Promise resolving Signed Transaction hash.
 
 
-send
--
+### send
 Send the signed transaction to the blockchain.
 
 Usage: `send(signedTransactions)`
@@ -134,11 +132,9 @@ Usage: `send(signedTransactions)`
 #### Parameters
 This function takes Signed Transaction Hash as parameter.
 
-
-
-| Name          | Type   | Description                                       |
-|:---------------|:--------|:--------------------------------------------------|
-| `signedTransactions[object]`    | Object | Object of signed transaction |
+|Name|Type|Description|
+|---|---|---|
+| `signedTransactions[object]`|object|Object of signed transaction|
 
 ```
 signedTransactions = [
@@ -167,21 +163,20 @@ This function has no parameters.
 #### Return value
 This function returns a promise that resolves with an array of Overledger transaction objects with the following fields:
 
-|name         |type   |description|
-|---         |---    |---        |
-|`mappId`       |string |Identifier of a multi-chain application
+|Name|Type|Description|
+|---|---|---|
+|`mappId`|string|Identifier of a multi-chain application
 |`overledgerTransactionId`|string|A transaction hash used to identify it, represented in hexadecimal
 |`timestamp`|string|The timestamp when the transaction was received by Overledger
-|`dltData`    |array  |Array of dltData type objects
+|`dltData`|array|Array of dltData type objects
 
 
-readByTransactionId
--
+### readByTransactionId
 Read an Overledger transaction by its ID.
 #### Parameters
 
 |Name|Type|Description|
-|--- |--- |---        |
+|--- |--- |---|
 |`id`|String|A transaction hash used to identify it, represented in hexadecimal
 
 #### Return value
@@ -193,8 +188,7 @@ This function returns a promise that resolves with an Overledger transaction con
 |`timestamp`|string|The timestamp when the transaction was received by Overledger
 |`dltData`|array|Array of objects of the dltData type|
 
-setMappId
--
+### setMappId
 Set the multi-chain application ID.
 Usage: `setMappId('network.quant.helloworld');`
 
@@ -206,8 +200,7 @@ Usage: `setMappId('network.quant.helloworld');`
 #### Return value
 This functionns has no return value
 
-getMappId
--
+### getMappId
 Get the multi-chain application identifier.
 Usage: `const mappId = getMappId();`
 
@@ -222,8 +215,7 @@ This function returns a string representing the multi-chain application identifi
 |`id`|string|String representation of a multichain application id
 
 
-setBpiKey
--
+### setBpiKey
 Set the Blockchain Programming Interface key.
 Usage: `setBpiKey('bpiKey');`
 #### Parameters
@@ -235,8 +227,7 @@ Usage: `setBpiKey('bpiKey');`
 #### Return value
 This functions has no return value
 
-getBpiKey
--
+### getBpiKey
 Get the currently set Blockchain Programming Interface key.
 Usage: `const bpiKey = getBpiKey();`
 #### Parameters
@@ -257,8 +248,7 @@ In this section we will provide a description of the common types.
 * [overledgerTransaction](#overledgerTransaction)
 * [dltData](#dltData)
 
-overledgerTransaction
--
+### overledgerTransaction
 |Name|Type|Description|
 |---|---|---|
 |`mappId`|string|
@@ -266,8 +256,7 @@ overledgerTransaction
 |`timestamp`|string|The timestamp when the transaction was received by Overledger
 |`dltData`|array|Array of objects of the dltData type|
 
-dltData
--
+### dltData
 |Name|Type|Description|
 |---|---|---|
 |`dlt`|string|String representation of the BPI key.
