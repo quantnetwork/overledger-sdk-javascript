@@ -1,4 +1,5 @@
 import { RippleAPI } from 'ripple-lib';
+import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
 import AbstractDlt from './AbstractDlt';
 
@@ -44,21 +45,22 @@ class Ripple extends AbstractDlt {
     if (typeof options.maxLedgerVersion === 'undefined') {
       throw new Error('options.maxLedgerVersion must be setup');
     }
+    const amountInXRP = dropsToXrp(options.amount);
 
     const address = fromAddress;
     const payment = {
       source: {
         address: fromAddress,
         amount: {
-          value: options.amount,
-          currency: 'drops',
+          value: amountInXRP,
+          currency: 'XRP',
         },
       },
       destination: {
         address: toAddress,
         minAmount: {
-          value: options.amount,
-          currency: 'drops',
+          value: amountInXRP,
+          currency: 'XRP',
         },
       },
       memos: [{
