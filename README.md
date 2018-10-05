@@ -71,6 +71,7 @@ const overledger = new OverledgerSDK('mappId', 'bpiKey', {
 ## Usage
 
 The SDK provides following functions:
+
 * [configure](#configure)
 * [sign](#sign)
 * [send](#send)
