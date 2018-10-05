@@ -6,43 +6,58 @@
 
 Developer's guide to use Overledger SDK written in Javascript by Quant Network.
 
-Introduction to OverledgerSDK
--
+
+
+
+## Introduction
+
 Overledger is an open source platform that allows distributed apps(DApps) to connect to multiple blockchains. DLT stands for **Distributed Ledger Technology**.
 OverledgerSDK allows developers to create signed transactions & send them to the Bitcoin and Ethereum blockchains.
 
 
-Technologies
--
+
+
+## Technologies
+
 OverledgerSDK is a node module written in Javascript/ES6.
 
-Prerequisites
--
+
+
+
+## Prerequisites
+
 * Register for a free developer account on [Quant Developer's Portal](https://developer.quant.network)
 * Register for a free mapp to get a mappId for your app.
 
-Installation
--
+
+
+
+## Installation
+
 Developers would have to install OverledgerSDK as an npm module.
 
-`npm install @quantnetwork/overledger-sdk`
+```
+npm install @quantnetwork/overledger-sdk
+```
 
-Getting started
--
+
+
+
+## Getting started
 
 NodeJS with babel
-```
+```javascript
 import OverledgerSDK from '@quantnetwork/overledger-sdk';
 ```
 
 NodeJS
-```
+```javascript
 const OverledgerSDK = require('@quantnetwork/overledger-sdk');
 ```
 
 Initialize the SDK with the 2 dlts available
 
-```
+```javascript
 const overledger = new OverledgerSDK('mappId', 'bpiKey', {
     dlts: [
         { dlt: 'bitcoin' },
@@ -52,8 +67,9 @@ const overledger = new OverledgerSDK('mappId', 'bpiKey', {
 ```
 
 
-Usage
--
+
+## Usage
+
 The SDK provides following functions:
 * [configure](#configure)
 * [sign](#sign)
