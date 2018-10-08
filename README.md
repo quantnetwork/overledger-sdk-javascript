@@ -299,7 +299,7 @@ In this section we will provide a description of the common types.
 
 |Name|Type|Description|
 |---|---|---|
-|`mappId`|string|
+|`mappId`|string|Identifier of a multi-chain application
 |`overledgerTransactionId`|string|A transaction hash used to identify it, represented in hexadecimal
 |`timestamp`|string|The timestamp when the transaction was received by Overledger
 |`dltData`|array|Array of objects of the dltData type|
