@@ -236,7 +236,7 @@ This functionns has no return value
 
 
 
-## getMappId
+### getMappId
 
 Get the multi-chain application identifier.
 Usage: `const mappId = getMappId();`
