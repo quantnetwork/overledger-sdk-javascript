@@ -294,7 +294,8 @@ This function returns a string representing the bpi key that is currently used.
 
 ## Types
 
-In this section we will provide a description of the common types.
+In this section we will provide a description of the common object types.
+
 * [overledgerTransaction](#overledgerTransaction)
 * [dltData](#dltData)
 
