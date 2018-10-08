@@ -283,7 +283,8 @@ This function has no parameters
 
 #### Return value
 
-This function returns a
+This function returns a string representing the bpi key that is currently used.
+
 |Name|Type|Description|
 |---|---|---|
 |`bpiKey`|string|String representation of the BPI key.
