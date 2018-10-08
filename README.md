@@ -272,7 +272,7 @@ This functions has no return value
 
 
 
-## getBpiKey
+### getBpiKey
 
 Get the currently set Blockchain Programming Interface key.
 Usage: `const bpiKey = getBpiKey();`
