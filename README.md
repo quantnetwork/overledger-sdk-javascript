@@ -289,6 +289,7 @@ This function returns a
 
 
 ## Types
+
 In this section we will provide a description of the common types.
 * [overledgerTransaction](#overledgerTransaction)
 * [dltData](#dltData)
