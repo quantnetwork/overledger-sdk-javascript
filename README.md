@@ -138,16 +138,19 @@ Example of DLT transaction data:
 ```
 
 #### Return Value
+
 This function returns a Promise which resolves with a signedTransaction string.
 
 
 
 ### send
+
 Send the signed transaction to the blockchain.
 
 Usage: `send(signedTransactions)`
 
 #### Parameters
+
 This function takes Signed Transaction Hash as parameter.
 
 |Name|Type|Description|
