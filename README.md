@@ -61,7 +61,8 @@ Initialize the SDK with the 2 dlts available
 const overledger = new OverledgerSDK('mappId', 'bpiKey', {
     dlts: [
         { dlt: 'bitcoin' },
-        { dlt: 'ethereum' }
+        { dlt: 'ethereum' },
+        { dlt: 'ripple' }
     ]
 });
 ```
