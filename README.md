@@ -55,7 +55,7 @@ NodeJS
 const OverledgerSDK = require('@quantnetwork/overledger-sdk');
 ```
 
-Initialize the SDK with the 2 dlts available
+Initialize the SDK with the 3 dlts available
 
 ```javascript
 const overledger = new OverledgerSDK('mappId', 'bpiKey', {
@@ -133,6 +133,12 @@ Example of DLT transaction data:
       dlt: 'ethereum',
       fromAddress: '0x930724bd974260Eb6C859abE2144f7e7ea73d7C1',
       toAddress: '0x0000000000000000000000000000000000000000',
+      data: 'QNT test'
+    },
+    {
+      dlt: 'ripple',
+      fromAddress: 'rBLsJC9zuwn4H4z3LA8JD4fv2Nut4qf7ve',
+      toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
       data: 'QNT test'
     }
 ]
