@@ -55,7 +55,7 @@ NodeJS
 const OverledgerSDK = require('@quantnetwork/overledger-sdk');
 ```
 
-Initialize the SDK with the 3 dlts available
+Initialize the SDK with the 3 available dlts.
 
 ```javascript
 const overledger = new OverledgerSDK('mappId', 'bpiKey', {
