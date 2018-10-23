@@ -7,11 +7,11 @@ Developer's guide to use Overledger SDK written in Javascript by Quant Network.
 
 ## Introduction to the Overledger SDK
 
-Overledger is an operating system that allows distributed apps(MApps) to connect to multiple distributed ledger technologies (DLTs) or blockchains. The OverledgerSDK allows developers to create signed transactions & send them simultaneously to all supported DLTs.
+Overledger is an operating system that allows distributed apps(MApps) to connect to multiple distributed ledger technologies (DLTs) or blockchains. The Overledger SDK allows developers to create signed transactions & send them simultaneously to all supported DLTs.
 
 ## Technologies
 
-OverledgerSDK is a node module written in Javascript/ES6.
+The Overledger SDK is a node module written in Javascript/ES6.
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ OverledgerSDK is a node module written in Javascript/ES6.
 
 ## Installation
 
-The OverledgerSDK can be easily installed as an npm module. This will ensure that all required dependencies are automatically included.
+The Overledger SDK can be easily installed as an npm module. This will ensure that all required dependencies are automatically included.
 
 ```
 npm install @quantnetwork/overledger-sdk
