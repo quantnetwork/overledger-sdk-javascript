@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Search from './Search';
 import ucFirst from './utils/ucFirst';
 
 class OverledgerSDK {
@@ -53,6 +54,8 @@ class OverledgerSDK {
     } else {
       this.overledgerUri = 'https://bpi.testnet.overledger.io/v1';
     }
+
+    this.search = new Search(this, options);
   }
 
   /**
