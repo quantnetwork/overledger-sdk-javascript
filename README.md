@@ -34,6 +34,10 @@ Or if you prefer Yarn as the package manager.
 yarn add @quantnetwork/overledger-sdk
 ```
 
+## Development
+
+To run the SDK in development mode, run the command `npm run dev` and every changes will be automatically build.
+
 ## Getting started
 
 NodeJS with babel
