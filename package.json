@@ -4,6 +4,7 @@
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "scripts": {
+    "dev": "nodemon --config nodemon.json --exec npm run build",
     "test": "jest --runInBand",
     "prepublishOnly": "npm run build",
     "clean": "rm -rf dist && mkdir dist",
@@ -13,7 +14,7 @@
     "type": "git",
     "url": "git://github.com/quantnetwork/overledger-sdk-javascript.git"
   },
-  "author": "Sebastien Bramille support@quant.network",
+  "author": "Sebastien Bramille <support@quant.network>",
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
@@ -42,6 +43,7 @@
     "eslint-plugin-jest": "^21.22.1",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.6"
   }
 }
