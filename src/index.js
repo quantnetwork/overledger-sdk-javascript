@@ -52,7 +52,7 @@ class OverledgerSDK {
     if (this.network === this.MAINNET) {
       this.overledgerUri = 'https://bpi.overledger.io/v1';
     } else {
-      this.overledgerUri = 'https://bpi.testnet.overledger.io/v1';
+      this.overledgerUri = 'http://bpi.devnet.overledger.io/v1';
     }
 
     this.request = axios.create({
