@@ -82,6 +82,10 @@ class Ethereum extends AbstractDLT {
     });
   }
 
+  get utils() {
+    return web3Utils;
+  }
+
   /**
    * @inheritdoc
    */

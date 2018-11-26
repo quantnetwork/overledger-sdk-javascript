@@ -16,6 +16,14 @@ class Search {
    */
   constructor(sdk, options = {}) {
     this.sdk = sdk;
+
+    this.request = axios.create({
+      baseURL: `${this.sdk.overledgerUri}/search`,
+      timeout: 1000,
+      headers: { Authorization: `Bearer ${this.sdk.mappId}:${this.sdk.bpiKey}` }
+    });
+
+
   }
 
   /**
@@ -25,15 +33,40 @@ class Search {
    */
   async getTransaction(transactionHash) {
     try {
-      const response = await axios.get(`${this.overledgerUri}/transactions/${transactionHash}`);
-      return response.data;
+      const response = await this.request.get(`/transactions/${transactionHash}`);
+      return response;
     } catch (e) {
-      return e.response.data;
+      console.log(e);
+      return e.response;
     }
   }
 
-  get overledgerUri() {
-    return `${this.sdk.overledgerUri}/search`;
+  /**
+   * Get whoami
+   *
+   * @param {string} hash hash
+   */
+  async whoami(hash) {
+    try {
+      const response = await this.request.get(`/whoami/${hash}`, this.requestConfig);
+      return response;
+    } catch (e) {
+      return e.response;
+    }
+  }
+
+  /**
+   * Get block
+   *
+   * @param {string} hashOrNumber hash or number
+   */
+  async getBlockByDltAndHash(dlt, hashOrNumber) {
+    try {
+      const response = await this.request.get(`/chains/${dlt}/blocks/${hashOrNumber}`, this.requestConfig);
+      return response;
+    } catch (e) {
+      return e.response;
+    }
   }
 }
 

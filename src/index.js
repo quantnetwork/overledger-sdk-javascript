@@ -55,6 +55,14 @@ class OverledgerSDK {
       this.overledgerUri = 'https://bpi.testnet.overledger.io/v1';
     }
 
+    this.request = axios.create({
+      baseURL: this.overledgerUri,
+      timeout: 1000,
+      headers: {
+        Authorization: `Bearer ${this.mappId}:${this.bpiKey}`,
+      },
+    });
+
     this.search = new Search(this, options);
   }
 
@@ -100,7 +108,9 @@ class OverledgerSDK {
       dlt => this.dlts[dlt.dlt].buildApiCall(dlt.signedTransaction),
     );
 
-    return axios.post(`${this.overledgerUri}/transactions`, this.buildWrapperApiCall(apiCall));
+    console.log(this.buildWrapperApiCall(apiCall), `${this.overledgerUri}/transactions`);
+
+    return this.request.post(`${this.overledgerUri}/transactions`, this.buildWrapperApiCall(apiCall));
   }
 
   /**
@@ -121,7 +131,7 @@ class OverledgerSDK {
    */
   async readTransactionsByMappId() {
     try {
-      const response = await axios.get(`${this.overledgerUri}/mapp/${this.mappId}/transactions`);
+      const response = await this.request.get(`${this.overledgerUri}/mapp/${this.mappId}/transactions`);
       return response.data;
     } catch (e) {
       return e.response.data;
@@ -135,7 +145,7 @@ class OverledgerSDK {
    */
   async readByTransactionId(ovlTransactionId) {
     try {
-      const response = await axios.get(`${this.overledgerUri}/transactions/${ovlTransactionId}`);
+      const response = await this.request.get(`${this.overledgerUri}/transactions/${ovlTransactionId}`);
       return response.data;
     } catch (e) {
       return e.response.data;
