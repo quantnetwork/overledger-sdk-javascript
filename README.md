@@ -36,7 +36,7 @@ yarn add @quantnetwork/overledger-sdk
 
 ## Development
 
-To run the SDK in development mode, run the command `npm run dev` and every changes will be automatically build.
+To run the SDK in development mode, run the command `npm run dev` and every change will be automatically built.
 
 ## Getting started
 
