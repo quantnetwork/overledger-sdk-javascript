@@ -3,13 +3,13 @@ import OverledgerSDK from '../src';
 
 jest.mock('axios');
 
-describe('Dlt/BitcoinAndEthereum', () => {
+describe('Dlt/RippleAndEthereum', () => {
   describe('Main read functions', () => {
     test('Can read transactions from mappId', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
-            dlt: 'bitcoin',
+            dlt: 'ripple',
           },
           {
             dlt: 'ethereum',
@@ -43,7 +43,7 @@ describe('Dlt/BitcoinAndEthereum', () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
-            dlt: 'bitcoin',
+            dlt: 'ripple',
           },
           {
             dlt: 'ethereum',
@@ -73,15 +73,15 @@ describe('Dlt/BitcoinAndEthereum', () => {
     });
   });
 
-  describe('Using bitcoin & ethereum without injecting the privatekey in the DLT array', () => {
+  describe('Using ripple & ethereum without injecting the privatekey in the DLT array', () => {
     let overledger;
     let signedTransactions;
 
-    test('Load bitcoin and ethereum DLTs', async () => {
+    test('Load ripple and ethereum DLTs', async () => {
       overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
-            dlt: 'bitcoin',
+            dlt: 'ripple',
           },
           {
             dlt: 'ethereum',
@@ -90,30 +90,34 @@ describe('Dlt/BitcoinAndEthereum', () => {
       });
 
       expect(overledger.dlts.ethereum).toBeDefined();
-      expect(overledger.dlts.bitcoin).toBeDefined();
+      expect(overledger.dlts.ripple).toBeDefined();
     });
 
-    test('Can generate & set account for ethereum & bitcoin', async () => {
-      const bitcoinAccount = overledger.dlts.bitcoin.createAccount();
+    test('Can generate & set account for ethereum & ripple', async () => {
+      const rippleAccount = overledger.dlts.ripple.createAccount();
       const ethereumAccount = overledger.dlts.ethereum.createAccount();
 
-      overledger.dlts.bitcoin.setAccount(bitcoinAccount.privateKey);
+      overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
       overledger.dlts.ethereum.setAccount(ethereumAccount.privateKey);
 
-      expect(overledger.dlts.bitcoin.account.toWIF()).toBe(bitcoinAccount.privateKey);
+      console.log(rippleAccount.privateKey);
+
+      expect(overledger.dlts.ripple.account.privateKey).toBe(rippleAccount.privateKey);
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);
     });
 
-    test('Can sign bitcoin & ethereum transactions', async () => {
+    test('Can sign ripple & ethereum transactions', async () => {
       signedTransactions = await overledger.sign([
         {
-          dlt: 'bitcoin',
-          fromAddress: '2NFj2CVhE5ru7werwXUNCbirUW6KDo2d',
-          toAddress: '2NFj2CVhE5ru7werwXUNCbirUW6KDo2d',
+          dlt: 'ripple',
+          fromAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
+          toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
           message: 'QNT test',
           options: {
-            sequence: 0,
-            previousTransactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111',
+            sequence: 1,
+            amount: '1',
+            feePrice: '0.000012',
+            maxLedgerVersion: 100000000,
           },
         },
         {
@@ -132,7 +136,7 @@ describe('Dlt/BitcoinAndEthereum', () => {
 
       expect(signedTransactions).toEqual([
         {
-          dlt: 'bitcoin',
+          dlt: 'ripple',
           signedTransaction: expect.any(String),
         },
         {
@@ -142,9 +146,9 @@ describe('Dlt/BitcoinAndEthereum', () => {
       ]);
     });
 
-    test('Can send bitcoin & ethereum signedTransactions', async () => {
+    test('Can send ripple & ethereum signedTransactions', async () => {
       axios.post.mockResolvedValue([
-        { dlt: 'bitcoin', status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
+        { dlt: 'ripple', status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
         { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
       ]);
 
@@ -155,27 +159,11 @@ describe('Dlt/BitcoinAndEthereum', () => {
         dltData:
           [
             {
-              dlt: 'bitcoin',
-              amount: 0,
-              callbackUrl: '',
-              changeAddress: '',
-              fee: 0,
-              feeLimit: 0,
-              fromAddress: '',
-              message: '',
-              toAddress: '',
+              dlt: 'ripple',
               signedTransaction: expect.any(String),
             },
             {
               dlt: 'ethereum',
-              amount: 0,
-              callbackUrl: '',
-              changeAddress: '',
-              fee: 0,
-              feeLimit: 0,
-              fromAddress: '',
-              message: '',
-              toAddress: '',
               signedTransaction: expect.any(String),
             },
           ],
@@ -183,15 +171,15 @@ describe('Dlt/BitcoinAndEthereum', () => {
     });
   });
 
-  describe('Using bitcoin & ethereum with injecting the privatekey in the DLT array', () => {
+  describe('Using ripple & ethereum with injecting the privatekey in the DLT array', () => {
     let overledger;
     let signedTransactions;
 
-    test('Load bitcoin and ethereum DLTs', async () => {
+    test('Load ripple and ethereum DLTs', async () => {
       overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
           {
-            dlt: 'bitcoin', privateKey: 'cR6RJbsZWKdSu18MhFp6vJnBMXx1syHjMmhfVSfZAqjCakB8SBg5',
+            dlt: 'ripple', privateKey: 'shL8VmeBqoB7CnbPjXmfue7zeBeeg',
           },
           {
             dlt: 'ethereum', privateKey: '0xe58af4f4a4a509b0190d87bdcd6d05ec4c274cfdd2282f4d196da6466d56c621',
@@ -200,30 +188,32 @@ describe('Dlt/BitcoinAndEthereum', () => {
       });
 
       expect(overledger.dlts.ethereum).toBeDefined();
-      expect(overledger.dlts.bitcoin).toBeDefined();
+      expect(overledger.dlts.ripple).toBeDefined();
     });
 
-    test('Can generate & set account for ethereum & bitcoin', async () => {
-      const bitcoinAccount = overledger.dlts.bitcoin.createAccount();
+    test('Can generate & set account for ethereum & ripple', async () => {
+      const rippleAccount = overledger.dlts.ripple.createAccount();
       const ethereumAccount = overledger.dlts.ethereum.createAccount();
 
-      overledger.dlts.bitcoin.setAccount(bitcoinAccount.privateKey);
+      overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
       overledger.dlts.ethereum.setAccount(ethereumAccount.privateKey);
 
-      expect(overledger.dlts.bitcoin.account.toWIF()).toBe(bitcoinAccount.privateKey);
+      expect(overledger.dlts.ripple.account.privateKey).toBe(rippleAccount.privateKey);
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);
     });
 
-    test('Can sign bitcoin & ethereum transactions', async () => {
+    test('Can sign ripple & ethereum transactions', async () => {
       signedTransactions = await overledger.sign([
         {
-          dlt: 'bitcoin',
-          fromAddress: '2NFj2CVhE5ru7werwXUNCbirUW6KDo2d',
-          toAddress: '2NFj2CVhE5ru7werwXUNCbirUW6KDo2d',
+          dlt: 'ripple',
+          fromAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
+          toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
           message: 'QNT test',
           options: {
-            sequence: 0,
-            previousTransactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111',
+            sequence: 1,
+            amount: '1',
+            feePrice: '0.000012',
+            maxLedgerVersion: 100000000,
           },
         },
         {
@@ -242,7 +232,7 @@ describe('Dlt/BitcoinAndEthereum', () => {
 
       expect(signedTransactions).toEqual([
         {
-          dlt: 'bitcoin',
+          dlt: 'ripple',
           signedTransaction: expect.any(String),
         },
         {
@@ -252,9 +242,9 @@ describe('Dlt/BitcoinAndEthereum', () => {
       ]);
     });
 
-    test('Can send bitcoin & ethereum signedTransactions', async () => {
+    test('Can send ripple & ethereum signedTransactions', async () => {
       axios.post.mockResolvedValue([
-        { dlt: 'bitcoin', status: 'broadcasted', transactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' },
+        { dlt: 'ripple', status: 'broadcasted', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' },
         { dlt: 'ethereum', status: 'broadcasted', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' },
       ]);
 
@@ -265,27 +255,11 @@ describe('Dlt/BitcoinAndEthereum', () => {
         dltData:
           [
             {
-              dlt: 'bitcoin',
-              amount: 0,
-              callbackUrl: '',
-              changeAddress: '',
-              fee: 0,
-              feeLimit: 0,
-              fromAddress: '',
-              message: '',
-              toAddress: '',
+              dlt: 'ripple',
               signedTransaction: expect.any(String),
             },
             {
               dlt: 'ethereum',
-              amount: 0,
-              callbackUrl: '',
-              changeAddress: '',
-              fee: 0,
-              feeLimit: 0,
-              fromAddress: '',
-              message: '',
-              toAddress: '',
               signedTransaction: expect.any(String),
             },
           ],

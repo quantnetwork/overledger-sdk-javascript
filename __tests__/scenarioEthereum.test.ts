@@ -29,7 +29,7 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Cannot sign an ethereum transaction without an account setup', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('The account must be setup');
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {
@@ -39,29 +39,30 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('options.amount must be setup');
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('options.amount must be setup');
   });
 
   test('Cannot sign an ethereum transaction without specifying an feeLimit', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0,
     })).toThrow('options.feeLimit must be setup');
   });
 
   test('Cannot sign an ethereum transaction without specifying an feePrice', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0, feeLimit: 100,
     })).toThrow('options.feePrice must be setup');
   });
 
   test('Cannot sign an ethereum transaction without specifying a sequence', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0, feeLimit: 100, feePrice: 1,
     })).toThrow('options.sequence must be setup');
   });
 
   test('Can sign an ethereum transaction', async () => {
-    signedTransaction = await overledger.dlts.ethereum.sign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+    signedTransaction = await overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
     });
 
@@ -78,22 +79,14 @@ describe('Dlt/Ethereum', () => {
       dltData:
         [{
           dlt: 'ethereum',
-          amount: 0,
-          callbackUrl: '',
-          changeAddress: '',
-          fee: 0,
-          feeLimit: 0,
-          fromAddress: '',
-          message: '',
-          toAddress: '',
           signedTransaction: expect.any(String),
         }],
     });
   });
 
-  test('Can sendAndSign an ethereum transaction', async () => {
+  test('Can signAndSend an ethereum transaction', async () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
-    await overledger.dlts.ethereum.sendAndSign('0x930724bd974260Eb6C859abE2144f7e7ea73d7C1', '0x0000000000000000000000000000000000000000', 'QNT tt3', {
+    await overledger.dlts.ethereum.signAndSend('0x0000000000000000000000000000000000000000', 'QNT tt3', {
       amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
     });
 
@@ -102,14 +95,6 @@ describe('Dlt/Ethereum', () => {
       dltData:
         [{
           dlt: 'ethereum',
-          amount: 0,
-          callbackUrl: '',
-          changeAddress: '',
-          fee: 0,
-          feeLimit: 0,
-          fromAddress: '',
-          message: '',
-          toAddress: '',
           signedTransaction: expect.any(String),
         }],
     });
