@@ -48,7 +48,7 @@ class Search {
    */
   async whoami(hash) {
     try {
-      const response = await this.request.get(`/whoami/${hash}`, this.requestConfig);
+      const response = await this.request.get(`/whoami/${hash}`);
       return response;
     } catch (e) {
       return e.response;
@@ -56,13 +56,27 @@ class Search {
   }
 
   /**
-   * Get block
+   * Get block by number
    *
-   * @param {string} hashOrNumber hash or number
+   * @param {number} number block number
    */
-  async getBlockByDltAndHash(dlt, hashOrNumber) {
+  async getBlockByDltAndNumber(dlt, number) {
     try {
-      const response = await this.request.get(`/chains/${dlt}/blocks/${hashOrNumber}`, this.requestConfig);
+      const response = await this.request.get(`/chains/${dlt}/blocks/byNumber/${number}`);
+      return response;
+    } catch (e) {
+      return e.response;
+    }
+  }
+
+  /**
+   * Get block by hash
+   *
+   * @param {string} hash block hash
+   */
+  async getBlockByDltAndHash(dlt, hash) {
+    try {
+      const response = await this.request.get(`/chains/${dlt}/blocks/byHash/${hash}`);
       return response;
     } catch (e) {
       return e.response;
