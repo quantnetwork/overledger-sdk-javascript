@@ -100,8 +100,6 @@ describe('Dlt/RippleAndEthereum', () => {
       overledger.dlts.ripple.setAccount(rippleAccount.privateKey);
       overledger.dlts.ethereum.setAccount(ethereumAccount.privateKey);
 
-      console.log(rippleAccount.privateKey);
-
       expect(overledger.dlts.ripple.account.privateKey).toBe(rippleAccount.privateKey);
       expect(overledger.dlts.ethereum.account.privateKey).toBe(ethereumAccount.privateKey);
     });

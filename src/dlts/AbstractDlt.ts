@@ -17,15 +17,6 @@ abstract class AbstractDLT {
   }
 
   /**
-   * Build a DLT transaction to be signed
-   *
-   * @param {string} toAddress
-   * @param {string} message
-   * @param {TransactionOptions} options
-   */
-  abstract buildTransaction(toAddress: string, message: string, options?: TransactionOptions): any
-
-  /**
    * Sign a transaction for the DLT
    *
    * @param {string} toAddress
@@ -55,11 +46,14 @@ abstract class AbstractDLT {
    * @param {string|string[]} signedTransaction
    */
   public send(signedTransaction: string|string[]): Promise<any> {
+    let signedTransactions = [];
     if (!Array.isArray(signedTransaction)) {
-      signedTransaction = [signedTransaction];
+      signedTransactions = [signedTransaction];
+    } else {
+      signedTransactions = signedTransaction;
     }
 
-    return this.sdk.send(signedTransaction.map(dlt => this.buildApiCall(dlt)));
+    return this.sdk.send(signedTransactions.map(dlt => this.buildApiCall(dlt)));
   }
 
   /**
@@ -87,8 +81,8 @@ abstract class AbstractDLT {
    */
   protected buildApiCall(signedTransaction: string): ApiCall {
     return {
-      dlt: this.name,
       signedTransaction,
+      dlt: this.name,
     };
   }
 
@@ -113,7 +107,7 @@ abstract class AbstractDLT {
 
 export type Account = {
   privateKey: string,
-  address: string
+  address: string,
 };
 
 export type Options = {
@@ -121,8 +115,8 @@ export type Options = {
 };
 
 export type TransactionOptions = {
-  sequence?: number;
-  amount?: number;
+  sequence?: number,
+  amount?: string,
 };
 
 export type ApiCall = {

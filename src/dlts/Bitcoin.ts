@@ -1,5 +1,5 @@
 import bitcoin from 'bitcoinjs-lib';
-import AbstractDLT, { Options, Account } from './AbstractDlt';
+import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
 import OverledgerSDK from '../';
 
 class Bitcoin extends AbstractDLT {
@@ -53,7 +53,7 @@ class Bitcoin extends AbstractDLT {
 
     const embed = bitcoin.payments.embed({ data: [data] });
     tx.addInput(options.previousTransactionHash, options.sequence);
-    tx.addOutput(toAddress, options.amount)
+    tx.addOutput(toAddress, options.amount);
     tx.addOutput(embed.output, this.NON_DUST_AMOUNT);
 
     return tx;
@@ -93,11 +93,8 @@ class Bitcoin extends AbstractDLT {
   }
 }
 
-export type TransactionOptions = {
-  amount: number,
-  previousTransactionHash: string,
-  sequence: number,
-};
-
+interface TransactionOptions extends BaseTransactionOptions {
+  previousTransactionHash: string;
+}
 
 export default Bitcoin;

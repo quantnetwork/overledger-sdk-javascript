@@ -1,6 +1,6 @@
 import Accounts from 'web3-eth-accounts';
 import Web3 from 'web3';
-import AbstractDLT, { Options, Account } from './AbstractDlt';
+import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
 import OverledgerSDK from '../';
 
 class Ethereum extends AbstractDLT {
@@ -48,7 +48,6 @@ class Ethereum extends AbstractDLT {
    * @param {TransactionOptions} options
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
-    console.log(options);
     if (typeof options.amount === 'undefined') {
       throw new Error('options.amount must be setup');
     }
@@ -121,14 +120,12 @@ export type Transaction = {
   gas: string,
   gasPrice: string,
   value: string,
-  data: string
+  data: string,
 };
 
-export type TransactionOptions = {
-  amount: string,
-  feePrice: string,
-  feeLimit: string,
-  sequence: number,
-};
+interface TransactionOptions extends BaseTransactionOptions {
+  feePrice: string;
+  feeLimit: string;
+}
 
 export default Ethereum;

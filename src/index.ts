@@ -102,8 +102,8 @@ class OverledgerSDK {
    */
   private buildWrapperApiCall(dltData: ApiCall[]): WrapperApiCall {
     return {
-      mappId: this.mappId,
       dltData,
+      mappId: this.mappId,
     };
   }
 
@@ -117,8 +117,6 @@ class OverledgerSDK {
       dlt => this.dlts[dlt.dlt].buildApiCall(dlt.signedTransaction),
     );
 
-    console.log(this.buildWrapperApiCall(apiCall), `${this.overledgerUri}/transactions`);
-
     return this.request.post(`${this.overledgerUri}/transactions`, this.buildWrapperApiCall(apiCall));
   }
 
@@ -131,9 +129,7 @@ class OverledgerSDK {
    */
   private loadDlt(config: DltOptions): AbstractDLT {
     // Need to improve this loading
-    console.log(`./dlts/${ucFirst(config.dlt)}`);
     const Provider = require(`./dlts/${ucFirst(config.dlt)}`).default;
-
 
     return new Provider(this, config);
   }
@@ -199,12 +195,12 @@ class OverledgerSDK {
 
 export type SDKOptions = {
   dlts: DltOptions[],
-  network?: 'mainnet' | 'testnet'
+  network?: 'mainnet' | 'testnet',
 };
 
 export type DltOptions = {
   dlt: string,
-  privateKey?: string
+  privateKey?: string,
 };
 
 export type WrapperApiCall = {
@@ -216,7 +212,7 @@ export type SignOptions = [{
   dlt: string,
   toAddress: string,
   message: string,
-  options: TransactionOptions
+  options: TransactionOptions,
 }];
 
 export default OverledgerSDK;

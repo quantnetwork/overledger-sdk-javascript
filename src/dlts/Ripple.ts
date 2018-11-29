@@ -2,7 +2,7 @@ import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
 import OverledgerSDK from '../';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
-import AbstractDlt, { Account, Options } from './AbstractDlt';
+import AbstractDlt, { Account, Options, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
 
@@ -124,8 +124,8 @@ class Ripple extends AbstractDlt {
   setAccount(privateKey: string): void {
     const keypair = deriveKeypair(privateKey);
     const account = {
-      address: keypair.publicKey,
       privateKey,
+      address: keypair.publicKey,
     };
     account.address = deriveAddress(keypair.publicKey);
     this.account = account;
@@ -135,14 +135,12 @@ class Ripple extends AbstractDlt {
 export type Transaction = {
   address: string,
   payment: Payment,
-  instructions?: Instructions
+  instructions?: Instructions,
 };
 
-export type TransactionOptions = {
-  amount: string,
-  feePrice: string,
-  sequence: number,
-  maxLedgerVersion: number,
-};
+interface TransactionOptions extends BaseTransactionOptions {
+  feePrice: string;
+  maxLedgerVersion: number;
+}
 
 export default Ripple;
