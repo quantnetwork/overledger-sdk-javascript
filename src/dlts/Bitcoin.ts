@@ -1,23 +1,26 @@
 import bitcoin from 'bitcoinjs-lib';
-import AbstractDLT from './AbstractDlt';
+import AbstractDLT, { Options, Account } from './AbstractDlt';
+import OverledgerSDK from '../';
 
 class Bitcoin extends AbstractDLT {
-  NON_DUST_AMOUNT = 546;
+  NON_DUST_AMOUNT: number = 546;
+  addressType: string;
+  privateKey: string;
 
   /**
    * Name of the DLT
    */
-  name = 'bitcoin';
+  name: string = 'bitcoin';
 
   /**
    * Symbol of the DLT
    */
-  symbol = 'XBT';
+  symbol: string = 'XBT';
 
   /**
    * @inheritdoc
    */
-  constructor(sdk, options) {
+  constructor(sdk: OverledgerSDK, options: Options) {
     super(sdk, options);
 
     if (sdk.network === sdk.MAINNET) {
@@ -34,7 +37,9 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  buildTransaction(fromAddress, toAddress, message, options) {
+    // @TODO: add return statement
+    // @TODO: add option statement
+  buildTransaction(toAddress: string, message: string, options: TransactionOptions): any {
     if (typeof options.sequence === 'undefined') {
       throw new Error('options.sequence must be setup');
     }
@@ -48,6 +53,7 @@ class Bitcoin extends AbstractDLT {
 
     const embed = bitcoin.payments.embed({ data: [data] });
     tx.addInput(options.previousTransactionHash, options.sequence);
+    tx.addOutput(toAddress, options.amount)
     tx.addOutput(embed.output, this.NON_DUST_AMOUNT);
 
     return tx;
@@ -56,17 +62,17 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  _sign(fromAddress, toAddress, message, options) {
-    const transaction = this.buildTransaction(fromAddress, toAddress, message, options);
+  _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
+    const transaction = this.buildTransaction(toAddress, message, options);
     transaction.sign(0, this.account);
 
-    return transaction.build().toHex();
+    return Promise.resolve(transaction.build().toHex());
   }
 
   /**
    * @inheritdoc
    */
-  createAccount() {
+  createAccount(): Account {
     const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
 
     const privateKey = keyPair.toWIF();
@@ -82,9 +88,16 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  setAccount(privateKey) {
+  setAccount(privateKey: string): void {
     this.account = bitcoin.ECPair.fromWIF(privateKey, this.addressType);
   }
 }
+
+export type TransactionOptions = {
+  amount: number,
+  previousTransactionHash: string,
+  sequence: number,
+};
+
 
 export default Bitcoin;

@@ -1,23 +1,29 @@
 import { RippleAPI } from 'ripple-lib';
 import { dropsToXrp } from 'ripple-lib/dist/npm/common';
+import OverledgerSDK from '../';
 import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
-import AbstractDlt from './AbstractDlt';
+import AbstractDlt, { Account, Options } from './AbstractDlt';
+import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
+import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
 
 class Ripple extends AbstractDlt {
+  rippleAPI: RippleAPI;
+  account: Account;
   /**
    * Name of the DLT
    */
-  name = 'ripple';
+  name: string = 'ripple';
 
   /**
    * Symbol of the DLT
    */
-  symbol = 'XRP';
+  symbol: string = 'XRP';
 
   /**
    * @inheritdoc
    */
-  constructor(sdk, options) {
+  // @TODO: add options statement
+  constructor(sdk: OverledgerSDK, options: Options = {}) {
     super(sdk, options);
 
     this.options = options;
@@ -30,9 +36,13 @@ class Ripple extends AbstractDlt {
   }
 
   /**
-   * @inheritdoc
+   * Build the transaction
+   *
+   * @param {string} toAddress
+   * @param {string} message
+   * @param {TransactionOptions} options
    */
-  buildTransaction(fromAddress, toAddress, message, options) {
+  buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options.amount === 'undefined') {
       throw new Error('options.amount must be setup');
     }
@@ -47,10 +57,10 @@ class Ripple extends AbstractDlt {
     }
     const amountInXRP = dropsToXrp(options.amount);
 
-    const address = fromAddress;
+    const address = this.account.address;
     const payment = {
       source: {
-        address: fromAddress,
+        address: this.account.address,
         amount: {
           value: amountInXRP,
           currency: 'XRP',
@@ -77,10 +87,14 @@ class Ripple extends AbstractDlt {
   }
 
   /**
-   * @inheritdoc
+   * Sign the transaction
+   *
+   * @param {string} toAddress
+   * @param {string} message
+   * @param {TransactionOptions} options
    */
-  _sign(fromAddress, toAddress, message, options) {
-    const built = this.buildTransaction(fromAddress, toAddress, message, options);
+  _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
+    const built = this.buildTransaction(toAddress, message, options);
 
     return this.rippleAPI.preparePayment(built.address, built.payment, built.instructions)
       .then(
@@ -91,7 +105,8 @@ class Ripple extends AbstractDlt {
   /**
    * @inheritdoc
    */
-  createAccount() {
+  // @TODO: add return statement
+  createAccount(): Account {
     const generated = this.rippleAPI.generateAddress();
 
     const account = {
@@ -105,15 +120,29 @@ class Ripple extends AbstractDlt {
   /**
    * @inheritdoc
    */
-  setAccount(key) {
-    const keypair = deriveKeypair(key);
+  // @TODO: add return statement
+  setAccount(privateKey: string): void {
+    const keypair = deriveKeypair(privateKey);
     const account = {
       address: keypair.publicKey,
-      privateKey: key,
+      privateKey,
     };
     account.address = deriveAddress(keypair.publicKey);
     this.account = account;
   }
 }
+
+export type Transaction = {
+  address: string,
+  payment: Payment,
+  instructions?: Instructions
+};
+
+export type TransactionOptions = {
+  amount: string,
+  feePrice: string,
+  sequence: number,
+  maxLedgerVersion: number,
+};
 
 export default Ripple;
