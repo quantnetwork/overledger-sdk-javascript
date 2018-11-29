@@ -1,6 +1,10 @@
 {
   "extends": "tslint-config-airbnb",
   "rules": {
-    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
+    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+    "import-name": [false],
+    "max-line-length": [true, 200],
+    "function-name": [false],
+    "variable-name": [false]
   }
 }
