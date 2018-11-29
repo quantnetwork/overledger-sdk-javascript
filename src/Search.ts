@@ -48,13 +48,27 @@ class Search {
   }
 
   /**
-   * Get block
+   * Get block hash
    *
-   * @param {string} hashOrNumber hash or number
+   * @param {string} hash block hash
    */
-  async getBlockByDltAndHash(dlt, hashOrNumber) {
+  async getBlockByDltAndHash(dlt, hash) {
     try {
-      const response = await this.request.get(`/chains/${dlt}/blocks/${hashOrNumber}`);
+      const response = await this.request.get(`/chains/${dlt}/blocks/byHash/${hash}`);
+      return response;
+    } catch (e) {
+      return e.response;
+    }
+  }
+
+  /**
+   * Get block number
+   *
+   * @param {number} number block number
+   */
+  async getBlockByDltAndNumber(dlt, number) {
+    try {
+      const response = await this.request.get(`/chains/${dlt}/blocks/byNumber/${number}`);
       return response;
     } catch (e) {
       return e.response;
