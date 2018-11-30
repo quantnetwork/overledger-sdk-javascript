@@ -22,6 +22,7 @@
     "@babel/runtime": "^7.1.2",
     "axios": "^0.18.0",
     "bitcoinjs-lib": "^4.0.2",
+    "event-stream": "3.3.4",
     "ripple-keypairs": "^0.10.1",
     "ripple-lib": "^1.1.1",
     "web3": "^1.0.0-beta.36"
