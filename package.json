@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec npm run build",
     "test": "jest --runInBand",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run lint && npm run test && npm run build",
     "clean": "rm -rf dist && mkdir dist",
-    "build": "npm run clean && babel src --out-dir dist",
+    "build": "npm run clean && tsc",
     "lint": "tslint -c tslint.json --project tsconfig.json 'src/**/*.ts'"
   },
   "repository": {
