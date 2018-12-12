@@ -49,7 +49,7 @@ import OverledgerSDK from "@quantnetwork/overledger-sdk";
 NodeJS
 
 ```javascript
-const OverledgerSDK = require("@quantnetwork/overledger-sdk");
+const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
 ```
 
 Initialize the SDK with the 3 available dlts.
