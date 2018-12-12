@@ -130,6 +130,23 @@ class Ripple extends AbstractDlt {
     account.address = deriveAddress(keypair.publicKey);
     this.account = account;
   }
+
+  async fundAccount(amount = 1e9, address = null) {
+    if (address === null) {
+      if (!this.account) {
+        throw new Error('The account must be setup');
+      }
+
+      address = this.account.address;
+    }
+
+    try {
+      const response = await this.sdk.request.post(`/faucet/fund/ripple/${address}/${amount}`);
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
 }
 
 export type Transaction = {
