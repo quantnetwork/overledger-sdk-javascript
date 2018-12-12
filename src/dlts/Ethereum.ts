@@ -111,6 +111,19 @@ class Ethereum extends AbstractDLT {
   setAccount(privateKey: string): void {
     this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
   }
+
+  async fundAccount(address = null) {
+    if (address === null) {
+      address = this.account.address;
+    }
+
+    try {
+      const response = await this.sdk.request.post(`/faucet/fund/ethereum/${address}/1000000000000000000`);
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
 }
 
 export type Transaction = {
