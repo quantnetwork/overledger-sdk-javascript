@@ -276,15 +276,17 @@ This function returns a string representing the bpi key that is currently used.
 | `bpiKey` | string | String representation of the BPI key. |
 
 ### Faucet
-
+As per default it would take the configured address.
 From the DLT level `overledger.dlts.[dlt]`
 Fund an account on our testnet.
 
-Usage: `fundAccount(address)`
+Usage: `fundAccount(amount?, address?)`
 
 #### Parameters
 
-This function takes an address as parameter.
+This function takes:
+- amount: **OPTIONAL** the dlt amount must be the lowest decimal available; ie. for bitcoin in satoshi, ripple in drops and ethereum in wei
+- address: **OPTIONAL** the dlt address.
 
 #### Return Value
 
