@@ -1,4 +1,6 @@
 {
   "verbose": true,
-  "ignore": ["*.test.js", "dist"]
+  "ignore": ["*.test.js", "dist"],
+  "watch": ["src/**/*.ts"],
+  "ext": "ts"
 }
