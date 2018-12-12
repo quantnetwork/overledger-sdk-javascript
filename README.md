@@ -64,16 +64,20 @@ const overledger = new OverledgerSDK("mappId", "bpiKey", {
 
 The SDK provides following functions:
 
-- [configure](#configure)
-- [sign](#sign)
-- [send](#send)
-- [loadDlt](#loadDlt)
-- [readByMappId](#readByMappId)
-- [readByTrannsactionId](#readByTransactionId)
-- [setMappId](#setMappId)
-- [getMappId](#getMappId)
-- [setBpiKey](#setBpiKey)
-- [getBpiKey](#getBpiKey)
+- Main functions
+  - [configure](#configure)
+  - [sign](#sign)
+  - [send](#send)
+  - [loadDlt](#loadDlt)
+  - [readByMappId](#readByMappId)
+  - [readByTrannsactionId](#readByTransactionId)
+  - [setMappId](#setMappId)
+  - [getMappId](#getMappId)
+  - [setBpiKey](#setBpiKey)
+  - [getBpiKey](#getBpiKey)
+- DLT functions
+  - [Faucet](#faucet)
+
 
 ### configure
 
@@ -270,6 +274,22 @@ This function returns a string representing the bpi key that is currently used.
 | Name     | Type   | Description                           |
 | -------- | ------ | ------------------------------------- |
 | `bpiKey` | string | String representation of the BPI key. |
+
+### Faucet
+
+From the DLT level `overledger.dlts.[dlt]`
+Fund an account on our testnet.
+
+Usage: `fundAccount(address)`
+
+#### Parameters
+
+This function takes an address as parameter.
+
+#### Return Value
+
+This function returns `Promise`
+
 
 ## Types
 
