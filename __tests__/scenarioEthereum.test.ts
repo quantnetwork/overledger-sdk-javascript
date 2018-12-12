@@ -38,6 +38,21 @@ describe('Dlt/Ethereum', () => {
     expect(overledger.dlts.ethereum.account.privateKey).toBe(account.privateKey);
   });
 
+  test('Can fund the setup account', () => {
+    overledger.dlts.ethereum.fundAccount();
+
+    axios.post.mockResolvedValue({ status: 'ok', message: 'successfully added to the queue' });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/ethereum/${account.address}/1000000000000000000`);
+  });
+
+  test('Can fund the setup account', () => {
+    const newAccount = overledger.dlts.ethereum.createAccount();
+    overledger.dlts.ethereum.fundAccount(newAccount.address);
+
+    axios.post.mockResolvedValue({ status: 'ok', message: 'successfully added to the queue' });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/ethereum/${newAccount.address}/1000000000000000000`);
+  });
+
   test('Cannot sign an ethereum transaction without specifying an amount', () => {
     expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('options.amount must be setup');
   });
