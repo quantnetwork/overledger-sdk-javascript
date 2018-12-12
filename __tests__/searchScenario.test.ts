@@ -81,8 +81,6 @@ describe('Search', () => {
       },
     });
 
-    console.log(hash);
-
     await overledger.search.getBlockByDltAndHash('bitcoin', hash);
 
     expect(axios.get).toBeCalledWith(`/chains/${dlt}/blocks/byHash/${hash}`);

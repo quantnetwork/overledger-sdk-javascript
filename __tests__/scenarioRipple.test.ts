@@ -32,11 +32,62 @@ describe('Dlt/Ripple', () => {
     expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('The account must be setup');
   });
 
+  test('Cannot fund without the address parameter if no account are setup', () => {
+    try {
+      overledger.dlts.ripple.fundAccount();
+      axios.post.mockResolvedValue({});
+      expect(axios.post).not.toBeCalledWith('');
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
   test('Can set the account previously created', () => {
     overledger.dlts.ripple.setAccount(account.privateKey);
 
     expect(overledger.dlts.ripple.account.privateKey).toBe(account.privateKey);
   });
+
+  test('Can fund the setup account with the default amount', () => {
+    overledger.dlts.ripple.fundAccount();
+
+    axios.post.mockResolvedValue({ status: 'OK',
+    message:
+     'The transaction was applied. Only final in a validated ledger.',
+    transactionHash:
+     '1CF917EBBA27CA477878E8386C404EC9851CA39237BB3433CCD79C6172D12788',
+    address: 'rfkP2KXi9G8GEsMHgUm2NS4ip4QbU4jga',
+    amount: '1000000000' });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/ripple/${account.address}/1000000000`);
+  });
+
+  test('Can fund the setup account with a specific amount', () => {
+    overledger.dlts.ripple.fundAccount(10);
+
+    axios.post.mockResolvedValue({ status: 'OK',
+    message:
+     'The transaction was applied. Only final in a validated ledger.',
+    transactionHash:
+     '1CF917EBBA27CA477878E8386C404EC9851CA39237BB3433CCD79C6172D12788',
+    address: 'rfkP2KXi9G8GEsMHgUm2NS4ip4QbU4jga',
+    amount: '1000000000' });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/ripple/${account.address}/10`);
+  });
+
+  test('Can fund the setup account with a specific amount', () => {
+    const newAccount = overledger.dlts.ripple.createAccount();
+    overledger.dlts.ripple.fundAccount(10, newAccount.address);
+
+    axios.post.mockResolvedValue({ status: 'OK',
+    message:
+     'The transaction was applied. Only final in a validated ledger.',
+    transactionHash:
+     '1CF917EBBA27CA477878E8386C404EC9851CA39237BB3433CCD79C6172D12788',
+    address: 'rfkP2KXi9G8GEsMHgUm2NS4ip4QbU4jga',
+    amount: '1000000000' });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/ripple/${newAccount.address}/10`);
+  });
+
 
   test('Cannot sign a ripple transaction without specifying an amount', () => {
     expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('options.amount must be setup');
