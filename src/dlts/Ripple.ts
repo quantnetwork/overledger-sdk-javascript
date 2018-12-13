@@ -131,21 +131,11 @@ class Ripple extends AbstractDlt {
     this.account = account;
   }
 
-  async fundAccount(amount = 1e9, address = null): Promise<Object> {
-    if (address === null) {
-      if (!this.account) {
-        throw new Error('The account must be setup');
-      }
-
-      address = this.account.address;
-    }
-
-    try {
-      const response = await this.sdk.request.post(`/faucet/fund/ripple/${address}/${amount}`);
-      return response.data;
-    } catch (e) {
-      return e.response.data;
-    }
+  /**
+   * @inheritdoc
+   */
+  async fundAccount(amount: number = 1e9, address: string = null): Promise<Object> {
+    return super.fundAccount(amount, address);
   }
 }
 

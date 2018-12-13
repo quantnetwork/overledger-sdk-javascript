@@ -103,6 +103,29 @@ abstract class AbstractDLT {
    * @param {string} privateKey The privateKey
    */
   abstract setAccount(privateKey: string): void;
+
+  /**
+   * Fund an account
+   *
+   * @param {number} amount The amount to fund
+   * @param {string} address the address to fund
+   */
+  async fundAccount(amount: number, address: string = null): Promise<Object> {
+    if (address === null) {
+      if (!this.account) {
+        throw new Error('The account must be setup');
+      }
+
+      address = this.account.address;
+    }
+
+    try {
+      const response = await this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
 }
 
 export type Account = {
