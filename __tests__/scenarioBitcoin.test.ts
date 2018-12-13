@@ -33,10 +33,60 @@ describe('Dlt/Bitcoin', () => {
     expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3')).toThrow('The account must be setup');
   });
 
+  test('Cannot fund without the address parameter if no account are setup', () => {
+    try {
+      overledger.dlts.bitcoin.fundAccount();
+      axios.post.mockResolvedValue({});
+      expect(axios.post).not.toBeCalledWith('');
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
   test('Can set the account previously created', () => {
     overledger.dlts.bitcoin.setAccount(account.privateKey);
 
     expect(overledger.dlts.bitcoin.account.toWIF()).toBe(account.privateKey);
+  });
+
+  test('Can fund the setup account with the default amount', () => {
+    overledger.dlts.bitcoin.fundAccount();
+
+    axios.post.mockResolvedValue({ status: 'OK',
+    message: null,
+    address: 'muW84hNaxfzForQumMihF1Kp6yErJ5bHMD',
+    amount: 1,
+    txnHash:
+     '0f0736ec4d85128edd6fefa770dcf456aa6e2cff737e6f5edf26dea1be67a9bc',
+    vout: 1 });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/bitcoin/${account.address}/100000000`);
+  });
+
+  test('Can fund the setup account with a specific amount', () => {
+    overledger.dlts.bitcoin.fundAccount(10);
+
+    axios.post.mockResolvedValue({ status: 'OK',
+    message: null,
+    address: 'muW84hNaxfzForQumMihF1Kp6yErJ5bHMD',
+    amount: 1,
+    txnHash:
+     '0f0736ec4d85128edd6fefa770dcf456aa6e2cff737e6f5edf26dea1be67a9bc',
+    vout: 1 });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/bitcoin/${account.address}/10`);
+  });
+
+  test('Can fund the setup account with a specific amount', () => {
+    const newAccount = overledger.dlts.bitcoin.createAccount();
+    overledger.dlts.bitcoin.fundAccount(10, newAccount.address);
+
+    axios.post.mockResolvedValue({ status: 'OK',
+    message: null,
+    address: 'muW84hNaxfzForQumMihF1Kp6yErJ5bHMD',
+    amount: 1,
+    txnHash:
+     '0f0736ec4d85128edd6fefa770dcf456aa6e2cff737e6f5edf26dea1be67a9bc',
+    vout: 1 });
+    expect(axios.post).toBeCalledWith(`/faucet/fund/bitcoin/${newAccount.address}/10`);
   });
 
   test('Cannot sign a bitcoin transaction without specifying a sequence', () => {
