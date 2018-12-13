@@ -136,7 +136,7 @@ class OverledgerSDK {
    * Read by mapp id
    */
   public readTransactionsByMappId(): AxiosPromise<Object> {
-    return this.request.get(`${this.overledgerUri}/mapp/${this.mappId}/transactions`);
+    return this.request.get(`${this.overledgerUri}/transactions/mappid/${this.mappId}`);
   }
 
   /**
