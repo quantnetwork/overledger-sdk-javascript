@@ -5,6 +5,7 @@ import { deriveKeypair, deriveAddress } from 'ripple-keypairs';
 import AbstractDlt, { Account, Options, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
 import { Payment } from 'ripple-lib/dist/npm/transaction/payment';
 import { Instructions } from 'ripple-lib/dist/npm/transaction/types';
+import { AxiosResponse } from 'axios';
 
 class Ripple extends AbstractDlt {
   rippleAPI: RippleAPI;
@@ -134,7 +135,7 @@ class Ripple extends AbstractDlt {
   /**
    * @inheritdoc
    */
-  async fundAccount(amount: number = 1e9, address: string = null): Promise<Object> {
+  async fundAccount(amount: number = 1e9, address: string = null): Promise<AxiosResponse> {
     return super.fundAccount(amount, address);
   }
 }

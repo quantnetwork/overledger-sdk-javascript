@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosPromise } from 'axios';
 import Search from './Search';
 import ucFirst from './utils/ucFirst';
 import AbstractDLT, { ApiCall, TransactionOptions } from './dlts/AbstractDlt';
@@ -80,19 +80,17 @@ class OverledgerSDK {
    *
    * @param {Object} dlts Object of the DLTs where you want to send a transaction
    */
-  public async sign(dlts: SignOptions): Promise<any> {
+  public async sign(dlts: SignOptions): Promise<SignedTransactionResponse[]> {
     if (!Array.isArray(dlts)) {
       throw new Error('The dlts object must be an array');
     }
 
-    const responseDlts = await Promise.all(dlts.map(async (dlt) => {
+    return Promise.all(dlts.map(async (dlt) => {
       return {
         dlt: dlt.dlt,
         signedTransaction: await this.dlts[dlt.dlt].sign(dlt.toAddress, dlt.message, dlt.options),
       };
     }));
-
-    return responseDlts;
   }
 
   /**
@@ -112,7 +110,7 @@ class OverledgerSDK {
    *
    * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
    */
-  public send(signedTransactions): Promise<any> {
+  public send(signedTransactions): AxiosPromise<Object> {
     const apiCall = signedTransactions.map(
       dlt => this.dlts[dlt.dlt].buildApiCall(dlt.signedTransaction),
     );
@@ -137,13 +135,8 @@ class OverledgerSDK {
   /**
    * Read by mapp id
    */
-  public async readTransactionsByMappId(): Promise<Object> {
-    try {
-      const response = await this.request.get(`${this.overledgerUri}/mapp/${this.mappId}/transactions`);
-      return response.data;
-    } catch (e) {
-      return e.response.data;
-    }
+  public readTransactionsByMappId(): AxiosPromise<Object> {
+    return this.request.get(`${this.overledgerUri}/mapp/${this.mappId}/transactions`);
   }
 
   /**
@@ -151,13 +144,8 @@ class OverledgerSDK {
    *
    * @param {string} ovlTransactionId
    */
-  public async readByTransactionId(ovlTransactionId: string): Promise<Object> {
-    try {
-      const response = await this.request.get(`${this.overledgerUri}/transactions/${ovlTransactionId}`);
-      return response.data;
-    } catch (e) {
-      return e.response.data;
-    }
+  public readByTransactionId(ovlTransactionId: string): AxiosPromise<Object> {
+    return this.request.get(`${this.overledgerUri}/transactions/${ovlTransactionId}`);
   }
 
   /**
@@ -192,6 +180,11 @@ class OverledgerSDK {
     return this.bpiKey;
   }
 }
+
+export type SignedTransactionResponse = {
+  dlt: string,
+  signedTransaction: string,
+};
 
 export type SDKOptions = {
   dlts: DltOptions[],

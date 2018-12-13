@@ -1,6 +1,7 @@
 import bitcoin from 'bitcoinjs-lib';
 import AbstractDLT, { Options, Account, TransactionOptions as BaseTransactionOptions } from './AbstractDlt';
 import OverledgerSDK from '../';
+import { AxiosResponse } from 'axios';
 
 class Bitcoin extends AbstractDLT {
   NON_DUST_AMOUNT: number = 546;
@@ -101,7 +102,7 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  async fundAccount(amount: number = 1e8, address: string = null): Promise<Object> {
+  async fundAccount(amount: number = 1e8, address: string = null): Promise<AxiosResponse> {
     return super.fundAccount(amount, address);
   }
 }
