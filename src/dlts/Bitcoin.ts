@@ -97,6 +97,23 @@ class Bitcoin extends AbstractDLT {
       .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
     };
   }
+
+  async fundAccount(amount = 1e8, address = null) {
+    if (address === null) {
+      if (!this.account) {
+        throw new Error('The account must be setup');
+      }
+
+      address = this.account.address;
+    }
+
+    try {
+      const response = await this.sdk.request.post(`/faucet/fund/bitcoin/${address}/${amount}`);
+      return response.data;
+    } catch (e) {
+      return e.response.data;
+    }
+  }
 }
 
 interface TransactionOptions extends BaseTransactionOptions {
