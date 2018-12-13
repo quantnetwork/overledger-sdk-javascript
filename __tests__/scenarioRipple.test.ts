@@ -29,17 +29,11 @@ describe('Dlt/Ripple', () => {
   });
 
   test('Cannot sign a ripple transaction without an account setup', () => {
-    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('The account must be setup');
+    expect(() => overledger.dlts.ripple.sign('rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh', 'QNT tt3')).toThrow('The ripple account must be setup');
   });
 
-  test('Cannot fund without the address parameter if no account are setup', () => {
-    try {
-      overledger.dlts.ripple.fundAccount();
-      axios.post.mockResolvedValue({});
-      expect(axios.post).not.toBeCalledWith('');
-    } catch (e) {
-      console.log(e);
-    }
+  test('Cannot fund without the address parameter if no account are setup', async() => {
+    await expect(overledger.dlts.ripple.fundAccount()).rejects.toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {

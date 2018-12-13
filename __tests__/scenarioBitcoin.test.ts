@@ -12,8 +12,8 @@ describe('Dlt/Bitcoin', () => {
     overledger = new OverledgerSDK('testmappid', 'testbpikey', {
       dlts: [{
         dlt: 'bitcoin',
-        network: 'testnet',
       }],
+      network: 'testnet',
     });
   });
 
@@ -30,17 +30,11 @@ describe('Dlt/Bitcoin', () => {
   });
 
   test('Cannot sign a bitcoin transaction without a account setup', () => {
-    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3')).toThrow('The account must be setup');
+    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3')).toThrow('The bitcoin account must be setup');
   });
 
-  test('Cannot fund without the address parameter if no account are setup', () => {
-    try {
-      overledger.dlts.bitcoin.fundAccount();
-      axios.post.mockResolvedValue({});
-      expect(axios.post).not.toBeCalledWith('');
-    } catch (e) {
-      console.log(e);
-    }
+  test('Cannot fund without the address parameter if no account are setup', async () => {
+    await expect(overledger.dlts.bitcoin.fundAccount()).rejects.toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {

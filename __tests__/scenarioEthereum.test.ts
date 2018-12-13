@@ -29,17 +29,11 @@ describe('Dlt/Ethereum', () => {
   });
 
   test('Cannot sign an ethereum transaction without an account setup', () => {
-    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('The account must be setup');
+    expect(() => overledger.dlts.ethereum.sign('0x0000000000000000000000000000000000000000', 'QNT tt3')).toThrow('The ethereum account must be setup');
   });
 
-  test('Cannot fund without the address parameter if no account are setup', () => {
-    try {
-      overledger.dlts.ethereum.fundAccount();
-      axios.post.mockResolvedValue({});
-      expect(axios.post).not.toBeCalledWith('');
-    } catch (e) {
-      console.log(e);
-    }
+  test('Cannot fund without the address parameter if no account are setup', async () => {
+    await expect(overledger.dlts.ethereum.fundAccount()).rejects.toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {
