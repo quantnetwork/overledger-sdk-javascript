@@ -131,7 +131,7 @@ class Ripple extends AbstractDlt {
     this.account = account;
   }
 
-  async fundAccount(amount = 1e9, address = null) {
+  async fundAccount(amount = 1e9, address = null): Promise<Object> {
     if (address === null) {
       if (!this.account) {
         throw new Error('The account must be setup');

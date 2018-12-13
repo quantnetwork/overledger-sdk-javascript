@@ -98,7 +98,7 @@ class Bitcoin extends AbstractDLT {
     };
   }
 
-  async fundAccount(amount = 1e8, address = null) {
+  async fundAccount(amount = 1e8, address = null): Promise<Object> {
     if (address === null) {
       if (!this.account) {
         throw new Error('The account must be setup');
