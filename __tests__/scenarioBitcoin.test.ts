@@ -46,7 +46,7 @@ describe('Dlt/Bitcoin', () => {
   test('Can set the account previously created', () => {
     overledger.dlts.bitcoin.setAccount(account.privateKey);
 
-    expect(overledger.dlts.bitcoin.account.toWIF()).toBe(account.privateKey);
+    expect(overledger.dlts.bitcoin.account.privateKey.toWIF()).toBe(account.privateKey);
   });
 
   test('Can fund the setup account with the default amount', () => {
