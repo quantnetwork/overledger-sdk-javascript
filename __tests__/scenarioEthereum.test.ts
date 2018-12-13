@@ -100,13 +100,12 @@ describe('Dlt/Ethereum', () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ethereum', transactionHash: '0x712df767d7adea8a16aebbf080bc14daf21d3f00d3f95817db0b45abe7631711' });
     await overledger.dlts.ethereum.send(signedTransaction);
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
-      dltData:
-        [{
-          dlt: 'ethereum',
-          signedTransaction: expect.any(String),
-        }],
+      dltData: [{
+        dlt: 'ethereum',
+        signedTransaction: expect.any(String),
+      }],
     });
   });
 
@@ -116,13 +115,12 @@ describe('Dlt/Ethereum', () => {
       amount: 0, feeLimit: 100, feePrice: 1, sequence: 1,
     });
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
-      dltData:
-        [{
-          dlt: 'ethereum',
-          signedTransaction: expect.any(String),
-        }],
+      dltData: [{
+        dlt: 'ethereum',
+        signedTransaction: expect.any(String),
+      }],
     });
   });
 });

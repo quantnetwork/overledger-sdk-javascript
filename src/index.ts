@@ -115,7 +115,7 @@ class OverledgerSDK {
       dlt => this.dlts[dlt.dlt].buildApiCall(dlt.signedTransaction),
     );
 
-    return this.request.post(`${this.overledgerUri}/transactions`, this.buildWrapperApiCall(apiCall));
+    return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
   }
 
   /**
@@ -136,7 +136,7 @@ class OverledgerSDK {
    * Read by mapp id
    */
   public readTransactionsByMappId(): AxiosPromise<Object> {
-    return this.request.get(`${this.overledgerUri}/transactions/mappid/${this.mappId}`);
+    return this.request.get(`/transactions/mappid/${this.mappId}`);
   }
 
   /**
@@ -145,7 +145,7 @@ class OverledgerSDK {
    * @param {string} ovlTransactionId
    */
   public readByTransactionId(ovlTransactionId: string): AxiosPromise<Object> {
-    return this.request.get(`${this.overledgerUri}/transactions/id/${ovlTransactionId}`);
+    return this.request.get(`/transactions/id/${ovlTransactionId}`);
   }
 
   /**

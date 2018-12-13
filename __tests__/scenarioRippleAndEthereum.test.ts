@@ -36,7 +36,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
       await overledger.readTransactionsByMappId();
 
-      expect(axios.get).toBeCalledWith(`${overledger.overledgerUri}/mapp/testmappid/transactions`);
+      expect(axios.get).toBeCalledWith('/transactions/mappid/testmappid');
     });
 
     test('Can read transactions by overledger transaction id', async () => {
@@ -69,7 +69,7 @@ describe('Dlt/RippleAndEthereum', () => {
       const transactionId = '70cb4832-bbd0-400f-a6d8-2add51deb111';
       await overledger.readByTransactionId(transactionId);
 
-      expect(axios.get).toBeCalledWith(`${overledger.overledgerUri}/transactions/${transactionId}`);
+      expect(axios.get).toBeCalledWith(`/transactions/id/${transactionId}`);
     });
   });
 
@@ -152,7 +152,7 @@ describe('Dlt/RippleAndEthereum', () => {
 
       await overledger.send(signedTransactions);
 
-      expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+      expect(axios.post).toBeCalledWith('/transactions', {
         mappId: 'testmappid',
         dltData:
           [
@@ -248,19 +248,18 @@ describe('Dlt/RippleAndEthereum', () => {
 
       await overledger.send(signedTransactions);
 
-      expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+      expect(axios.post).toBeCalledWith('/transactions', {
         mappId: 'testmappid',
-        dltData:
-          [
-            {
-              dlt: 'ripple',
-              signedTransaction: expect.any(String),
-            },
-            {
-              dlt: 'ethereum',
-              signedTransaction: expect.any(String),
-            },
-          ],
+        dltData: [
+          {
+            dlt: 'ripple',
+            signedTransaction: expect.any(String),
+          },
+          {
+            dlt: 'ethereum',
+            signedTransaction: expect.any(String),
+          },
+        ],
       });
     });
   });

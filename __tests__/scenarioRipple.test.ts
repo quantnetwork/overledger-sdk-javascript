@@ -118,7 +118,7 @@ describe('Dlt/Ripple', () => {
     axios.post.mockResolvedValue({ status: 'broadcasted', dlt: 'ripple', transactionHash: 'E8F7ED33E0FD8A06C33A00165508A556A958F2DC53AF4C5FC40FD93FA1A50693' });
     await overledger.dlts.ripple.send(signedTransaction);
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
       dltData:
         [{
@@ -134,7 +134,7 @@ describe('Dlt/Ripple', () => {
       amount: '1', feePrice: '0.000012', sequence: 1, maxLedgerVersion: 100000000,
     });
 
-    expect(axios.post).toBeCalledWith(`${overledger.overledgerUri}/transactions`, {
+    expect(axios.post).toBeCalledWith('/transactions', {
       mappId: 'testmappid',
       dltData:
         [{
