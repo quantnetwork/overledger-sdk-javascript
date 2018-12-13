@@ -145,7 +145,7 @@ class OverledgerSDK {
    * @param {string} ovlTransactionId
    */
   public readByTransactionId(ovlTransactionId: string): AxiosPromise<Object> {
-    return this.request.get(`${this.overledgerUri}/transactions/${ovlTransactionId}`);
+    return this.request.get(`${this.overledgerUri}/transactions/id/${ovlTransactionId}`);
   }
 
   /**
