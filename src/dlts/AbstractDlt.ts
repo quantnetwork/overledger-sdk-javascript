@@ -26,7 +26,7 @@ abstract class AbstractDLT {
    */
   public sign(toAddress: string, message: string, options: TransactionOptions = {}): Promise<string> {
     if (!this.account) {
-      throw new Error('The account must be setup');
+      throw new Error(`The ${this.name} account must be setup`);
     }
 
     return this._sign(toAddress, message, options);
@@ -120,12 +120,7 @@ abstract class AbstractDLT {
       address = this.account.address;
     }
 
-    try {
-      const response = await this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
-      return response.data;
-    } catch (e) {
-      return e.response.data;
-    }
+    return this.sdk.request.post(`/faucet/fund/${this.name}/${address}/${amount}`);
   }
 }
 
