@@ -111,7 +111,7 @@ abstract class AbstractDLT {
    * @param {number} amount The amount to fund
    * @param {string} address the address to fund
    */
-  async fundAccount(amount: number, address: string = null): Promise<AxiosResponse> {
+  fundAccount(amount: number, address: string = null): Promise<AxiosResponse> {
     if (address === null) {
       if (!this.account) {
         throw new Error('The account must be setup');

@@ -33,7 +33,7 @@ describe('Dlt/Ripple', () => {
   });
 
   test('Cannot fund without the address parameter if no account are setup', async() => {
-    await expect(overledger.dlts.ripple.fundAccount()).rejects.toThrow('The account must be setup');
+    expect(() => overledger.dlts.ripple.fundAccount()).toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {

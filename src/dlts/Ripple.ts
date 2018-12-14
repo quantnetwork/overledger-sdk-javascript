@@ -135,7 +135,7 @@ class Ripple extends AbstractDlt {
   /**
    * @inheritdoc
    */
-  async fundAccount(amount: number = 1e9, address: string = null): Promise<AxiosResponse> {
+  fundAccount(amount: number = 1e9, address: string = null): Promise<AxiosResponse> {
     return super.fundAccount(amount, address);
   }
 }

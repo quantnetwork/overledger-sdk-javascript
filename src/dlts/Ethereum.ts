@@ -115,7 +115,7 @@ class Ethereum extends AbstractDLT {
   /**
    * @inheritdoc
    */
-  async fundAccount(amount: number = 1e18, address: string = null): Promise<AxiosResponse> {
+  fundAccount(amount: number = 1e18, address: string = null): Promise<AxiosResponse> {
     return super.fundAccount(amount, address);
   }
 }

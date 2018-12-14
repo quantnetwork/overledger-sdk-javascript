@@ -34,7 +34,7 @@ describe('Dlt/Bitcoin', () => {
   });
 
   test('Cannot fund without the address parameter if no account are setup', async () => {
-    await expect(overledger.dlts.bitcoin.fundAccount()).rejects.toThrow('The account must be setup');
+    expect(() => overledger.dlts.bitcoin.fundAccount()).toThrow('The account must be setup');
   });
 
   test('Can set the account previously created', () => {
@@ -69,7 +69,7 @@ describe('Dlt/Bitcoin', () => {
     expect(axios.post).toBeCalledWith(`/faucet/fund/bitcoin/${account.address}/10`);
   });
 
-  test('Can fund the setup account with a specific amount', () => {
+  test('Can fund an account with a specific amount', () => {
     const newAccount = overledger.dlts.bitcoin.createAccount();
     overledger.dlts.bitcoin.fundAccount(10, newAccount.address);
 
