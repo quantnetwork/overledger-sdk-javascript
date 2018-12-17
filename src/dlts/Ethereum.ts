@@ -118,24 +118,6 @@ class Ethereum extends AbstractDLT {
   fundAccount(amount: number = 1e18, address: string = null): Promise<AxiosResponse> {
     return super.fundAccount(amount, address);
   }
-
-  /**
-   * @inheritdoc
-   */
-  getBalance(address: string = null): Promise<AxiosResponse> {
-    if (address === null) {
-      if (!this.account) {
-        throw new Error('The account must be setup');
-      }
-
-      address = this.account.address;
-    }
-
-    return this.sdk.request.post('/balances', {
-      address,
-      dlt: this.name,
-  });
-  }
 }
 
 export type Transaction = {
