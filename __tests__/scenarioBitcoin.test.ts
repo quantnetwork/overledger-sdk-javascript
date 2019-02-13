@@ -46,6 +46,14 @@ describe('Dlt/Bitcoin', () => {
     expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3', { sequence: 1 })).toThrow('options.previousTransactionHash must be set up');
   });
 
+  test('Cannot sign a bitcoin transaction without specifying a value', () => {
+    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3', { sequence: 1, previousTransactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' })).toThrow('options.value must be set up');
+  });
+
+  test('Cannot sign a bitcoin transaction without specifying a feePrice', () => {
+    expect(() => overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3', { sequence: 1, previousTransactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111', value: 2 })).toThrow('options.feePrice must be set up');
+  });
+
   // @TODO: Needs to be fix
   test.skip('Can sign a bitcoin transaction', async () => {
     signedTransaction = await overledger.dlts.bitcoin.sign('2NFj2CVhE5ru7werwXUNCbirUW6KDo2d', 'QNT tt3', { sequence: 1, previousTransactionHash: '716b436d084fa8a23cc623411f84bdb581036a79f9519eefb36754c5e6fe1111' });

@@ -42,19 +42,19 @@ class Bitcoin extends AbstractDLT {
   // @TODO: add option statement
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): any {
     if (typeof options.sequence === 'undefined') {
-      throw new Error('options.sequence must be setup');
+      throw new Error('options.sequence must be set up');
     }
 
     if (typeof options.previousTransactionHash === 'undefined') {
-      throw new Error('options.previousTransactionHash must be setup');
+      throw new Error('options.previousTransactionHash must be set up');
     }
 
     if (typeof options.value === 'undefined') {
-      throw new Error('options.value must be setup');
+      throw new Error('options.value must be set up');
     }
 
     if (typeof options.feePrice === 'undefined') {
-      throw new Error('options.feePrice must be setup');
+      throw new Error('options.feePrice must be set up');
     }
 
     const tx = new bitcoin.TransactionBuilder(this.addressType);
