@@ -206,7 +206,6 @@ describe('Dlt/RippleAndEthereum', () => {
       signedTransactions = await overledger.sign([
         {
           dlt: 'ripple',
-          fromAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
           toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
           message: 'QNT test',
           options: {
@@ -218,7 +217,6 @@ describe('Dlt/RippleAndEthereum', () => {
         },
         {
           dlt: 'ethereum',
-          fromAddress: '0x930724bd974260Eb6C859abE2144f7e7ea73d7C1',
           toAddress: '0x0000000000000000000000000000000000000000',
           message: 'QNT test',
           options: {
@@ -302,7 +300,6 @@ describe('Dlt/RippleAndEthereum', () => {
       signedTransactions = await overledger.sign([
         {
           dlt: 'ripple',
-          fromAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
           toAddress: 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh',
           message: 'QNT test',
           options: {
@@ -314,7 +311,6 @@ describe('Dlt/RippleAndEthereum', () => {
         },
         {
           dlt: 'ethereum',
-          fromAddress: '0x930724bd974260Eb6C859abE2144f7e7ea73d7C1',
           toAddress: '0x0000000000000000000000000000000000000000',
           message: 'QNT test',
           options: {
