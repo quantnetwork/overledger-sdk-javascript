@@ -66,7 +66,7 @@ class OverledgerSDK {
 
     this.request = axios.create({
       baseURL: this.overledgerUri,
-      timeout: options.timeout || 1000,
+      timeout: options.timeout || 5000,
       headers: {
         Authorization: `Bearer ${this.mappId}:${this.bpiKey}`,
       },
