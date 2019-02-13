@@ -39,7 +39,6 @@ class Bitcoin extends AbstractDLT {
    * @inheritdoc
    */
   // @TODO: add return statement
-  // @TODO: add option statement
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): any {
     if (typeof options.sequence === 'undefined') {
       throw new Error('options.sequence must be set up');
@@ -64,7 +63,6 @@ class Bitcoin extends AbstractDLT {
     tx.addInput(options.previousTransactionHash, options.sequence);
     tx.addOutput(toAddress, options.amount);
     tx.addOutput(embed.output, this.NON_DUST_AMOUNT);
-    console.log(options.value - options.amount - this.NON_DUST_AMOUNT - options.feePrice);
     tx.addOutput(this.account.address, options.value - options.amount - this.NON_DUST_AMOUNT - options.feePrice);
 
     return tx;
