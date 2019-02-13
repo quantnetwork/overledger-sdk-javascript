@@ -76,11 +76,13 @@ The SDK provides the following functions which return a promise with a standard 
   - [getMappId](#getMappId)
   - [setBpiKey](#setBpiKey)
   - [getBpiKey](#getBpiKey)
-  - [getBalance](#getBalance)
   - [getBalances](#getBalances)
+  - [getSequences](#getSequences)
 - DLT functions
   - [Faucet](#faucet)
   - [Account](#account)
+  - [getBalance](#getBalance)
+  - [getSequence](#getSequence)
 
 
 ### configure
@@ -295,29 +297,6 @@ This function returns a string representing the bpi key that is currently used.
 | -------- | ------ | ------------------------------------- |
 | `bpiKey` | string | String representation of the BPI key. |
 
-### getBalance
-
-Get the balance of an address or, by default, the account that is currently set.
-
-Usage: `overledger.dlts.{dltName}.getBalance(address);`
-
-#### Parameters
-
-| Name      | Type   | Description       |
-| --------- | ------ | ------------------|
-| `address` | string | Optional address. |
-
-#### Return value
-
-This function returns an object with the following fields.
-
-| Name      | Type   | Description                                                       |
-| --------- | ------ | ----------------------------------------------------------------- |
-| `dlt`     | string | The DLT which the request has been submitted to                   |
-| `address` | string | The address holding the balance                                   |
-| `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
-| `value`   | string | The amount of units this address holds                            |
-
 ### getBalances
 
 Get the balances of multiple addresses
@@ -357,6 +336,44 @@ This function returns an array of objects with the following fields.
 | `address` | string | The address holding the balance                                   |
 | `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
 | `value`   | string | The amount of units this address holds                            |
+
+### getSequences
+
+Get the sequences of multiple addresses
+Usage:
+
+```
+const request = [
+	{
+		"dlt": "ethereum",
+		"fromAddress": "0x0000000000000000000000000000000000000000"
+	},
+	{
+		"dlt": "ripple",
+		"fromAddress": "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh"
+	}
+]
+
+overledger.getSequences(request);
+```
+
+#### Parameters
+
+This function accepts an array of objects with the following fields:
+
+| Name          | Type   | Description                                      |
+| ------------- | ------ | ------------------------------------------------ |
+| `dlt`         | string | The dlt where this address should be searched on |
+| `fromAddress` | string | The address for the sequence query               |
+
+#### Return value
+
+This function returns an array of objects with the following fields.
+
+| Name      | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `dlt`     | string | The DLT which the request has been submitted to                   |
+| `sequence`| string | The sequence number of this address                               |
 
 ### Faucet
 As per default it would take the configured address.
@@ -453,6 +470,51 @@ This function returns
 }
 ```
 *For bitcoin, the privateKey is in the WIF format*
+
+### getBalance
+
+Get the balance of an address or, by default, the account that is currently set.
+
+Usage: `overledger.dlts.{dltName}.getBalance(address);`
+
+#### Parameters
+
+| Name      | Type   | Description       |
+| --------- | ------ | ------------------|
+| `address` | string | Optional address. |
+
+#### Return value
+
+This function returns an object with the following fields.
+
+| Name      | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `dlt`     | string | The DLT which the request has been submitted to                   |
+| `address` | string | The address holding the balance                                   |
+| `unit`    | string | The unit; satoshi for bitcoin, wei for ethereum, drops for ripple |
+| `value`   | string | The amount of units this address holds                            |
+
+
+### getSequence
+
+Get the sequence of an address
+Usage: `overledger.dlts.{dltName}.getSequence('0x0000000000000000000000000000000000000000');`
+
+#### Parameters
+
+| Name          | Type   | Description                                      |
+| ------------- | ------ | ------------------------------------------------ |
+| `fromAddress` | string | The address for the sequence query               |
+
+#### Return value
+
+This function returns an array of objects with the following fields.
+
+| Name      | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `dlt`     | string | The DLT which the request has been submitted to                   |
+| `sequence`| string | The sequence number of this address                               |
+
 
 ## Usage Example
 
