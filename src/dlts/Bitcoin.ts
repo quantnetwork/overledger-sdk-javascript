@@ -38,24 +38,34 @@ class Bitcoin extends AbstractDLT {
   /**
    * @inheritdoc
    */
-    // @TODO: add return statement
-    // @TODO: add option statement
+  // @TODO: add return statement
+  // @TODO: add option statement
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): any {
     if (typeof options.sequence === 'undefined') {
-      throw new Error('options.sequence must be set up');
+      throw new Error('options.sequence must be setup');
     }
 
     if (typeof options.previousTransactionHash === 'undefined') {
-      throw new Error('options.previousTransactionHash must be set up');
+      throw new Error('options.previousTransactionHash must be setup');
+    }
+
+    if (typeof options.value === 'undefined') {
+      throw new Error('options.value must be setup');
+    }
+
+    if (typeof options.feePrice === 'undefined') {
+      throw new Error('options.feePrice must be setup');
     }
 
     const tx = new bitcoin.TransactionBuilder(this.addressType);
-    const data = Buffer.from(message); // Message is inserted
+    const data = Buffer.from(message, 'utf8'); // Message is inserted
 
     const embed = bitcoin.payments.embed({ data: [data] });
     tx.addInput(options.previousTransactionHash, options.sequence);
     tx.addOutput(toAddress, options.amount);
     tx.addOutput(embed.output, this.NON_DUST_AMOUNT);
+    console.log(options.value - options.amount - this.NON_DUST_AMOUNT - options.feePrice);
+    tx.addOutput(this.account.address, options.value - options.amount - this.NON_DUST_AMOUNT - options.feePrice);
 
     return tx;
   }
@@ -95,7 +105,7 @@ class Bitcoin extends AbstractDLT {
     this.account = {
       privateKey: keyPair,
       address: bitcoin.payments
-      .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
+        .p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address,
     };
   }
 
