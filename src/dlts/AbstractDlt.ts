@@ -156,7 +156,7 @@ export type Options = {
 
 export type TransactionOptions = {
   sequence?: number,
-  amount?: string,
+  amount?: string | number,
 };
 
 export type ApiCall = {

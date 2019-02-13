@@ -133,6 +133,7 @@ export type Transaction = {
 interface TransactionOptions extends BaseTransactionOptions {
   feePrice: string;
   feeLimit: string;
+  amount: string;
 }
 
 export default Ethereum;

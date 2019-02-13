@@ -149,6 +149,7 @@ export type Transaction = {
 interface TransactionOptions extends BaseTransactionOptions {
   feePrice: string;
   maxLedgerVersion: number;
+  amount: string;
 }
 
 export default Ripple;

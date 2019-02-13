@@ -119,6 +119,9 @@ class Bitcoin extends AbstractDLT {
 
 interface TransactionOptions extends BaseTransactionOptions {
   previousTransactionHash: string;
+  value: number;
+  amount: number;
+  feePrice: number;
 }
 
 export default Bitcoin;
