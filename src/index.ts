@@ -112,7 +112,7 @@ class OverledgerSDK {
    */
   public send(signedTransactions): AxiosPromise<Object> {
     const apiCall = signedTransactions.map(
-      dlt => this.dlts[dlt.dlt].buildApiCall(dlt.signedTransaction),
+      dlt => this.dlts[dlt.dlt].buildSignedTransactionsApiCall(dlt.signedTransaction),
     );
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));

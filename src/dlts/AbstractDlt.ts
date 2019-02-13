@@ -54,7 +54,7 @@ abstract class AbstractDLT {
       signedTransactions = signedTransaction;
     }
 
-    return this.sdk.send(signedTransactions.map(dlt => this.buildApiCall(dlt)));
+    return this.sdk.send(signedTransactions.map(dlt => this.buildSignedTransactionsApiCall(dlt)));
   }
 
   /**
@@ -88,7 +88,7 @@ abstract class AbstractDLT {
    *
    * @return {ApiCall}
    */
-  protected buildApiCall(signedTransaction: string): ApiCall {
+  protected buildSignedTransactionsApiCall(signedTransaction: string): ApiCall {
     return {
       signedTransaction,
       dlt: this.name,
