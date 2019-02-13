@@ -5,6 +5,104 @@ jest.mock('axios');
 
 describe('Dlt/RippleAndEthereum', () => {
   describe('Main read functions', () => {
+    test('Can getSequences for specific addresses from mappId', async () => {
+      const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
+        dlts: [
+          {
+            dlt: 'ripple',
+          },
+          {
+            dlt: 'ethereum',
+          },
+        ],
+      });
+
+      axios.post.mockResolvedValue([
+        {
+          mappId: 'mappTestId',
+          overledgerTransactionId: null,
+          timestamp: null,
+          dltData: [
+            {
+              sequence: 2,
+              dlt: 'ripple',
+            },
+            {
+              sequence: 0,
+              dlt: 'ethereum',
+            },
+          ],
+        },
+      ]);
+
+      const params = [
+        {
+          dlt: 'ethereum',
+          fromAddress: '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101',
+        },
+        {
+          dlt: 'ripple',
+          fromAddress: 'sncVkJpFZGjfHkahGeXVM4d3fXZTU',
+        },
+      ];
+
+      await overledger.getSequences(params);
+
+      expect(axios.post).toBeCalledWith('/sequence', {
+        mappId: 'testmappid',
+        dltData: [
+          {
+            dlt: 'ethereum',
+            fromAddress: expect.any(String),
+          },
+          {
+            dlt: 'ripple',
+            fromAddress: expect.any(String),
+          },
+        ],
+      });
+    });
+
+    test('Can getSequence for a specific address from mappId', async () => {
+      const ethAddress = '0xA72a14Cdca45D51326d394B2ddAFb408270Ae101';
+      const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
+        dlts: [
+          {
+            dlt: 'ripple',
+          },
+          {
+            dlt: 'ethereum',
+          },
+        ],
+      });
+
+      axios.post.mockResolvedValue([
+        {
+          mappId: 'mappTestId',
+          overledgerTransactionId: null,
+          timestamp: null,
+          dltData: [
+            {
+              sequence: 1,
+              dlt: 'ethereum',
+            },
+          ],
+        },
+      ]);
+
+      await overledger.dlts.ethereum.getSequence(ethAddress);
+
+      expect(axios.post).toBeCalledWith('/sequence', {
+        mappId: 'testmappid',
+        dltData: [
+          {
+            dlt: 'ethereum',
+            fromAddress: expect.any(String),
+          },
+        ],
+      });
+    });
+
     test('Can read transactions from mappId', async () => {
       const overledger = new OverledgerSDK('testmappid', 'testbpikey', {
         dlts: [
