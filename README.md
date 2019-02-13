@@ -52,7 +52,7 @@ NodeJS
 const OverledgerSDK = require("@quantnetwork/overledger-sdk").default;
 ```
 
-Initialize the SDK with the 3 available dlts. Optionally, a timeout period can be specified (by default it's 1000ms).
+Initialize the SDK with the 3 available dlts. Optionally, a timeout period can be specified (by default it's 5000ms).
 
 ```javascript
 const overledger = new OverledgerSDK("mappId", "bpiKey", {
