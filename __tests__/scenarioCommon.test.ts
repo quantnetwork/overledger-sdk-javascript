@@ -25,6 +25,21 @@ describe('Dlt/Common', () => {
         account = overledger.dlts[dlt.type].createAccount();
       });
 
+      test ('The default request timeout should be 5s', () => {
+        /**
+         * To be able to test that a specific timeout period has been set,
+         * we have to use the constructor again because of the scope of the mock
+         */
+        new OverledgerSDK('testmappid', 'testbpikey', {
+          dlts: [
+            {
+              dlt: dlt.type
+            }
+          ],
+        });
+        expect(axios.create.mock.calls[0][0].timeout).toEqual(5000);
+      })
+
       test ('Can specify a custom request timeout', () => {
         /**
          * To be able to test that a specific timeout period has been set,
