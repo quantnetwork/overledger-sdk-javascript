@@ -129,6 +129,8 @@ Example of DLT transaction data:
       amount: 1,
       sequence: 2, // VOUT
       previousTransactionHash: '77b04805f40a7cba6ed49be10d200f41462bfa266f24db91114798178c802058',
+      feePrice: 1e5,
+      value: 1
     }
   },
   {
