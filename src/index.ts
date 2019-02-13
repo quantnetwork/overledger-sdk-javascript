@@ -98,7 +98,7 @@ class OverledgerSDK {
    *
    * @param {array} dltData
    */
-  private buildWrapperApiCall(dltData: ApiCall[]): WrapperApiCall {
+  private buildWrapperApiCall(dltData: ApiCall[] | sequenceDataRequest[]): WrapperApiCall {
     return {
       dltData,
       mappId: this.mappId,
@@ -116,6 +116,15 @@ class OverledgerSDK {
     );
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
+  }
+
+  /**
+   * Get the sequence number from the provided address
+   *
+   * @param {Object} signedTransactions Object of the DLTs where you want to send a transaction
+   */
+  public getSequences(sequenceData: sequenceDataRequest[]): AxiosPromise<Object> {
+    return this.request.post('/sequence', this.buildWrapperApiCall(sequenceData));
   }
 
   /**
@@ -204,7 +213,7 @@ export type DltOptions = {
 
 export type WrapperApiCall = {
   mappId: string,
-  dltData: ApiCall[],
+  dltData: ApiCall[] | sequenceDataRequest[],
 };
 
 export type SignOptions = [{
@@ -212,6 +221,16 @@ export type SignOptions = [{
   toAddress: string,
   message: string,
   options: TransactionOptions,
+}];
+
+export type sequenceDataRequest = {
+  dlt: string,
+  fromAddress: string,
+};
+
+export type sequenceDataResponse = [{
+  dlt: string,
+  sequence: number,
 }];
 
 export default OverledgerSDK;
