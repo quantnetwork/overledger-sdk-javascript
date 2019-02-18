@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import OverledgerSDK from './';
+import OverledgerSDK, { SDKOptions } from './';
 
 class Search {
   sdk: OverledgerSDK;
@@ -9,12 +9,12 @@ class Search {
    * @param {Object} sdk
    * @param {Object} options
    */
-  constructor(sdk) {
+  constructor(sdk: OverledgerSDK, options: SDKOptions) {
     this.sdk = sdk;
 
     this.request = axios.create({
       baseURL: `${this.sdk.overledgerUri}/search`,
-      timeout: 1000,
+      timeout: options.timeout || 5000,
       headers: { Authorization: `Bearer ${this.sdk.mappId}:${this.sdk.bpiKey}` },
     });
   }

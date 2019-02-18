@@ -72,7 +72,7 @@ class OverledgerSDK {
       },
     });
 
-    this.search = new Search(this);
+    this.search = new Search(this, options);
   }
 
   /**
