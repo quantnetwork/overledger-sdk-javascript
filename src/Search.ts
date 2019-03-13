@@ -54,7 +54,7 @@ class Search {
    */
   async getBlockByDltAndHash(dlt, hash) {
     try {
-      const response = await this.request.get(`/chains/${dlt}/blocks/byHash/${hash}`);
+      const response = await this.request.get(`/${dlt}/blocks/${hash}`);
       return response;
     } catch (e) {
       return e.response;
@@ -68,7 +68,7 @@ class Search {
    */
   async getBlockByDltAndNumber(dlt, number) {
     try {
-      const response = await this.request.get(`/chains/${dlt}/blocks/byNumber/${number}`);
+      const response = await this.request.get(`/${dlt}/blocks/${number}`);
       return response;
     } catch (e) {
       return e.response;

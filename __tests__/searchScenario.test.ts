@@ -83,7 +83,7 @@ describe('Search', () => {
 
     await overledger.search.getBlockByDltAndHash('bitcoin', hash);
 
-    expect(axios.get).toBeCalledWith(`/chains/${dlt}/blocks/byHash/${hash}`);
+    expect(axios.get).toBeCalledWith(`/${dlt}/blocks/${hash}`);
   });
 
   test('Can search for a block by dlt and Number', async () => {
@@ -119,6 +119,6 @@ describe('Search', () => {
     });
     await overledger.search.getBlockByDltAndNumber('bitcoin', number);
 
-    expect(axios.get).toBeCalledWith(`/chains/${dlt}/blocks/byNumber/${number}`);
+    expect(axios.get).toBeCalledWith(`/${dlt}/blocks/${number}`);
   });
 });
