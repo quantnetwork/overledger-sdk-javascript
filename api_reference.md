@@ -1,21 +1,21 @@
 ## Modules
 
 <dl>
-<dt><a href="#module_bundle">bundle</a></dt>
+<dt><a href="#module_overledger-bundle">overledger-bundle</a></dt>
 <dd></dd>
-<dt><a href="#module_core">core</a></dt>
+<dt><a href="#module_overledger-core">overledger-core</a></dt>
 <dd></dd>
-<dt><a href="#module_dlt-abstract">dlt-abstract</a></dt>
+<dt><a href="#module_overledger-dlt-abstract">overledger-dlt-abstract</a></dt>
 <dd></dd>
-<dt><a href="#module_dlt-ethereum">dlt-ethereum</a></dt>
+<dt><a href="#module_overledger-dlt-ethereum">overledger-dlt-ethereum</a></dt>
 <dd></dd>
-<dt><a href="#module_dlt-ripple">dlt-ripple</a></dt>
+<dt><a href="#module_overledger-dlt-ripple">overledger-dlt-ripple</a></dt>
 <dd></dd>
-<dt><a href="#module_provider">provider</a></dt>
+<dt><a href="#module_overledger-provider">overledger-provider</a></dt>
 <dd></dd>
-<dt><a href="#module_search">search</a></dt>
+<dt><a href="#module_overledger-search">overledger-search</a></dt>
 <dd></dd>
-<dt><a href="#module_types">types</a></dt>
+<dt><a href="#module_overledger-types">overledger-types</a></dt>
 <dd></dd>
 </dl>
 
@@ -45,100 +45,100 @@
 </dd>
 </dl>
 
-<a name="module_bundle"></a>
+<a name="module_overledger-bundle"></a>
 
-## bundle
-<a name="module_bundle.default"></a>
+## overledger-bundle
+<a name="module_overledger-bundle.default"></a>
 
-### *bundle*.default
+### *overledger-bundle*.default
 Main Overledger SDK bundle. Includes all the packages for all supported DLTs.
 
-<a name="module_core"></a>
+<a name="module_overledger-core"></a>
 
-## core
+## overledger-core
 
-* [core](#module_core)
+* [overledger-core](#module_overledger-core)
 
     * _static_
-        * [.default](#module_core.default)
+        * [.default](#module_overledger-core.default)
 
     * _inner_
-        * [~OverledgerSDK](#module_core.OverledgerSDK)
+        * [~OverledgerSDK](#module_overledger-core.OverledgerSDK)
 
-            * [new OverledgerSDK(mappId, bpiKey, options)](#new_module_core.OverledgerSDK_new)
+            * [new OverledgerSDK(mappId, bpiKey, options)](#new_module_overledger-core.OverledgerSDK_new)
 
-            * [.dlts](#module_core.OverledgerSDK+dlts)
+            * [.dlts](#module_overledger-core.OverledgerSDK+dlts)
 
-            * [.loadDlt(config)](#module_core.OverledgerSDK+loadDlt)
+            * [.loadDlt(config)](#module_overledger-core.OverledgerSDK+loadDlt)
 
-            * [.validateOptions(options)](#module_core.OverledgerSDK+validateOptions)
+            * [.validateOptions(options)](#module_overledger-core.OverledgerSDK+validateOptions)
 
-            * [.buildWrapperApiCall(signedTransactionRequest)](#module_core.OverledgerSDK+buildWrapperApiCall)
+            * [.buildWrapperApiCall(signedTransactionRequest)](#module_overledger-core.OverledgerSDK+buildWrapperApiCall)
 
-            * [.sign(unsignedData)](#module_core.OverledgerSDK+sign)
+            * [.sign(unsignedData)](#module_overledger-core.OverledgerSDK+sign)
 
-            * [.send(signedTransactions)](#module_core.OverledgerSDK+send)
+            * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
-            * [.getBalances(balancesRequest)](#module_core.OverledgerSDK+getBalances)
+            * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
 
-            * [.getSequences(sequenceRequest)](#module_core.OverledgerSDK+getSequences)
+            * [.getSequences(sequenceRequest)](#module_overledger-core.OverledgerSDK+getSequences)
 
-            * [.readTransactionsByMappId()](#module_core.OverledgerSDK+readTransactionsByMappId)
+            * [.readTransactionsByMappId()](#module_overledger-core.OverledgerSDK+readTransactionsByMappId)
 
-            * [.readOverledgerTransaction(overledgerTransactionId)](#module_core.OverledgerSDK+readOverledgerTransaction)
+            * [.readOverledgerTransaction(overledgerTransactionId)](#module_overledger-core.OverledgerSDK+readOverledgerTransaction)
 
-            * [.setMappId(mappId)](#module_core.OverledgerSDK+setMappId)
+            * [.setMappId(mappId)](#module_overledger-core.OverledgerSDK+setMappId)
 
-            * [.getMappId()](#module_core.OverledgerSDK+getMappId)
+            * [.getMappId()](#module_overledger-core.OverledgerSDK+getMappId)
 
-            * [.setBpiKey(bpiKey)](#module_core.OverledgerSDK+setBpiKey)
+            * [.setBpiKey(bpiKey)](#module_overledger-core.OverledgerSDK+setBpiKey)
 
-            * [.getBpiKey()](#module_core.OverledgerSDK+getBpiKey)
+            * [.getBpiKey()](#module_overledger-core.OverledgerSDK+getBpiKey)
 
 
-<a name="module_core.default"></a>
+<a name="module_overledger-core.default"></a>
 
-### *core*.default
+### *overledger-core*.default
 Core Overledger SDK class. Individual dlt packages must be installed manually.
 
-<a name="module_core.OverledgerSDK"></a>
+<a name="module_overledger-core.OverledgerSDK"></a>
 
-### *core*~OverledgerSDK
+### *overledger-core*~OverledgerSDK
 
-* [~OverledgerSDK](#module_core.OverledgerSDK)
+* [~OverledgerSDK](#module_overledger-core.OverledgerSDK)
 
-    * [new OverledgerSDK(mappId, bpiKey, options)](#new_module_core.OverledgerSDK_new)
+    * [new OverledgerSDK(mappId, bpiKey, options)](#new_module_overledger-core.OverledgerSDK_new)
 
-    * [.dlts](#module_core.OverledgerSDK+dlts)
+    * [.dlts](#module_overledger-core.OverledgerSDK+dlts)
 
-    * [.loadDlt(config)](#module_core.OverledgerSDK+loadDlt)
+    * [.loadDlt(config)](#module_overledger-core.OverledgerSDK+loadDlt)
 
-    * [.validateOptions(options)](#module_core.OverledgerSDK+validateOptions)
+    * [.validateOptions(options)](#module_overledger-core.OverledgerSDK+validateOptions)
 
-    * [.buildWrapperApiCall(signedTransactionRequest)](#module_core.OverledgerSDK+buildWrapperApiCall)
+    * [.buildWrapperApiCall(signedTransactionRequest)](#module_overledger-core.OverledgerSDK+buildWrapperApiCall)
 
-    * [.sign(unsignedData)](#module_core.OverledgerSDK+sign)
+    * [.sign(unsignedData)](#module_overledger-core.OverledgerSDK+sign)
 
-    * [.send(signedTransactions)](#module_core.OverledgerSDK+send)
+    * [.send(signedTransactions)](#module_overledger-core.OverledgerSDK+send)
 
-    * [.getBalances(balancesRequest)](#module_core.OverledgerSDK+getBalances)
+    * [.getBalances(balancesRequest)](#module_overledger-core.OverledgerSDK+getBalances)
 
-    * [.getSequences(sequenceRequest)](#module_core.OverledgerSDK+getSequences)
+    * [.getSequences(sequenceRequest)](#module_overledger-core.OverledgerSDK+getSequences)
 
-    * [.readTransactionsByMappId()](#module_core.OverledgerSDK+readTransactionsByMappId)
+    * [.readTransactionsByMappId()](#module_overledger-core.OverledgerSDK+readTransactionsByMappId)
 
-    * [.readOverledgerTransaction(overledgerTransactionId)](#module_core.OverledgerSDK+readOverledgerTransaction)
+    * [.readOverledgerTransaction(overledgerTransactionId)](#module_overledger-core.OverledgerSDK+readOverledgerTransaction)
 
-    * [.setMappId(mappId)](#module_core.OverledgerSDK+setMappId)
+    * [.setMappId(mappId)](#module_overledger-core.OverledgerSDK+setMappId)
 
-    * [.getMappId()](#module_core.OverledgerSDK+getMappId)
+    * [.getMappId()](#module_overledger-core.OverledgerSDK+getMappId)
 
-    * [.setBpiKey(bpiKey)](#module_core.OverledgerSDK+setBpiKey)
+    * [.setBpiKey(bpiKey)](#module_overledger-core.OverledgerSDK+setBpiKey)
 
-    * [.getBpiKey()](#module_core.OverledgerSDK+getBpiKey)
+    * [.getBpiKey()](#module_overledger-core.OverledgerSDK+getBpiKey)
 
 
-<a name="new_module_core.OverledgerSDK_new"></a>
+<a name="new_module_overledger-core.OverledgerSDK_new"></a>
 
 #### new OverledgerSDK(mappId, bpiKey, options)
 
@@ -150,12 +150,12 @@ Core Overledger SDK class. Individual dlt packages must be installed manually.
 
 Create the Overledger SDK
 
-<a name="module_core.OverledgerSDK+dlts"></a>
+<a name="module_overledger-core.OverledgerSDK+dlts"></a>
 
 #### *overledgerSDK*.dlts
 The object storing the DLTs loaded by the Overledger SDK
 
-<a name="module_core.OverledgerSDK+loadDlt"></a>
+<a name="module_overledger-core.OverledgerSDK+loadDlt"></a>
 
 #### *overledgerSDK*.loadDlt(config)
 
@@ -166,7 +166,7 @@ The object storing the DLTs loaded by the Overledger SDK
 Load the DLT in the Overledger SDK
 
 **Returns**: <code>AbstractDLT</code> - The loaded DLT class  
-<a name="module_core.OverledgerSDK+validateOptions"></a>
+<a name="module_overledger-core.OverledgerSDK+validateOptions"></a>
 
 #### *overledgerSDK*.validateOptions(options)
 
@@ -176,7 +176,7 @@ Load the DLT in the Overledger SDK
 
 Validate the provided Overledger SDK Options
 
-<a name="module_core.OverledgerSDK+buildWrapperApiCall"></a>
+<a name="module_overledger-core.OverledgerSDK+buildWrapperApiCall"></a>
 
 #### *overledgerSDK*.buildWrapperApiCall(signedTransactionRequest)
 
@@ -187,7 +187,7 @@ Validate the provided Overledger SDK Options
 Wrap the DLT Data with the API schema
 
 **Returns**: <code>APICallWrapper</code> - Object conforming to the API schema  
-<a name="module_core.OverledgerSDK+sign"></a>
+<a name="module_overledger-core.OverledgerSDK+sign"></a>
 
 #### *overledgerSDK*.sign(unsignedData)
 
@@ -198,7 +198,7 @@ Wrap the DLT Data with the API schema
 Sign the provided transactions
 
 **Returns**: <code>Array.&lt;SignedTransactionRequest&gt;</code> - Array of signed transaction requests wrapped by Overledger metadata  
-<a name="module_core.OverledgerSDK+send"></a>
+<a name="module_overledger-core.OverledgerSDK+send"></a>
 
 #### *overledgerSDK*.send(signedTransactions)
 
@@ -208,7 +208,7 @@ Sign the provided transactions
 
 Send signed transactions to Overledger
 
-<a name="module_core.OverledgerSDK+getBalances"></a>
+<a name="module_overledger-core.OverledgerSDK+getBalances"></a>
 
 #### *overledgerSDK*.getBalances(balancesRequest)
 
@@ -218,7 +218,7 @@ Send signed transactions to Overledger
 
 Get the balances of the specified addresses
 
-<a name="module_core.OverledgerSDK+getSequences"></a>
+<a name="module_overledger-core.OverledgerSDK+getSequences"></a>
 
 #### *overledgerSDK*.getSequences(sequenceRequest)
 
@@ -229,12 +229,12 @@ Get the balances of the specified addresses
 Get the sequence numbers for the provided addresses
 
 **Returns**: [<code>SequenceDataResponse</code>](#SequenceDataResponse) - Sequence response  
-<a name="module_core.OverledgerSDK+readTransactionsByMappId"></a>
+<a name="module_overledger-core.OverledgerSDK+readTransactionsByMappId"></a>
 
 #### *overledgerSDK*.readTransactionsByMappId()
 Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
 
-<a name="module_core.OverledgerSDK+readOverledgerTransaction"></a>
+<a name="module_overledger-core.OverledgerSDK+readOverledgerTransaction"></a>
 
 #### *overledgerSDK*.readOverledgerTransaction(overledgerTransactionId)
 
@@ -244,7 +244,7 @@ Get transactions submitted through Oberledger by the Multi-Chain Application ID 
 
 Get the transaction specified by the Overledger Transaction ID
 
-<a name="module_core.OverledgerSDK+setMappId"></a>
+<a name="module_overledger-core.OverledgerSDK+setMappId"></a>
 
 #### *overledgerSDK*.setMappId(mappId)
 
@@ -254,12 +254,12 @@ Get the transaction specified by the Overledger Transaction ID
 
 Set the Multi-Chain Application ID
 
-<a name="module_core.OverledgerSDK+getMappId"></a>
+<a name="module_overledger-core.OverledgerSDK+getMappId"></a>
 
 #### *overledgerSDK*.getMappId()
 Get the Multi-Chain Application ID
 
-<a name="module_core.OverledgerSDK+setBpiKey"></a>
+<a name="module_overledger-core.OverledgerSDK+setBpiKey"></a>
 
 #### *overledgerSDK*.setBpiKey(bpiKey)
 
@@ -269,61 +269,61 @@ Get the Multi-Chain Application ID
 
 Set the Overledger Blockchain Programming Interface license key
 
-<a name="module_core.OverledgerSDK+getBpiKey"></a>
+<a name="module_overledger-core.OverledgerSDK+getBpiKey"></a>
 
 #### *overledgerSDK*.getBpiKey()
 Get the Overledger Blockchain Programming Interface license key
 
-<a name="module_dlt-abstract"></a>
+<a name="module_overledger-dlt-abstract"></a>
 
-## dlt-abstract
+## overledger-dlt-abstract
 
-* [dlt-abstract](#module_dlt-abstract)
+* [overledger-dlt-abstract](#module_overledger-dlt-abstract)
 
     * _static_
-        * [.default](#module_dlt-abstract.default)
+        * [.default](#module_overledger-dlt-abstract.default)
 
     * _inner_
-        * [~AbstractDLT](#module_dlt-abstract.AbstractDLT)
+        * [~AbstractDLT](#module_overledger-dlt-abstract.AbstractDLT)
 
-            * [new AbstractDLT(sdk, options)](#new_module_dlt-abstract.AbstractDLT_new)
+            * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
-            * [.getBalance(address)](#module_dlt-abstract.AbstractDLT+getBalance)
+            * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
-            * [.getSequence(address)](#module_dlt-abstract.AbstractDLT+getSequence)
+            * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
 
-            * [.sign(toAddress, message, options)](#module_dlt-abstract.AbstractDLT+sign)
+            * [.sign(toAddress, message, options)](#module_overledger-dlt-abstract.AbstractDLT+sign)
 
-            * [.send(signedTransaction)](#module_dlt-abstract.AbstractDLT+send)
+            * [.send(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+send)
 
-            * [.buildSignedTransactionsApiCall(signedTransaction)](#module_dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
+            * [.buildSignedTransactionsApiCall(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
 
 
-<a name="module_dlt-abstract.default"></a>
+<a name="module_overledger-dlt-abstract.default"></a>
 
-### *dlt-abstract*.default
+### *overledger-dlt-abstract*.default
 Abstract class for DLT modules. All DLT packages need to extend this class.
 
-<a name="module_dlt-abstract.AbstractDLT"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT"></a>
 
-### *dlt-abstract*~AbstractDLT
+### *overledger-dlt-abstract*~AbstractDLT
 
-* [~AbstractDLT](#module_dlt-abstract.AbstractDLT)
+* [~AbstractDLT](#module_overledger-dlt-abstract.AbstractDLT)
 
-    * [new AbstractDLT(sdk, options)](#new_module_dlt-abstract.AbstractDLT_new)
+    * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
-    * [.getBalance(address)](#module_dlt-abstract.AbstractDLT+getBalance)
+    * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
-    * [.getSequence(address)](#module_dlt-abstract.AbstractDLT+getSequence)
+    * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
 
-    * [.sign(toAddress, message, options)](#module_dlt-abstract.AbstractDLT+sign)
+    * [.sign(toAddress, message, options)](#module_overledger-dlt-abstract.AbstractDLT+sign)
 
-    * [.send(signedTransaction)](#module_dlt-abstract.AbstractDLT+send)
+    * [.send(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+send)
 
-    * [.buildSignedTransactionsApiCall(signedTransaction)](#module_dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
+    * [.buildSignedTransactionsApiCall(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
 
 
-<a name="new_module_dlt-abstract.AbstractDLT_new"></a>
+<a name="new_module_overledger-dlt-abstract.AbstractDLT_new"></a>
 
 #### new AbstractDLT(sdk, options)
 
@@ -332,7 +332,7 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 | sdk | <code>any</code> | 
 | options | <code>Object</code> | 
 
-<a name="module_dlt-abstract.AbstractDLT+getBalance"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+getBalance"></a>
 
 #### *abstractDLT*.getBalance(address)
 
@@ -342,7 +342,7 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
 Get the balance for a specific address
 
-<a name="module_dlt-abstract.AbstractDLT+getSequence"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+getSequence"></a>
 
 #### *abstractDLT*.getSequence(address)
 
@@ -352,7 +352,7 @@ Get the balance for a specific address
 
 Get the sequence for a specific address
 
-<a name="module_dlt-abstract.AbstractDLT+sign"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+sign"></a>
 
 #### *abstractDLT*.sign(toAddress, message, options)
 
@@ -364,7 +364,7 @@ Get the sequence for a specific address
 
 Sign a transaction for the DLT
 
-<a name="module_dlt-abstract.AbstractDLT+send"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+send"></a>
 
 #### *abstractDLT*.send(signedTransaction)
 
@@ -374,7 +374,7 @@ Sign a transaction for the DLT
 
 Send an Overledger signed transaction
 
-<a name="module_dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall"></a>
 
 #### *abstractDLT*.buildSignedTransactionsApiCall(signedTransaction)
 
@@ -384,60 +384,60 @@ Send an Overledger signed transaction
 
 Wrap a specific DLT signed transaction with the Overledger required fields
 
-<a name="module_dlt-ethereum"></a>
+<a name="module_overledger-dlt-ethereum"></a>
 
-## dlt-ethereum
+## overledger-dlt-ethereum
 
-* [dlt-ethereum](#module_dlt-ethereum)
+* [overledger-dlt-ethereum](#module_overledger-dlt-ethereum)
 
     * _static_
-        * [.default](#module_dlt-ethereum.default)
+        * [.default](#module_overledger-dlt-ethereum.default)
 
     * _inner_
-        * [~Ethereum](#module_dlt-ethereum.Ethereum)
+        * [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
 
-            * [new Ethereum(sdk, options)](#new_module_dlt-ethereum.Ethereum_new)
+            * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
 
-            * [.name](#module_dlt-ethereum.Ethereum+name)
+            * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
 
-            * [.symbol](#module_dlt-ethereum.Ethereum+symbol)
+            * [.symbol](#module_overledger-dlt-ethereum.Ethereum+symbol)
 
-            * [.createAccount()](#module_dlt-ethereum.Ethereum+createAccount)
+            * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
 
-            * [.setAccount(privateKey)](#module_dlt-ethereum.Ethereum+setAccount)
+            * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
 
-            * [.buildTransaction(toAddress, message, options)](#module_dlt-ethereum.Ethereum+buildTransaction)
+            * [.buildTransaction(toAddress, message, options)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
 
-            * [._sign(toAddress, message, options)](#module_dlt-ethereum.Ethereum+_sign)
+            * [._sign(toAddress, message, options)](#module_overledger-dlt-ethereum.Ethereum+_sign)
 
 
-<a name="module_dlt-ethereum.default"></a>
+<a name="module_overledger-dlt-ethereum.default"></a>
 
-### *dlt-ethereum*.default
+### *overledger-dlt-ethereum*.default
 Development package for Ethereum.
 
-<a name="module_dlt-ethereum.Ethereum"></a>
+<a name="module_overledger-dlt-ethereum.Ethereum"></a>
 
-### *dlt-ethereum*~Ethereum
+### *overledger-dlt-ethereum*~Ethereum
 
-* [~Ethereum](#module_dlt-ethereum.Ethereum)
+* [~Ethereum](#module_overledger-dlt-ethereum.Ethereum)
 
-    * [new Ethereum(sdk, options)](#new_module_dlt-ethereum.Ethereum_new)
+    * [new Ethereum(sdk, options)](#new_module_overledger-dlt-ethereum.Ethereum_new)
 
-    * [.name](#module_dlt-ethereum.Ethereum+name)
+    * [.name](#module_overledger-dlt-ethereum.Ethereum+name)
 
-    * [.symbol](#module_dlt-ethereum.Ethereum+symbol)
+    * [.symbol](#module_overledger-dlt-ethereum.Ethereum+symbol)
 
-    * [.createAccount()](#module_dlt-ethereum.Ethereum+createAccount)
+    * [.createAccount()](#module_overledger-dlt-ethereum.Ethereum+createAccount)
 
-    * [.setAccount(privateKey)](#module_dlt-ethereum.Ethereum+setAccount)
+    * [.setAccount(privateKey)](#module_overledger-dlt-ethereum.Ethereum+setAccount)
 
-    * [.buildTransaction(toAddress, message, options)](#module_dlt-ethereum.Ethereum+buildTransaction)
+    * [.buildTransaction(toAddress, message, options)](#module_overledger-dlt-ethereum.Ethereum+buildTransaction)
 
-    * [._sign(toAddress, message, options)](#module_dlt-ethereum.Ethereum+_sign)
+    * [._sign(toAddress, message, options)](#module_overledger-dlt-ethereum.Ethereum+_sign)
 
 
-<a name="new_module_dlt-ethereum.Ethereum_new"></a>
+<a name="new_module_overledger-dlt-ethereum.Ethereum_new"></a>
 
 #### new Ethereum(sdk, options)
 
@@ -446,22 +446,22 @@ Development package for Ethereum.
 | sdk | <code>any</code> | 
 | options | <code>Object</code> | 
 
-<a name="module_dlt-ethereum.Ethereum+name"></a>
+<a name="module_overledger-dlt-ethereum.Ethereum+name"></a>
 
 #### *ethereum*.name
 Name of the DLT
 
-<a name="module_dlt-ethereum.Ethereum+symbol"></a>
+<a name="module_overledger-dlt-ethereum.Ethereum+symbol"></a>
 
 #### *ethereum*.symbol
 Symbol of the DLT
 
-<a name="module_dlt-ethereum.Ethereum+createAccount"></a>
+<a name="module_overledger-dlt-ethereum.Ethereum+createAccount"></a>
 
 #### *ethereum*.createAccount()
 Create an account for a specific DLT
 
-<a name="module_dlt-ethereum.Ethereum+setAccount"></a>
+<a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
 
 #### *ethereum*.setAccount(privateKey)
 
@@ -471,7 +471,7 @@ Create an account for a specific DLT
 
 Set an account for signing transactions for a specific DLT
 
-<a name="module_dlt-ethereum.Ethereum+buildTransaction"></a>
+<a name="module_overledger-dlt-ethereum.Ethereum+buildTransaction"></a>
 
 #### *ethereum*.buildTransaction(toAddress, message, options)
 
@@ -483,7 +483,7 @@ Set an account for signing transactions for a specific DLT
 
 Build the transaction
 
-<a name="module_dlt-ethereum.Ethereum+_sign"></a>
+<a name="module_overledger-dlt-ethereum.Ethereum+_sign"></a>
 
 #### *ethereum*._sign(toAddress, message, options)
 
@@ -495,60 +495,60 @@ Build the transaction
 
 Sign the transaction
 
-<a name="module_dlt-ripple"></a>
+<a name="module_overledger-dlt-ripple"></a>
 
-## dlt-ripple
+## overledger-dlt-ripple
 
-* [dlt-ripple](#module_dlt-ripple)
+* [overledger-dlt-ripple](#module_overledger-dlt-ripple)
 
     * _static_
-        * [.default](#module_dlt-ripple.default)
+        * [.default](#module_overledger-dlt-ripple.default)
 
     * _inner_
-        * [~Ripple](#module_dlt-ripple.Ripple)
+        * [~Ripple](#module_overledger-dlt-ripple.Ripple)
 
-            * [new Ripple(sdk, options)](#new_module_dlt-ripple.Ripple_new)
+            * [new Ripple(sdk, options)](#new_module_overledger-dlt-ripple.Ripple_new)
 
-            * [.name](#module_dlt-ripple.Ripple+name)
+            * [.name](#module_overledger-dlt-ripple.Ripple+name)
 
-            * [.symbol](#module_dlt-ripple.Ripple+symbol)
+            * [.symbol](#module_overledger-dlt-ripple.Ripple+symbol)
 
-            * [.createAccount()](#module_dlt-ripple.Ripple+createAccount)
+            * [.createAccount()](#module_overledger-dlt-ripple.Ripple+createAccount)
 
-            * [.setAccount(privateKey)](#module_dlt-ripple.Ripple+setAccount)
+            * [.setAccount(privateKey)](#module_overledger-dlt-ripple.Ripple+setAccount)
 
-            * [.buildTransaction(toAddress, message, options)](#module_dlt-ripple.Ripple+buildTransaction)
+            * [.buildTransaction(toAddress, message, options)](#module_overledger-dlt-ripple.Ripple+buildTransaction)
 
-            * [._sign(toAddress, message, options)](#module_dlt-ripple.Ripple+_sign)
+            * [._sign(toAddress, message, options)](#module_overledger-dlt-ripple.Ripple+_sign)
 
 
-<a name="module_dlt-ripple.default"></a>
+<a name="module_overledger-dlt-ripple.default"></a>
 
-### *dlt-ripple*.default
+### *overledger-dlt-ripple*.default
 Development package for Ripple (XRP Ledger).
 
-<a name="module_dlt-ripple.Ripple"></a>
+<a name="module_overledger-dlt-ripple.Ripple"></a>
 
-### *dlt-ripple*~Ripple
+### *overledger-dlt-ripple*~Ripple
 
-* [~Ripple](#module_dlt-ripple.Ripple)
+* [~Ripple](#module_overledger-dlt-ripple.Ripple)
 
-    * [new Ripple(sdk, options)](#new_module_dlt-ripple.Ripple_new)
+    * [new Ripple(sdk, options)](#new_module_overledger-dlt-ripple.Ripple_new)
 
-    * [.name](#module_dlt-ripple.Ripple+name)
+    * [.name](#module_overledger-dlt-ripple.Ripple+name)
 
-    * [.symbol](#module_dlt-ripple.Ripple+symbol)
+    * [.symbol](#module_overledger-dlt-ripple.Ripple+symbol)
 
-    * [.createAccount()](#module_dlt-ripple.Ripple+createAccount)
+    * [.createAccount()](#module_overledger-dlt-ripple.Ripple+createAccount)
 
-    * [.setAccount(privateKey)](#module_dlt-ripple.Ripple+setAccount)
+    * [.setAccount(privateKey)](#module_overledger-dlt-ripple.Ripple+setAccount)
 
-    * [.buildTransaction(toAddress, message, options)](#module_dlt-ripple.Ripple+buildTransaction)
+    * [.buildTransaction(toAddress, message, options)](#module_overledger-dlt-ripple.Ripple+buildTransaction)
 
-    * [._sign(toAddress, message, options)](#module_dlt-ripple.Ripple+_sign)
+    * [._sign(toAddress, message, options)](#module_overledger-dlt-ripple.Ripple+_sign)
 
 
-<a name="new_module_dlt-ripple.Ripple_new"></a>
+<a name="new_module_overledger-dlt-ripple.Ripple_new"></a>
 
 #### new Ripple(sdk, options)
 
@@ -557,22 +557,22 @@ Development package for Ripple (XRP Ledger).
 | sdk | <code>any</code> | 
 | options | <code>Object</code> | 
 
-<a name="module_dlt-ripple.Ripple+name"></a>
+<a name="module_overledger-dlt-ripple.Ripple+name"></a>
 
 #### *ripple*.name
 Name of the DLT
 
-<a name="module_dlt-ripple.Ripple+symbol"></a>
+<a name="module_overledger-dlt-ripple.Ripple+symbol"></a>
 
 #### *ripple*.symbol
 Symbol of the DLT
 
-<a name="module_dlt-ripple.Ripple+createAccount"></a>
+<a name="module_overledger-dlt-ripple.Ripple+createAccount"></a>
 
 #### *ripple*.createAccount()
 Create an account for a specific DLT
 
-<a name="module_dlt-ripple.Ripple+setAccount"></a>
+<a name="module_overledger-dlt-ripple.Ripple+setAccount"></a>
 
 #### *ripple*.setAccount(privateKey)
 
@@ -582,7 +582,7 @@ Create an account for a specific DLT
 
 Set an account for signing for a specific DLT
 
-<a name="module_dlt-ripple.Ripple+buildTransaction"></a>
+<a name="module_overledger-dlt-ripple.Ripple+buildTransaction"></a>
 
 #### *ripple*.buildTransaction(toAddress, message, options)
 
@@ -594,7 +594,7 @@ Set an account for signing for a specific DLT
 
 Build the transaction
 
-<a name="module_dlt-ripple.Ripple+_sign"></a>
+<a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
 #### *ripple*._sign(toAddress, message, options)
 
@@ -606,87 +606,87 @@ Build the transaction
 
 Sign the transaction
 
-<a name="module_provider"></a>
+<a name="module_overledger-provider"></a>
 
-## provider
+## overledger-provider
 
-* [provider](#module_provider)
+* [overledger-provider](#module_overledger-provider)
 
     * _static_
-        * [.TESTNET](#module_provider.TESTNET)
+        * [.TESTNET](#module_overledger-provider.TESTNET)
 
-        * [.MAINNET](#module_provider.MAINNET)
+        * [.MAINNET](#module_overledger-provider.MAINNET)
 
-        * [.default](#module_provider.default)
+        * [.default](#module_overledger-provider.default)
 
     * _inner_
-        * [~Provider](#module_provider.Provider)
+        * [~Provider](#module_overledger-provider.Provider)
 
 
-<a name="module_provider.TESTNET"></a>
+<a name="module_overledger-provider.TESTNET"></a>
 
-### *provider*.TESTNET
+### *overledger-provider*.TESTNET
 Constant for the testnet URL.
 
-<a name="module_provider.MAINNET"></a>
+<a name="module_overledger-provider.MAINNET"></a>
 
-### *provider*.MAINNET
+### *overledger-provider*.MAINNET
 Constant for the mainnet URL (placeholder).
 
-<a name="module_provider.default"></a>
+<a name="module_overledger-provider.default"></a>
 
-### *provider*.default
+### *overledger-provider*.default
 Network provider package.
 
-<a name="module_provider.Provider"></a>
+<a name="module_overledger-provider.Provider"></a>
 
-### *provider*~Provider
-<a name="module_search"></a>
+### *overledger-provider*~Provider
+<a name="module_overledger-search"></a>
 
-## search
+## overledger-search
 
-* [search](#module_search)
+* [overledger-search](#module_overledger-search)
 
     * _static_
-        * [.default](#module_search.default)
+        * [.default](#module_overledger-search.default)
 
     * _inner_
-        * [~OverledgerSearch](#module_search.OverledgerSearch)
+        * [~OverledgerSearch](#module_overledger-search.OverledgerSearch)
 
-            * [new OverledgerSearch(sdk)](#new_module_search.OverledgerSearch_new)
+            * [new OverledgerSearch(sdk)](#new_module_overledger-search.OverledgerSearch_new)
 
-            * [.getTransaction(transactionHash)](#module_search.OverledgerSearch+getTransaction)
+            * [.getTransaction(transactionHash)](#module_overledger-search.OverledgerSearch+getTransaction)
 
-            * [.getTransactionType(hash)](#module_search.OverledgerSearch+getTransactionType)
+            * [.getTransactionType(hash)](#module_overledger-search.OverledgerSearch+getTransactionType)
 
-            * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_search.OverledgerSearch+getBlockByDltAndNumber)
+            * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_overledger-search.OverledgerSearch+getBlockByDltAndNumber)
 
-            * [.getBlockByDltAndHash(dlt, hash)](#module_search.OverledgerSearch+getBlockByDltAndHash)
+            * [.getBlockByDltAndHash(dlt, hash)](#module_overledger-search.OverledgerSearch+getBlockByDltAndHash)
 
 
-<a name="module_search.default"></a>
+<a name="module_overledger-search.default"></a>
 
-### *search*.default
+### *overledger-search*.default
 Search support package.
 
-<a name="module_search.OverledgerSearch"></a>
+<a name="module_overledger-search.OverledgerSearch"></a>
 
-### *search*~OverledgerSearch
+### *overledger-search*~OverledgerSearch
 
-* [~OverledgerSearch](#module_search.OverledgerSearch)
+* [~OverledgerSearch](#module_overledger-search.OverledgerSearch)
 
-    * [new OverledgerSearch(sdk)](#new_module_search.OverledgerSearch_new)
+    * [new OverledgerSearch(sdk)](#new_module_overledger-search.OverledgerSearch_new)
 
-    * [.getTransaction(transactionHash)](#module_search.OverledgerSearch+getTransaction)
+    * [.getTransaction(transactionHash)](#module_overledger-search.OverledgerSearch+getTransaction)
 
-    * [.getTransactionType(hash)](#module_search.OverledgerSearch+getTransactionType)
+    * [.getTransactionType(hash)](#module_overledger-search.OverledgerSearch+getTransactionType)
 
-    * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_search.OverledgerSearch+getBlockByDltAndNumber)
+    * [.getBlockByDltAndNumber(dlt, blockNumber)](#module_overledger-search.OverledgerSearch+getBlockByDltAndNumber)
 
-    * [.getBlockByDltAndHash(dlt, hash)](#module_search.OverledgerSearch+getBlockByDltAndHash)
+    * [.getBlockByDltAndHash(dlt, hash)](#module_overledger-search.OverledgerSearch+getBlockByDltAndHash)
 
 
-<a name="new_module_search.OverledgerSearch_new"></a>
+<a name="new_module_overledger-search.OverledgerSearch_new"></a>
 
 #### new OverledgerSearch(sdk)
 
@@ -694,7 +694,7 @@ Search support package.
 | --- | --- |
 | sdk | <code>Object</code> | 
 
-<a name="module_search.OverledgerSearch+getTransaction"></a>
+<a name="module_overledger-search.OverledgerSearch+getTransaction"></a>
 
 #### *overledgerSearch*.getTransaction(transactionHash)
 
@@ -704,7 +704,7 @@ Search support package.
 
 Get transaction by transaction hash (non-deterministic)
 
-<a name="module_search.OverledgerSearch+getTransactionType"></a>
+<a name="module_overledger-search.OverledgerSearch+getTransactionType"></a>
 
 #### *overledgerSearch*.getTransactionType(hash)
 
@@ -714,7 +714,7 @@ Get transaction by transaction hash (non-deterministic)
 
 Get the transaction type based on the hash
 
-<a name="module_search.OverledgerSearch+getBlockByDltAndNumber"></a>
+<a name="module_overledger-search.OverledgerSearch+getBlockByDltAndNumber"></a>
 
 #### *overledgerSearch*.getBlockByDltAndNumber(dlt, blockNumber)
 
@@ -725,7 +725,7 @@ Get the transaction type based on the hash
 
 Get block by DLT and number
 
-<a name="module_search.OverledgerSearch+getBlockByDltAndHash"></a>
+<a name="module_overledger-search.OverledgerSearch+getBlockByDltAndHash"></a>
 
 #### *overledgerSearch*.getBlockByDltAndHash(dlt, hash)
 
@@ -736,9 +736,9 @@ Get block by DLT and number
 
 Get block by DLT and hash
 
-<a name="module_types"></a>
+<a name="module_overledger-types"></a>
 
-## types
+## overledger-types
 <a name="Account"></a>
 
 ## Account
