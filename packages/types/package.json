@@ -1,0 +1,44 @@
+{
+  "name": "@overledger/types",
+  "version": "1.0.0-beta.1",
+  "description": "Quant Network Overledger types package for the JavaScript (JS) programming language.",
+  "main": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf dist && mkdir dist",
+    "build": "yarn run clean && tsc --declaration",
+    "lint": "tslint -c ../../tslint.json --project tsconfig.json 'src/**/*.ts'",
+    "docs": "tsc --declaration && jsdoc2md --no-cache --plugin dmd-clear -t README_tpl.hbs --files './dist/**/*.js' > README.md"
+  },
+  "repository": "https://github.com/quantnetwork/overledger-sdk-javascript/tree/master/packages/types",
+  "contributors": [
+    {
+      "name": "Sebastien Bramille",
+      "email": "sebastien.bramille@quant.network",
+      "url": "https://github.com/oktapodia"
+    },
+    {
+      "name": "Alexandru Chiriac",
+      "email": "alexandru.chiriac@quant.network",
+      "url": "https://github.com/alexchiriac"
+    }
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "axios": "^0.18.0",
+    "jest": "^24.8.0",
+    "lerna": "^3.14.0",
+    "nodemon": "^1.19.0",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.16.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.4.5"
+  }
+}

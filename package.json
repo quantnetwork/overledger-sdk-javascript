@@ -1,5 +1,5 @@
 {
-  "name": "overledger-sdk",
+  "name": "overledger",
   "private": true,
   "version": "1.0.0-beta.1",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
@@ -8,7 +8,7 @@
     "clean": "lerna run clean",
     "bootstrap": "lerna bootstrap",
     "test": "lerna run test --stream",
-    "prepublishOnly": "yarn run lint && yarn run build && yarn run test",
+    "prepublishOnly": "yarn run lint && yarn run test && yarn run build",
     "build": "make",
     "lint": "lerna exec -- yarn run lint",
     "docs": "lerna run docs && jsdoc2md --no-cache --plugin dmd-clear --files './packages/*/dist/**/*.js' > api_reference.md"

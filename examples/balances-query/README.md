@@ -1,18 +1,18 @@
 # Multichain Balances Query
 
-This example contains one script to return the balances for mutliple addresses on multiple DLTs.
+This example contains one script to return the balances for mutliple addresses on multiple DLTs. Please not this feature is not supported for Bitcoin at the moment.
 
 ## Building
 
 In order to run the example, first, make sure you have built the SDK by running the following command in the root folder of the project:
 
 ```
-yarn run build
+npm run build
 ```
 
 ## Running the example
 
-The script has a section at the beginning where a couple of variables need to be initialised. First, set a mappId and BPI key. Then you can just run the following script from the 'balance-query' directory:
+The script has a section at the beginning where a couple of variables need to be initialised. First, set a mappId and BPI key. Then you can just run:
 
 ```
 node balances-query.js
