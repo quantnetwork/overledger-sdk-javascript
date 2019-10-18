@@ -1,23 +1,25 @@
 // Replace the dependency by @overledger/bundle if you're in your own project
-const OverledgerSDK = require('../../packages/bundle').default;
+const OverledgerSDK = require('../../packages/overledger-bundle').default;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '<ENTER YOUR MAPPID>';
-const bpiKey = '<ENTER YOUR BPIKEY>';
+// const mappId = '<ENTER YOUR MAPPID>';
+// const bpiKey = '<ENTER YOUR BPIKEY>';
+const mappId = 'network.quant.software';
+const bpiKey = 'bpiKeyTest';
 
 // Paste in your ethereum and ripple private keys.
-// For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten testnet faucet.
-const partyAEthereumPrivateKey = '0x5444c3e0f5e0ad11dfc5ff5252edad08940844eebaca5c85189103b5633e98cf';
-const partyAEthereumAddress = '0x88E4e574d4a45aBF8740F0048C491FA7B513207A'
-// For Ripple, you can go to the official ripple testnet faucet to get an account already funded.
-const partyARipplePrivateKey = 'snGbMLSbreaeXDSRubW1hJ7x5jCYA';
-const partyARippleAddress = 'rGwnDLPBTTpFAYvd1LoKWyQzkUyKmf2LA9'
+// For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
+const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3';
+const partyAEthereumAddress = '0x650A87cfB9165C9F4Ccc7B971D971f50f753e761'
+// For Ripple, you can go to the official Ripple Testnet Faucet to get an account already funded.
+const partyARipplePrivateKey = 'sswERuW1KWEwMXF6VFpRY72PxfC9b';
+const partyARippleAddress = 'rhTa8RGotyJQAW8sS2tFVVfvcHYXaps9hC'
 
 
 const partyBEthereumAddress = '0x1a90dbb13861a29bFC2e464549D28bE44846Dbe4';
-// Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20 000 000 drops), if the address is unfunded.
+// Keep in mind that for Ripple, the minimum transfer amount is 20XRP (20,000,000 drops), if the address is not yet funded.
 const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
 
 //  ---------------------------------------------------------
@@ -55,7 +57,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
         amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
         sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
         feePrice: '1000', // Price for each individual gas unit this transaction will consume
-        feeLimit: '8000000', // The maximum fee that this transaction will use
+        feeLimit: '80000', // The maximum fee that this transaction will use
       },
     },
     {
