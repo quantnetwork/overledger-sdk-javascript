@@ -615,6 +615,7 @@ Set an account for signing for a specific DLT
 
 Build the transaction
 
+**Returns**: <code>Transaction</code> - Transaction (address, payment, instructions)  
 <a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
 #### *ripple*._sign(toAddress, message, options)

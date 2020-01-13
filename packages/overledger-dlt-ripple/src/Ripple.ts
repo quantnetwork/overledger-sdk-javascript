@@ -78,7 +78,7 @@ class Ripple extends AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    * 
-   * @return {Transaction}
+   * @return {Transaction} Transaction (address, payment, instructions)
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options === 'undefined') {
