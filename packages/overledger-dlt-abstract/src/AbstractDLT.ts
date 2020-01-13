@@ -2,7 +2,6 @@ import { TransactionOptions, SignedTransactionRequest, Account } from '@quantnet
 import { AxiosPromise, AxiosResponse } from 'axios';
 
 /**
- * @abstract
  * @memberof module:overledger-dlt-abstract
 */
 abstract class AbstractDLT {
