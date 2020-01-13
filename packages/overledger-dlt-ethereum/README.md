@@ -97,6 +97,7 @@ Symbol of the DLT
 #### *ethereum*.createAccount()
 Create an account for a specific DLT
 
+**Returns**: <code>Account</code> - Account - (privateKey, address)  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
 
 #### *ethereum*.setAccount(privateKey)

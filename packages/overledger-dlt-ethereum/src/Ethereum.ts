@@ -48,7 +48,7 @@ class Ethereum extends AbstractDLT {
   /**
    * Create an account for a specific DLT
    *
-   * @return {Account}
+   * @return {Account} Account - (privateKey, address)
    */
   createAccount(): Account {
     return this.web3.eth.accounts.create();
