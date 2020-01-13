@@ -48,7 +48,7 @@ class Ethereum extends AbstractDLT {
   /**
    * Create an account for a specific DLT
    *
-   * @return {Account} Account - (privateKey, address)
+   * @return {Account} (privateKey, address)
    */
   createAccount(): Account {
     return this.web3.eth.accounts.create();
@@ -68,7 +68,7 @@ class Ethereum extends AbstractDLT {
    *
    * @param {string} toAddress
    * @param {string} message
-   * @param {TransactionOptions} options
+   * @param {TransactionOptions} options Transaction details
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options === 'undefined') {

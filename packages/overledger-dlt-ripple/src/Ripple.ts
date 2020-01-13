@@ -43,7 +43,7 @@ class Ripple extends AbstractDLT {
   /**
    * Create an account for a specific DLT
    *
-   * @return {Account}
+   * @return {Account} (privateKey, address)
    */
   createAccount(): Account {
     const generated = this.rippleAPI.generateAddress();
@@ -78,7 +78,7 @@ class Ripple extends AbstractDLT {
    * @param {string} message
    * @param {TransactionOptions} options
    * 
-   * @return {Transaction} Transaction (address, payment, instructions)
+   * @return {Transaction} Transaction details
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options === 'undefined') {

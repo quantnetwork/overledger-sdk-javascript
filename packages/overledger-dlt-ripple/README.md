@@ -97,6 +97,7 @@ Symbol of the DLT
 #### *ripple*.createAccount()
 Create an account for a specific DLT
 
+**Returns**: <code>Account</code> - (privateKey, address)  
 <a name="module_overledger-dlt-ripple.Ripple+setAccount"></a>
 
 #### *ripple*.setAccount(privateKey)
@@ -119,7 +120,7 @@ Set an account for signing for a specific DLT
 
 Build the transaction
 
-**Returns**: <code>Transaction</code> - Transaction (address, payment, instructions)  
+**Returns**: <code>Transaction</code> - Transaction details  
 <a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
 #### *ripple*._sign(toAddress, message, options)

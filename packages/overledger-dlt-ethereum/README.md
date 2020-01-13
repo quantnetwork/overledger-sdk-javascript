@@ -97,7 +97,7 @@ Symbol of the DLT
 #### *ethereum*.createAccount()
 Create an account for a specific DLT
 
-**Returns**: <code>Account</code> - Account - (privateKey, address)  
+**Returns**: <code>Account</code> - (privateKey, address)  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
 
 #### *ethereum*.setAccount(privateKey)
@@ -112,11 +112,11 @@ Set an account for signing transactions for a specific DLT
 
 #### *ethereum*.buildTransaction(toAddress, message, options)
 
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| toAddress | <code>string</code> |  |
+| message | <code>string</code> |  |
+| options | <code>TransactionOptions</code> | Transaction details |
 
 Build the transaction
 

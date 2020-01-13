@@ -482,7 +482,7 @@ Symbol of the DLT
 #### *ethereum*.createAccount()
 Create an account for a specific DLT
 
-**Returns**: [<code>Account</code>](#Account) - Account - (privateKey, address)  
+**Returns**: [<code>Account</code>](#Account) - (privateKey, address)  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
 
 #### *ethereum*.setAccount(privateKey)
@@ -497,11 +497,11 @@ Set an account for signing transactions for a specific DLT
 
 #### *ethereum*.buildTransaction(toAddress, message, options)
 
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
+| Param | Type | Description |
+| --- | --- | --- |
+| toAddress | <code>string</code> |  |
+| message | <code>string</code> |  |
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | Transaction details |
 
 Build the transaction
 
@@ -594,6 +594,7 @@ Symbol of the DLT
 #### *ripple*.createAccount()
 Create an account for a specific DLT
 
+**Returns**: [<code>Account</code>](#Account) - (privateKey, address)  
 <a name="module_overledger-dlt-ripple.Ripple+setAccount"></a>
 
 #### *ripple*.setAccount(privateKey)
@@ -616,7 +617,7 @@ Set an account for signing for a specific DLT
 
 Build the transaction
 
-**Returns**: <code>Transaction</code> - Transaction (address, payment, instructions)  
+**Returns**: <code>Transaction</code> - Transaction details  
 <a name="module_overledger-dlt-ripple.Ripple+_sign"></a>
 
 #### *ripple*._sign(toAddress, message, options)
