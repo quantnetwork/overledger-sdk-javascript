@@ -4,6 +4,10 @@ import { AxiosPromise, AxiosResponse } from 'axios';
 /**
  * @memberof module:overledger-dlt-abstract
 */
+/**
+ * @abstract
+ * @class
+ */
 abstract class AbstractDLT { 
   name: string;
   sdk: any;
@@ -35,7 +39,6 @@ abstract class AbstractDLT {
 
   /**
    * Set an account for signing transactions for a specific DLT
-   * @abstract 
    * @param {string} privateKey The privateKey
    */
   abstract setAccount(privateKey: string): void;
