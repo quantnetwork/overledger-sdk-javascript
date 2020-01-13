@@ -84,7 +84,7 @@ abstract class AbstractDLT {
   /**
    * Send an Overledger signed transaction
    *
-   * @param {SignedTransactionRequest} signedTransaction
+   * @param {SignedTransactionRequest=} signedTransaction
    */
   public send(signedTransaction: SignedTransactionRequest): AxiosPromise<Object> {
     return this.sdk.send([this.buildSignedTransactionsApiCall(signedTransaction)]);
