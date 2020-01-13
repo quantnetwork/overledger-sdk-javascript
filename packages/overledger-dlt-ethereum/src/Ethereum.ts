@@ -68,7 +68,9 @@ class Ethereum extends AbstractDLT {
    *
    * @param {string} toAddress
    * @param {string} message
-   * @param {TransactionOptions} options Transaction details
+   * @param {TransactionOptions} options
+   * 
+   * @return {Transaction} Transaction details
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options === 'undefined') {

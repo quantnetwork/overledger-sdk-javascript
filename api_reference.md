@@ -497,14 +497,15 @@ Set an account for signing transactions for a specific DLT
 
 #### *ethereum*.buildTransaction(toAddress, message, options)
 
-| Param | Type | Description |
-| --- | --- | --- |
-| toAddress | <code>string</code> |  |
-| message | <code>string</code> |  |
-| options | [<code>TransactionOptions</code>](#TransactionOptions) | Transaction details |
+| Param | Type |
+| --- | --- |
+| toAddress | <code>string</code> | 
+| message | <code>string</code> | 
+| options | [<code>TransactionOptions</code>](#TransactionOptions) | 
 
 Build the transaction
 
+**Returns**: <code>Transaction</code> - Transaction details  
 <a name="module_overledger-dlt-ethereum.Ethereum+_sign"></a>
 
 #### *ethereum*._sign(toAddress, message, options)
