@@ -1,5 +1,3 @@
-import TransactionOptions from './TransactionOptions';
-
 /**
  * Unsigned transaction data.
  * @typedef {Object} UnsignedData
@@ -8,6 +6,8 @@ import TransactionOptions from './TransactionOptions';
  * @property {string} message - The transaction message.
  * @property {TransactionOptions} options - The specific transaction options.
  */
+
+import TransactionOptions from './TransactionOptions';
 
 /**
  * @memberof module:overledger-types

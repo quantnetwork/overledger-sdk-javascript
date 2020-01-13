@@ -8,8 +8,6 @@
 import SequenceDataRequest from './SequenceDataRequest';
 import SignedTransactionRequest from './SignedTransactionRequest';
 
-
-
 /**
  * @memberof module:overledger-types
  */
