@@ -4,7 +4,7 @@ import { AxiosPromise, AxiosResponse } from 'axios';
 /**
  * @memberof module:overledger-dlt-abstract
 */
-abstract class AbstractDLT {
+abstract class AbstractDLT { 
   name: string;
   sdk: any;
   options: Object;
@@ -27,7 +27,7 @@ abstract class AbstractDLT {
    */
 
   /**
-   * Create an account for a specific DLT.
+   * Create an account for a specific DLT
    * @abstract
    * @return {Account}
    */
@@ -35,7 +35,6 @@ abstract class AbstractDLT {
 
   /**
    * Set an account for signing transactions for a specific DLT
-   *
    * @abstract 
    * @param {string} privateKey The privateKey
    */
@@ -60,7 +59,6 @@ abstract class AbstractDLT {
 
   /**
    * Get the sequence for a specific address
-   *
    * @param {string|string[]} address
    */
   public getSequence(address: string): AxiosPromise<Object> {
@@ -93,7 +91,6 @@ abstract class AbstractDLT {
 
   /**
    * Internal method to sign a transaction for the DLT
-   * 
    * @abstract
    * @param {string} toAddress
    * @param {string} message
