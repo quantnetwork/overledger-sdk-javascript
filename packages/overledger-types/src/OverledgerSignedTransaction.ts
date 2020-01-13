@@ -1,5 +1,5 @@
 /**
- * Overledger signed transaction data
+ * Overledger signed transaction data.
  * @typedef {Object} OverledgerSignedTransaction
  * @property {string[]} transactions - The signed transaction blobs.
  * @property {string[]} signatures - The signasture blobs.

@@ -1,5 +1,5 @@
 /**
- * Overledger network provider options
+ * Overledger network provider options.
  * @typedef {Object} ProviderOptions
  * @property {NetworkOptions=} network - The network, either testnet, mainnet or custom.
  * @property {number=} timeout - Request timeout period specified in milliseconds.

@@ -1,5 +1,5 @@
 /**
- * Overledger sequence request
+ * Overledger sequence request.
  * @typedef {Object} SequenceDataRequest
  * @property {string} dlt - The distributed ledger technology.
  * @property {string} address - The address to search for.

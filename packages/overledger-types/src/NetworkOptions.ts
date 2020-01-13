@@ -1,5 +1,5 @@
 /**
- * Overledger network options
+ * Overledger network options.
  * @typedef {string} NetworkOptions
  */
 

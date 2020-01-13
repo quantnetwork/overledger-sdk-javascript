@@ -1,5 +1,5 @@
 /**
- * DLT and Address pair
+ * DLT and Address pair.
  * @typedef {Object} DLTAndAddress
  * @property {string} dlt - The distributed ledger technology.
  * @property {string} address - The address on the respective dlt network.

@@ -1,5 +1,5 @@
 /**
- * Overledger signed transaction request object
+ * Overledger signed transaction request object.
  * @typedef {Object} SignedTransactionRequest
  * @property {string} dlt - The distributed ledger technology.
  * @property {string} fromAddress - The address initiating the transaction.
