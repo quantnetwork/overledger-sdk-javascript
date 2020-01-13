@@ -25,6 +25,9 @@
 <dt><a href="#Account">Account</a> : <code>Object</code></dt>
 <dd><p>An Overledger Account instance for a single DLT.</p>
 </dd>
+<dt><a href="#APICallWrapper">APICallWrapper</a> : <code>Object</code></dt>
+<dd><p>A wrapper object for the dlt data to be sent to Overledger.</p>
+</dd>
 <dt><a href="#DLTAndAddress">DLTAndAddress</a> : <code>Object</code></dt>
 <dd><p>DLT and Address pair</p>
 </dd>
@@ -186,7 +189,7 @@ Validate the provided Overledger SDK Options
 
 Wrap the DLT Data with the API schema
 
-**Returns**: <code>APICallWrapper</code> - Object conforming to the API schema  
+**Returns**: [<code>APICallWrapper</code>](#APICallWrapper) - Object conforming to the API schema  
 <a name="module_overledger-core.OverledgerSDK+sign"></a>
 
 #### *overledgerSDK*.sign(unsignedData)
@@ -750,6 +753,18 @@ Get block by DLT and hash
 | address | <code>string</code> | The address or public key of the account, used for receiving messages. |
 
 An Overledger Account instance for a single DLT.
+
+<a name="APICallWrapper"></a>
+
+## APICallWrapper
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | The unique multi-chain application ID received from the Overledger Developer Portal. |
+| dltData | <code>Array.&lt;SignedTransactionRequest&gt;</code> \| [<code>Array.&lt;SequenceDataRequest&gt;</code>](#SequenceDataRequest) | The dlt data to be sent to Overledger |
+
+A wrapper object for the dlt data to be sent to Overledger.
 
 <a name="DLTAndAddress"></a>
 
