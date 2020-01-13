@@ -788,7 +788,7 @@ Overledger network options
 | Name | Type | Description |
 | --- | --- | --- |
 | dlt | <code>string</code> | The distributed ledger technology. |
-| address- | <code>string</code> | The address to search for. |
+| address | <code>string</code> | The address to search for. |
 
 Overledger sequence request
 
