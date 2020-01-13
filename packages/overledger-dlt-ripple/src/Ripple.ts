@@ -77,6 +77,8 @@ class Ripple extends AbstractDLT {
    * @param {string} toAddress
    * @param {string} message
    * @param {TransactionOptions} options
+   * 
+   * @return {Transaction}
    */
   buildTransaction(toAddress: string, message: string, options: TransactionOptions): Transaction {
     if (typeof options === 'undefined') {
@@ -134,9 +136,9 @@ class Ripple extends AbstractDLT {
   /**
    * Sign the transaction
    *
-   * @param {string} toAddress
-   * @param {string} message
-   * @param {TransactionOptions} options
+   * @param {string} toAddress receiver address
+   * @param {string} message message in memos to display in the resulting transaction
+   * @param {TransactionOptions} options DLT transaction options
    */
   _sign(toAddress: string, message: string, options: TransactionOptions): Promise<string> {
     const built = this.buildTransaction(toAddress, message, options);

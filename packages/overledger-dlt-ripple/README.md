@@ -123,11 +123,11 @@ Build the transaction
 
 #### *ripple*._sign(toAddress, message, options)
 
-| Param | Type |
-| --- | --- |
-| toAddress | <code>string</code> | 
-| message | <code>string</code> | 
-| options | <code>TransactionOptions</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| toAddress | <code>string</code> | receiver address |
+| message | <code>string</code> | message in memos to display in the resulting transaction |
+| options | <code>TransactionOptions</code> | DLT transaction options |
 
 Sign the transaction
 
