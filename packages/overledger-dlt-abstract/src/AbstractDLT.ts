@@ -28,14 +28,14 @@ abstract class AbstractDLT {
 
   /**
    * Create an account for a specific DLT
-   *
+   * @abstract
    * @return {Account}
    */
   abstract createAccount(): Account;
 
   /**
    * Set an account for signing transactions for a specific DLT
-   *
+   * @abstract
    * @param {string} privateKey The privateKey
    */
   abstract setAccount(privateKey: string): void;
@@ -92,7 +92,7 @@ abstract class AbstractDLT {
 
   /**
    * Internal method to sign a transaction for the DLT
-   *
+   * @abstract
    * @param {string} toAddress
    * @param {string} message
    * @param {TransactionOptions} options
