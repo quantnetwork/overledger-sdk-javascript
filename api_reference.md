@@ -29,34 +29,34 @@
 <dd><p>A wrapper object for the dlt data to be sent to Overledger.</p>
 </dd>
 <dt><a href="#DLTAndAddress">DLTAndAddress</a> : <code>Object</code></dt>
-<dd><p>DLT and Address pair</p>
+<dd><p>DLT and Address pair.</p>
 </dd>
 <dt><a href="#DLTOptions">DLTOptions</a> : <code>Object</code></dt>
-<dd><p>Options for loading a DLT in the SDK</p>
+<dd><p>Options for loading a DLT in the SDK.</p>
 </dd>
 <dt><a href="#NetworkOptions">NetworkOptions</a> : <code>string</code></dt>
-<dd><p>Overledger network options</p>
+<dd><p>Overledger network options.</p>
 </dd>
 <dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Options for insantiating the SDK</p>
+<dd><p>Options for insantiating the SDK.</p>
 </dd>
 <dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
-<dd><p>Overledger signed transaction data</p>
+<dd><p>Overledger signed transaction data.</p>
 </dd>
 <dt><a href="#ProviderOptions">ProviderOptions</a> : <code>Object</code></dt>
-<dd><p>Overledger network provider options</p>
+<dd><p>Overledger network provider options.</p>
 </dd>
 <dt><a href="#SDKOptions">SDKOptions</a> : <code>Object</code></dt>
-<dd><p>Overledger SDK options</p>
+<dd><p>Overledger SDK options.</p>
 </dd>
 <dt><a href="#SequenceDataRequest">SequenceDataRequest</a> : <code>Object</code></dt>
-<dd><p>Overledger sequence request</p>
+<dd><p>Overledger sequence request.</p>
 </dd>
 <dt><a href="#SequenceDataResponse">SequenceDataResponse</a> : <code>Array.&lt;Object&gt;</code></dt>
-<dd><p>Overledger sequence data response</p>
+<dd><p>Overledger sequence data response.</p>
 </dd>
 <dt><a href="#SignedTransactionRequest">SignedTransactionRequest</a> : <code>Object</code></dt>
-<dd><p>Overledger signed transaction request object</p>
+<dd><p>Overledger signed transaction request object.</p>
 </dd>
 <dt><a href="#TransactionOptions">TransactionOptions</a> : <code>Object</code></dt>
 <dd><p>DLT transaction options.</p>
@@ -643,6 +643,10 @@ Sign the transaction
     * _inner_
         * [~Provider](#module_overledger-provider.Provider)
 
+            * [new Provider(mappId, bpiKey, ProviderOptions)](#new_module_overledger-provider.Provider_new)
+
+            * [.createRequest(path)](#module_overledger-provider.Provider+createRequest)
+
 
 <a name="module_overledger-provider.TESTNET"></a>
 
@@ -662,6 +666,32 @@ Network provider package.
 <a name="module_overledger-provider.Provider"></a>
 
 ### *overledger-provider*~Provider
+
+* [~Provider](#module_overledger-provider.Provider)
+
+    * [new Provider(mappId, bpiKey, ProviderOptions)](#new_module_overledger-provider.Provider_new)
+
+    * [.createRequest(path)](#module_overledger-provider.Provider+createRequest)
+
+
+<a name="new_module_overledger-provider.Provider_new"></a>
+
+#### new Provider(mappId, bpiKey, ProviderOptions)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | The Multi-chain Application ID |
+| bpiKey | <code>string</code> | The Overledger Blockchain Programming Interface license key |
+| ProviderOptions | [<code>ProviderOptions</code>](#ProviderOptions) | Overledger network provider options |
+
+<a name="module_overledger-provider.Provider+createRequest"></a>
+
+#### *provider*.createRequest(path)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Request endpoint resource path |
+
 <a name="module_overledger-search"></a>
 
 ## overledger-search
@@ -794,7 +824,7 @@ A wrapper object for the dlt data to be sent to Overledger.
 | dlt | <code>string</code> | The distributed ledger technology. |
 | address | <code>string</code> | The address on the respective dlt network. |
 
-DLT and Address pair
+DLT and Address pair.
 
 <a name="DLTOptions"></a>
 
@@ -806,12 +836,12 @@ DLT and Address pair
 | dlt | <code>string</code> | The distributed ledger technology. |
 | [privateKey] | <code>string</code> | The private key of an account for the respecitve dlt. |
 
-Options for loading a DLT in the SDK
+Options for loading a DLT in the SDK.
 
 <a name="NetworkOptions"></a>
 
 ## NetworkOptions
-Overledger network options
+Overledger network options.
 
 <a name="Options"></a>
 
@@ -822,7 +852,7 @@ Overledger network options
 | --- | --- | --- |
 | [privateKey] | <code>string</code> | The private key of the user account. |
 
-Options for insantiating the SDK
+Options for insantiating the SDK.
 
 <a name="OverledgerSignedTransaction"></a>
 
@@ -834,7 +864,7 @@ Options for insantiating the SDK
 | transactions | <code>Array.&lt;string&gt;</code> | The signed transaction blobs. |
 | signatures | <code>Array.&lt;string&gt;</code> | The signasture blobs. |
 
-Overledger signed transaction data
+Overledger signed transaction data.
 
 <a name="ProviderOptions"></a>
 
@@ -846,7 +876,7 @@ Overledger signed transaction data
 | [network] | [<code>NetworkOptions</code>](#NetworkOptions) | The network, either testnet, mainnet or custom. |
 | [timeout] | <code>number</code> | Request timeout period specified in milliseconds. |
 
-Overledger network provider options
+Overledger network provider options.
 
 <a name="SDKOptions"></a>
 
@@ -858,7 +888,7 @@ Overledger network provider options
 | dlts | [<code>Array.&lt;DLTOptions&gt;</code>](#DLTOptions) | The dlts to be loaded. |
 | [provider] | [<code>ProviderOptions</code>](#ProviderOptions) | The network provider options. |
 
-Overledger SDK options
+Overledger SDK options.
 
 <a name="SequenceDataRequest"></a>
 
@@ -870,7 +900,7 @@ Overledger SDK options
 | dlt | <code>string</code> | The distributed ledger technology. |
 | address | <code>string</code> | The address to search for. |
 
-Overledger sequence request
+Overledger sequence request.
 
 <a name="SequenceDataResponse"></a>
 
@@ -883,7 +913,7 @@ Overledger sequence request
 | address | <code>string</code> | The address the request was made for. |
 | sequence | <code>number</code> | The sequence number for the respective address. |
 
-Overledger sequence data response
+Overledger sequence data response.
 
 <a name="SignedTransactionRequest"></a>
 
@@ -897,7 +927,7 @@ Overledger sequence data response
 | amount | <code>string</code> | The token amount in the lowest unit for the respective DLT. |
 | signedTransaction | [<code>OverledgerSignedTransaction</code>](#OverledgerSignedTransaction) | The signed transaction object. |
 
-Overledger signed transaction request object
+Overledger signed transaction request object.
 
 <a name="TransactionOptions"></a>
 

@@ -36,6 +36,10 @@ yarn add @quantnetwork/overledger-provider
     * _inner_
         * [~Provider](#module_overledger-provider.Provider)
 
+            * [new Provider(mappId, bpiKey, ProviderOptions)](#new_module_overledger-provider.Provider_new)
+
+            * [.createRequest(path)](#module_overledger-provider.Provider+createRequest)
+
 
 <a name="module_overledger-provider.TESTNET"></a>
 
@@ -55,3 +59,29 @@ Network provider package.
 <a name="module_overledger-provider.Provider"></a>
 
 ### *overledger-provider*~Provider
+
+* [~Provider](#module_overledger-provider.Provider)
+
+    * [new Provider(mappId, bpiKey, ProviderOptions)](#new_module_overledger-provider.Provider_new)
+
+    * [.createRequest(path)](#module_overledger-provider.Provider+createRequest)
+
+
+<a name="new_module_overledger-provider.Provider_new"></a>
+
+#### new Provider(mappId, bpiKey, ProviderOptions)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| mappId | <code>string</code> | The Multi-chain Application ID |
+| bpiKey | <code>string</code> | The Overledger Blockchain Programming Interface license key |
+| ProviderOptions | <code>ProviderOptions</code> | Overledger network provider options |
+
+<a name="module_overledger-provider.Provider+createRequest"></a>
+
+#### *provider*.createRequest(path)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Request endpoint resource path |
+

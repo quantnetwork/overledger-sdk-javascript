@@ -13,6 +13,11 @@ class Provider {
   options: ProviderOptions;
   network: NetworkOptions;
 
+  /**
+   * @param {string} mappId The Multi-chain Application ID
+   * @param {string} bpiKey The Overledger Blockchain Programming Interface license key
+   * @param {ProviderOptions} ProviderOptions Overledger network provider options
+   */
   constructor(mappId: string, bpiKey: string, options: ProviderOptions = {}) {
     this.mappId = mappId;
     this.bpiKey = bpiKey;
@@ -20,6 +25,10 @@ class Provider {
     this.network = this.options.network || TESTNET;
   }
 
+  /**
+   * 
+   * @param {string} path Request endpoint resource path
+   */
   createRequest(path?: string): AxiosInstance {
     let overledgerUri: string;
 
