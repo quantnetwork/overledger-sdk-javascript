@@ -4,6 +4,7 @@ import { AxiosPromise, AxiosResponse } from 'axios';
 /**
  * @memberof module:overledger-dlt-abstract
 */
+/** @abstract */
 abstract class AbstractDLT { 
   name: string;
   sdk: any;
@@ -43,7 +44,6 @@ abstract class AbstractDLT {
 
   /**
    * Get the balance for a specific address
-   *
    * @param {string} address The address to query for
    */
   public getBalance(address: string = null): Promise<AxiosResponse> {
