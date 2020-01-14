@@ -4,7 +4,10 @@ import { AxiosPromise, AxiosResponse } from 'axios';
 /**
  * @memberof module:overledger-dlt-abstract
 */
-/** @abstract */
+/**
+ * @class
+ * @abstract
+ */
 abstract class AbstractDLT { 
   name: string;
   sdk: any;
