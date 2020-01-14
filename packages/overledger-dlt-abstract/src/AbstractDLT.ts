@@ -32,7 +32,7 @@ abstract class AbstractDLT {
    * Abstract method to be implemented in each DLT
    * @return {Account}
    */
-  public createAccount(): Account{
+  public createAccount(): Account {
       throw new Error(`createAccount: abstract method must be implemented`);
   }
 
