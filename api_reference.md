@@ -23,6 +23,8 @@
 
 <dl>
 <dt><a href="#Account">Account</a> : <code>Object</code></dt>
+<dd></dd>
+<dt><a href="#Account">Account</a> : <code>Object</code></dt>
 <dd><p>An Overledger Account instance for a single DLT.</p>
 </dd>
 <dt><a href="#APICallWrapper">APICallWrapper</a> : <code>Object</code></dt>
@@ -309,6 +311,8 @@ Get the Overledger Blockchain Programming Interface license key
 
             * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
+            * *[.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
+*
             * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
             * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
@@ -333,6 +337,8 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
     * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
+    * *[.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
+*
     * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
     * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
@@ -352,6 +358,11 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 | --- | --- |
 | sdk | <code>any</code> | 
 | options | <code>Object</code> | 
+
+<a name="module_overledger-dlt-abstract.AbstractDLT+createAccount"></a>
+
+#### **abstractDLT*.createAccount()*
+Create an account for a specific DLT
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+getBalance"></a>
 
@@ -794,6 +805,16 @@ Get block by DLT and hash
 <a name="module_overledger-types"></a>
 
 ## overledger-types
+<a name="Account"></a>
+
+## Account
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| privateKey | <code>string</code> | The privateKey |
+| address | <code>string</code> | The address |
+
 <a name="Account"></a>
 
 ## Account

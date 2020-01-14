@@ -20,6 +20,20 @@ yarn add @quantnetwork/overledger-dlt-abstract
 
 ## API Reference
 
+## Modules
+
+<dl>
+<dt><a href="#module_overledger-dlt-abstract">overledger-dlt-abstract</a></dt>
+<dd></dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#Account">Account</a> : <code>Object</code></dt>
+<dd></dd>
+</dl>
+
 <a name="module_overledger-dlt-abstract"></a>
 
 ## overledger-dlt-abstract
@@ -34,6 +48,8 @@ yarn add @quantnetwork/overledger-dlt-abstract
 
             * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
+            * *[.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
+*
             * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
             * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
@@ -58,6 +74,8 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
     * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
+    * *[.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
+*
     * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
 
     * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
@@ -77,6 +95,11 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 | --- | --- |
 | sdk | <code>any</code> | 
 | options | <code>Object</code> | 
+
+<a name="module_overledger-dlt-abstract.AbstractDLT+createAccount"></a>
+
+#### **abstractDLT*.createAccount()*
+Create an account for a specific DLT
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+getBalance"></a>
 
@@ -129,4 +152,14 @@ Send an Overledger signed transaction
 | signedTransaction | <code>SignedTransactionRequest</code> | 
 
 Wrap a specific DLT signed transaction with the Overledger required fields
+
+<a name="Account"></a>
+
+## Account
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| privateKey | <code>string</code> | The privateKey |
+| address | <code>string</code> | The address |
 
