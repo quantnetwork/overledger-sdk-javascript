@@ -27,14 +27,32 @@ the bundle package can be installed, which will include all required dependencie
 npm install @quantnetwork/overledger-bundle
 ```
 
+Or, if you prefer using [yarn](https://yarnpkg.com/):
+
+```
+yarn add @quantnetwork/overledger-bundle
+```
+
 Alternatively, the suite of packages allows developers to chose which blockchains/DLTs they would like to utilise by installing the core package and the individual DLT packages.
 
 ```
 npm install @quantnetwork/overledger-core
 ```
 
+Or, if you prefer using [yarn](https://yarnpkg.com/):
+
+```
+yarn add @quantnetwork/overledger-core
+```
+
 ```
 npm install @quantnetwork/overledger-ethereum
+```
+
+Or, if you prefer using [yarn](https://yarnpkg.com/):
+
+```
+yarn add @quantnetwork/overledger-ethereum
 ```
 
 
