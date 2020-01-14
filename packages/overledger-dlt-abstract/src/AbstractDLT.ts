@@ -28,6 +28,7 @@ abstract class AbstractDLT {
 
   /**
    * Create an account for a specific DLT
+   * 
    * Abstract method to be implemented in each DLT
    * @return {Account}
    */
@@ -37,6 +38,7 @@ abstract class AbstractDLT {
 
   /**
    * Set an account for signing transactions for a specific DLT
+   * 
    * Abstract method to be implemented in each DLT
    * @param {string} privateKey The privateKey
    */

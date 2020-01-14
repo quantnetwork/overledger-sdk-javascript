@@ -104,6 +104,7 @@ Abstract class for DLT modules. All DLT packages need to extend this class.
 
 #### *abstractDLT*.createAccount()
 Create an account for a specific DLT
+
 Abstract method to be implemented in each DLT
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+setAccount"></a>
@@ -115,6 +116,7 @@ Abstract method to be implemented in each DLT
 | privateKey | <code>string</code> | The privateKey |
 
 Set an account for signing transactions for a specific DLT
+
 Abstract method to be implemented in each DLT
 
 <a name="module_overledger-dlt-abstract.AbstractDLT+getBalance"></a>
