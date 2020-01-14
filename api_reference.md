@@ -509,7 +509,7 @@ Symbol of the DLT
 <a name="module_overledger-dlt-ethereum.Ethereum+createAccount"></a>
 
 #### *ethereum*.createAccount()
-Create an account for a specific DLT
+Create an account for a specific Ethereum
 
 **Returns**: [<code>Account</code>](#Account) - (privateKey, address)  
 <a name="module_overledger-dlt-ethereum.Ethereum+setAccount"></a>
@@ -622,7 +622,7 @@ Symbol of the DLT
 <a name="module_overledger-dlt-ripple.Ripple+createAccount"></a>
 
 #### *ripple*.createAccount()
-Create an account for a specific DLT
+Create an account for XRP
 
 **Returns**: [<code>Account</code>](#Account) - (privateKey, address)  
 <a name="module_overledger-dlt-ripple.Ripple+setAccount"></a>

@@ -10,3 +10,9 @@ This is the suite of packages of the [Overledger SDK][repo]. It bundles together
 ```bash
 npm install @quantnetwork/overledger-bundle
 ```
+
+Or, if you prefer using [yarn](https://yarnpkg.com/):
+
+```
+yarn add @quantnetwork/overledger-bundle
+```
