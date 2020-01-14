@@ -35,9 +35,7 @@ abstract class AbstractDLT {
    * @abstract
    * @return {Account}
    */
-  public createAccount(): Account {
-    throw new Error(`Abstract function`);
-  }
+  abstract createAccount(): Account;
 
   /**
    * Set an account for signing transactions for a specific DLT
