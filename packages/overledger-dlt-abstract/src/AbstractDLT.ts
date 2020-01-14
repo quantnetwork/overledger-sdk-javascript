@@ -4,10 +4,6 @@ import { AxiosPromise, AxiosResponse } from 'axios';
 /**
  * @memberof module:overledger-dlt-abstract
 */
-/**
- * @class
- * @abstract
- */
 abstract class AbstractDLT { 
   name: string;
   sdk: any;
@@ -32,16 +28,21 @@ abstract class AbstractDLT {
 
   /**
    * Create an account for a specific DLT
-   * @abstract
+   * Abstract method to be implemented in each DLT
    * @return {Account}
    */
-  abstract createAccount(): Account;
+  public createAccount(): Account{
+      throw new Error(`createAccount: abstract method must be implemented`);
+  }
 
   /**
    * Set an account for signing transactions for a specific DLT
+   * Abstract method to be implemented in each DLT
    * @param {string} privateKey The privateKey
    */
-  abstract setAccount(privateKey: string): void;
+  public setAccount(_privateKey: string): void {
+    throw new Error(`setAccount: abstract method must be implemented`);
+  }
 
   /**
    * Get the balance for a specific address

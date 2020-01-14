@@ -27,13 +27,6 @@ yarn add @quantnetwork/overledger-dlt-abstract
 <dd></dd>
 </dl>
 
-## Classes
-
-<dl>
-<dt><a href="#AbstractDLT">AbstractDLT</a></dt>
-<dd></dd>
-</dl>
-
 ## Typedefs
 
 <dl>
@@ -44,49 +37,89 @@ yarn add @quantnetwork/overledger-dlt-abstract
 <a name="module_overledger-dlt-abstract"></a>
 
 ## overledger-dlt-abstract
+
+* [overledger-dlt-abstract](#module_overledger-dlt-abstract)
+
+    * _static_
+        * [.default](#module_overledger-dlt-abstract.default)
+
+    * _inner_
+        * [~AbstractDLT](#module_overledger-dlt-abstract.AbstractDLT)
+
+            * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
+
+            * [.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
+
+            * [.setAccount(privateKey)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
+
+            * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
+
+            * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
+
+            * [.sign(toAddress, message, options)](#module_overledger-dlt-abstract.AbstractDLT+sign)
+
+            * [.send(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+send)
+
+            * [.buildSignedTransactionsApiCall(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
+
+
 <a name="module_overledger-dlt-abstract.default"></a>
 
 ### *overledger-dlt-abstract*.default
 Abstract class for DLT modules. All DLT packages need to extend this class.
 
-<a name="AbstractDLT"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT"></a>
 
-## *AbstractDLT*
+### *overledger-dlt-abstract*~AbstractDLT
 
-* *[AbstractDLT](#AbstractDLT)
-*
-    * *[new AbstractDLT(sdk, options)](#new_AbstractDLT_new)
-*
-    * **[.createAccount()](#AbstractDLT+createAccount)
-**
-    * *[.getBalance(address)](#AbstractDLT+getBalance)
-*
-    * *[.getSequence(address)](#AbstractDLT+getSequence)
-*
-    * *[.sign(toAddress, message, options)](#AbstractDLT+sign)
-*
-    * *[.send(signedTransaction)](#AbstractDLT+send)
-*
-    * *[.buildSignedTransactionsApiCall(signedTransaction)](#AbstractDLT+buildSignedTransactionsApiCall)
-*
+* [~AbstractDLT](#module_overledger-dlt-abstract.AbstractDLT)
 
-<a name="new_AbstractDLT_new"></a>
+    * [new AbstractDLT(sdk, options)](#new_module_overledger-dlt-abstract.AbstractDLT_new)
 
-### *new AbstractDLT(sdk, options)*
+    * [.createAccount()](#module_overledger-dlt-abstract.AbstractDLT+createAccount)
+
+    * [.setAccount(privateKey)](#module_overledger-dlt-abstract.AbstractDLT+setAccount)
+
+    * [.getBalance(address)](#module_overledger-dlt-abstract.AbstractDLT+getBalance)
+
+    * [.getSequence(address)](#module_overledger-dlt-abstract.AbstractDLT+getSequence)
+
+    * [.sign(toAddress, message, options)](#module_overledger-dlt-abstract.AbstractDLT+sign)
+
+    * [.send(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+send)
+
+    * [.buildSignedTransactionsApiCall(signedTransaction)](#module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall)
+
+
+<a name="new_module_overledger-dlt-abstract.AbstractDLT_new"></a>
+
+#### new AbstractDLT(sdk, options)
 
 | Param | Type |
 | --- | --- |
 | sdk | <code>any</code> | 
 | options | <code>Object</code> | 
 
-<a name="AbstractDLT+createAccount"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+createAccount"></a>
 
-### ***abstractDLT*.createAccount()**
+#### *abstractDLT*.createAccount()
 Create an account for a specific DLT
+Abstract method to be implemented in each DLT
 
-<a name="AbstractDLT+getBalance"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+setAccount"></a>
 
-### **abstractDLT*.getBalance(address)*
+#### *abstractDLT*.setAccount(privateKey)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| privateKey | <code>string</code> | The privateKey |
+
+Set an account for signing transactions for a specific DLT
+Abstract method to be implemented in each DLT
+
+<a name="module_overledger-dlt-abstract.AbstractDLT+getBalance"></a>
+
+#### *abstractDLT*.getBalance(address)
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -94,9 +127,9 @@ Create an account for a specific DLT
 
 Get the balance for a specific address
 
-<a name="AbstractDLT+getSequence"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+getSequence"></a>
 
-### **abstractDLT*.getSequence(address)*
+#### *abstractDLT*.getSequence(address)
 
 | Param | Type |
 | --- | --- |
@@ -104,9 +137,9 @@ Get the balance for a specific address
 
 Get the sequence for a specific address
 
-<a name="AbstractDLT+sign"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+sign"></a>
 
-### **abstractDLT*.sign(toAddress, message, options)*
+#### *abstractDLT*.sign(toAddress, message, options)
 
 | Param | Type |
 | --- | --- |
@@ -116,9 +149,9 @@ Get the sequence for a specific address
 
 Sign a transaction for the DLT
 
-<a name="AbstractDLT+send"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+send"></a>
 
-### **abstractDLT*.send(signedTransaction)*
+#### *abstractDLT*.send(signedTransaction)
 
 | Param | Type |
 | --- | --- |
@@ -126,9 +159,9 @@ Sign a transaction for the DLT
 
 Send an Overledger signed transaction
 
-<a name="AbstractDLT+buildSignedTransactionsApiCall"></a>
+<a name="module_overledger-dlt-abstract.AbstractDLT+buildSignedTransactionsApiCall"></a>
 
-### **abstractDLT*.buildSignedTransactionsApiCall(signedTransaction)*
+#### *abstractDLT*.buildSignedTransactionsApiCall(signedTransaction)
 
 | Param | Type |
 | --- | --- |
