@@ -55,7 +55,7 @@ const partyBRippleAddress = 'rHVsZPVPjYJMR3Xa8YH7r7MapS7s5cyqgB';
         amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
         sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
         feePrice: '1000', // Price for each individual gas unit this transaction will consume (gasPrice in wei)
-        feeLimit: '80000', // The maximum amount of gas units that this transaction can use (gasLimit)
+        feeLimit: '80000', // The maximum amount of gas units that this transaction can use (gasLimit, for a normal ETH transaction - no contract call - it is 21000)
       },
     },
     {
