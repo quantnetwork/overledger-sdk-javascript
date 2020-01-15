@@ -41,7 +41,7 @@ class Ripple extends AbstractDLT {
   }
 
   /**
-   * Create an account for XRP
+   * Create an XRP account
    *
    * @return {Account} (privateKey, address)
    */
