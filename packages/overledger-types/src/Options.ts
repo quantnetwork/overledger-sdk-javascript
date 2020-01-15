@@ -1,5 +1,5 @@
 /**
- * Options for insantiating the SDK.
+ * Options for instantiating the SDK.
  * @typedef {Object} Options
  * @property {string=} privateKey - The private key of the user account.
  */

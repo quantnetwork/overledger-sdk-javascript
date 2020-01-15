@@ -153,7 +153,7 @@ class OverledgerSDK {
   }
 
   /**
-   * Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+   * Get transactions submitted through Overledger by the Multi-Chain Application ID used to create the SDK
    *
    */
   public readTransactionsByMappId(): AxiosPromise<Object> {

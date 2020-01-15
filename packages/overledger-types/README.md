@@ -46,7 +46,7 @@ yarn add @quantnetwork/overledger-types
 <dd><p>Overledger network options.</p>
 </dd>
 <dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Options for insantiating the SDK.</p>
+<dd><p>Options for instantiating the SDK.</p>
 </dd>
 <dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
 <dd><p>Overledger signed transaction data.</p>
@@ -139,7 +139,7 @@ Overledger network options.
 | --- | --- | --- |
 | [privateKey] | <code>string</code> | The private key of the user account. |
 
-Options for insantiating the SDK.
+Options for instantiating the SDK.
 
 <a name="OverledgerSignedTransaction"></a>
 

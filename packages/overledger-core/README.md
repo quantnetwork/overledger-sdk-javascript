@@ -199,7 +199,7 @@ Get the sequence numbers for the provided addresses
 <a name="module_overledger-core.OverledgerSDK+readTransactionsByMappId"></a>
 
 #### *overledgerSDK*.readTransactionsByMappId()
-Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+Get transactions submitted through Overledger by the Multi-Chain Application ID used to create the SDK
 
 <a name="module_overledger-core.OverledgerSDK+readOverledgerTransaction"></a>
 

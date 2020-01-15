@@ -16,7 +16,7 @@ class OverledgerSearch {
   }
 
   /**
-   * Get transaction by transaction hash (non-deterministic)
+   * Get transaction by transaction hash
    *
    * @param {string} transactionHash Transaction hash
    */

@@ -40,7 +40,7 @@
 <dd><p>Overledger network options.</p>
 </dd>
 <dt><a href="#Options">Options</a> : <code>Object</code></dt>
-<dd><p>Options for insantiating the SDK.</p>
+<dd><p>Options for instantiating the SDK.</p>
 </dd>
 <dt><a href="#OverledgerSignedTransaction">OverledgerSignedTransaction</a> : <code>Object</code></dt>
 <dd><p>Overledger signed transaction data.</p>
@@ -255,7 +255,7 @@ Get the sequence numbers for the provided addresses
 <a name="module_overledger-core.OverledgerSDK+readTransactionsByMappId"></a>
 
 #### *overledgerSDK*.readTransactionsByMappId()
-Get transactions submitted through Oberledger by the Multi-Chain Application ID used to create the SDK
+Get transactions submitted through Overledger by the Multi-Chain Application ID used to create the SDK
 
 <a name="module_overledger-core.OverledgerSDK+readOverledgerTransaction"></a>
 
@@ -786,7 +786,7 @@ Search support package.
 | --- | --- | --- |
 | transactionHash | <code>string</code> | Transaction hash |
 
-Get transaction by transaction hash (non-deterministic)
+Get transaction by transaction hash
 
 <a name="module_overledger-search.OverledgerSearch+getTransactionType"></a>
 
@@ -895,7 +895,7 @@ Overledger network options.
 | --- | --- | --- |
 | [privateKey] | <code>string</code> | The private key of the user account. |
 
-Options for insantiating the SDK.
+Options for instantiating the SDK.
 
 <a name="OverledgerSignedTransaction"></a>
 

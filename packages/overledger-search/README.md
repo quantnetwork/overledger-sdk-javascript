@@ -81,7 +81,7 @@ Search support package.
 | --- | --- | --- |
 | transactionHash | <code>string</code> | Transaction hash |
 
-Get transaction by transaction hash (non-deterministic)
+Get transaction by transaction hash
 
 <a name="module_overledger-search.OverledgerSearch+getTransactionType"></a>
 
