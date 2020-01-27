@@ -34,7 +34,7 @@ npm install @quantnetwork/overledger-core
 ```
 
 ```
-npm install @quantnetwork/overledger-ethereum
+npm install @quantnetwork/overledger-dlt-ethereum
 ```
 
 
