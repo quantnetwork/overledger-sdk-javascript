@@ -37,5 +37,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "neat-csv": "^5.2.0"
+  }
 }
