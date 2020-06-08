@@ -4,14 +4,17 @@ import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
 import { Options, Account, TransactionRequest, ValidationCheck } from '@quantnetwork/overledger-types';
 import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequest';
 import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions';
+import { AxiosInstance, AxiosPromise } from 'axios';
 
 /**
  * @memberof module:overledger-dlt-bitcoin
 */
 class Bitcoin extends AbstractDLT {
   addressType: bitcoin.Network;
+  request: AxiosInstance;
   account: Account;
   options: Object;
+  
 
   /**
    * Name of the DLT
@@ -22,6 +25,7 @@ class Bitcoin extends AbstractDLT {
    * Symbol of the DLT
    */
   symbol: string = 'XBT';
+
 
   /**
    * @param {any} sdk - the sdk instance
@@ -36,6 +40,16 @@ class Bitcoin extends AbstractDLT {
     }
     if (options.privateKey) {
       this.setAccount(options.privateKey);
+    }
+  }
+
+
+  getEstimateFeeRate(): AxiosPromise {
+    try {
+      this.request = this.sdk.provider.createRequest('/bitcoin');
+      return this.request.get(`/transactions/fee`);
+    } catch (e) {
+      return e.response;
     }
   }
 

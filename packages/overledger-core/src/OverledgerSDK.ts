@@ -36,7 +36,9 @@ class OverledgerSDK {
     this.validateOptions(options);
 
     options.dlts.forEach((dltConfig: DLTOptions) => {
+      console.log(`dltConfig ${JSON.stringify(dltConfig)}`);
       const dlt = this.loadDlt(dltConfig);
+      console.log(dlt);
       this.dlts[dlt.name] = dlt;
     });
 
@@ -55,8 +57,10 @@ class OverledgerSDK {
   private loadDlt(config: DLTOptions): AbstractDLT {
 
     const dltName = `overledger-dlt-${config.dlt}`;
+    console.log(`dltName ${dltName}`);
     try {
       const provider = require(`@quantnetwork/${dltName}`).default;
+      console.log(`provider ${provider}`);
 
       return new provider(this, config);
     } catch (error) {
