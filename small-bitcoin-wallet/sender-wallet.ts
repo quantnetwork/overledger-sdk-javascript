@@ -284,3 +284,5 @@ function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
 
 
 // NEED TO ADD SCRIPT SIZE OF EACH TXN IN BYTES !!!
+
+// TRANSACTION BUILDER DEPRECATED ---> NEEDS TO USE psbt
