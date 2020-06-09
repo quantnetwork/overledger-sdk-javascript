@@ -19,6 +19,10 @@
 //  { privateKey: 'cNoXs1M34cVWhfQvd9cDSRkCfy9hLEGohzEfUrzUy7cdvMKTAhTk',
 //   address: 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt' }
 
+// Bitcoin account:
+//  { privateKey: 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G',
+//   address: 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w' }
+
 // npx ts-node sender-wallet.ts
 // ----------------------------------------------------------------------------
 
@@ -34,19 +38,19 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const mappId = 'network.quant.testnet';
 const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
-const senderAddress = 'mgjbZZqZg1r9Yqo8gjyBL3Y2Mu4XttAu1T';
-const senderChangeAddress = 'mvBLrpwRYs68GzXpTUBUf33jAfWtu6cg8M';
-const senderPrivateKey = 'cTmdFnuSqY8xrUKPuVeUip2LyRAwwwv8LqA6G1nLDmBNfPjzrK3s';
+// const senderAddress = 'mgjbZZqZg1r9Yqo8gjyBL3Y2Mu4XttAu1T';
+const senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
+const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
+const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
 const valueToSend = 0.0001;
-const csvFile = './sender-utxos.csv';
-const feeRate = 55; // satoshis per byte ? endpoint to get estimated fee rate from the connector ????
+const csvFile = '/Users/najlachamseddine/dev/overledger-sdk-javascript/small-bitcoin-wallet/sender-utxos.csv';
+// const feeRate = 55; // satoshis per byte ? endpoint to get estimated fee rate from the connector ????
 
 
 interface UtxoCSVObject {
   address: string;
   txHash: string;
-  // script: string;
   outputIndex: number;
   value: number; // satoshis
 }
@@ -54,7 +58,6 @@ interface UtxoCSVObject {
 interface UtxoInput {
   address: string;
   txHash: string;
-  script: string;
   outputIndex: number;
   value: number; // satoshis
 }
@@ -64,9 +67,10 @@ interface UtxoOutput {
   value: number; // satoshis
 }
 
-async function getFeeRate() {
-  //getestimatefee --> getestimatesmartfee
-  return feeRate;
+async function getFeeRate(overledger) {
+  const estimateFeeRate = await overledger.dlts.bitcoin.getEstimateFeeRate();
+  console.log(estimateFeeRate.data);
+  return estimateFeeRate.data.feerate * 1e5; // satoshis/byte
 }
 
 async function createUtxosObjects(csvFilePath: string): Promise<UtxoCSVObject[]> {
@@ -75,8 +79,7 @@ async function createUtxosObjects(csvFilePath: string): Promise<UtxoCSVObject[]>
   return txnInputs;
 }
 
-async function updateCsvFile(overledger, senderChangeAddress, txnHashInputsToAdd, csvFilePath) {
-  // address,txHash,outputIndex,value
+async function updateCsvFile(overledger, senderChangeAddress, txnsInputsNotUsed, txnHashInputsToAdd, csvFilePath) {
   const csvWriter = createCsvWriter({
     path: csvFilePath,
     header: [
@@ -88,9 +91,12 @@ async function updateCsvFile(overledger, senderChangeAddress, txnHashInputsToAdd
   });
   const newChangeInput = await Promise.all(txnHashInputsToAdd.map(async txnHash => {
     const bitcoinTransaction = await overledger.search.getTransaction(txnHash);
+    console.log(bitcoinTransaction);
     const vout = bitcoinTransaction.data.data.vout;
-    const changeOutputVout = vout.filter( o => {
-      if(o.scriptPubKey !== undefined && o.scriptPubKey.addresses !== undefined) {
+    console.log(bitcoinTransaction.data.data.vout);
+    console.log(bitcoinTransaction.data.data.vin);
+    const changeOutputVout = vout.filter(o => {
+      if (o.scriptPubKey !== undefined && o.scriptPubKey.addresses !== undefined) {
         return o.scriptPubKey.addresses.includes(senderChangeAddress);
       }
       return false;
@@ -98,13 +104,21 @@ async function updateCsvFile(overledger, senderChangeAddress, txnHashInputsToAdd
     console.log(`changeOutputVout ${JSON.stringify(changeOutputVout)}`);
     return {
       address: changeOutputVout[0].scriptPubKey.addresses[0],
-      txHash: changeOutputVout[0].scriptPubKey.hex,
+      txHash: bitcoinTransaction.data.data.txid,
       outputIndex: changeOutputVout[0].n,
       value: changeOutputVout[0].value
     }
   }));
-  console.log(`newChangeInput ${JSON.stringify(newChangeInput)}`);
-  await csvWriter.writeRecords(newChangeInput);
+
+  let totalRecords;
+  if (txnsInputsNotUsed !== undefined) {
+    totalRecords = txnsInputsNotUsed.concat(newChangeInput);
+  } else {
+    totalRecords = newChangeInput;
+  }
+
+  console.log(`newChangeInput ${JSON.stringify(totalRecords)}`);
+  await csvWriter.writeRecords(totalRecords);
 }
 
 function utxosWithSatoshisValues(txnInputs: UtxoCSVObject[]) {
@@ -129,15 +143,22 @@ function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
   return finalOutputs;
 }
 
-async function computeCoins(csvFilePath, senderAddress) {
+async function computeCoins(overledger, csvFilePath, senderAddress, senderChangeAddress) {
+  const computedFeeRate = await getFeeRate(overledger);
+   // "min relay fee not met, 226 < 256 (code 66) ?????
+  const feeRate = computedFeeRate <= 1 ? 2 : computedFeeRate;
+  console.log(`feeRate computeCoins ${feeRate}`)
   const txnInputs = await createUtxosObjects(csvFilePath);
   console.log(`txnInputs ${JSON.stringify(txnInputs)}`);
-  const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress);
+  // const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress || senderChangeAddresses.includes(t.address));
+  const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress); // for now
   const txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
   const coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
   const outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
+  const coinSelectedHashes = coinSelected.inputs.map(sel => { return sel.txHash });
+  const coinsToKeep = txnInputs.filter(t => !coinSelectedHashes.includes(t.txHash));
   console.log(`computeCoins ${JSON.stringify({ ...coinSelected, outputsWithChangeAddress })}`);
-  return { ...coinSelected, outputsWithChangeAddress };
+  return { ...coinSelected, coinsToKeep, outputsWithChangeAddress };
 }
 
 function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
@@ -158,61 +179,73 @@ function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
   return { txInputs, txOutputs };
 }
 
-// ; (async () => {
-//   try {
-//     // Connect to overledger and choose which distributed ledgers to use:
-//     const overledger = new OverledgerSDK(mappId, bpiKey, {
-//       dlts: [{ dlt: DltNameOptions.BITCOIN }],
-//       provider: { network: 'testnet' },
-//     });
-//     const transactionMessage = 'OVL SDK Wallet Test';
-//     const coinSelected = await computeCoins(csvFile, senderAddress);
-//     const { txInputs, txOutputs } = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
-
-//     overledger.dlts.bitcoin.setAccount(senderPrivateKey);
-
-//     const signedTransaction = await overledger.sign([
-//       {
-//         dlt: DltNameOptions.BITCOIN,
-//         type: TransactionTypeOptions.UTXO,
-//         subType: { name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER },
-//         message: transactionMessage,
-//         // The following parameters are from the TransactionUtxoRequest object:
-//         txInputs,
-//         txOutputs,
-//         extraFields: {
-//           feePrice: coinSelected.fee // Price for the miner to add this transaction to the block
-//         },
-//       },
-//     ]);
-
-//     console.log("Signed transactions: ");
-//     console.log(JSON.stringify(signedTransaction, null, 2));
-
-//     // Send the transactions to Overledger.
-//     const result = (await overledger.send(signedTransaction)).data;
-//     let txHash;
-
-//     // Log the result.
-//     console.log('OVL result:');
-//     console.log(JSON.stringify(result, null, 2));
-//     console.log("");
-//     console.log('Your ' + result.dltData[0].dlt + ' value transfer transaction hash is: ' + result.dltData[0].transactionHash);
-//     txHash = result.dltData[0].transactionHash;
-//   } catch (e) {
-//     console.error('error:', e);
-//   }
-// })();
-
 ; (async () => {
-  const overledger = new OverledgerSDK(mappId, bpiKey, {
-    dlts: [{ dlt: DltNameOptions.BITCOIN }],
-    provider: { network: 'testnet' },
-  });
-  const txHash = "740c27a91f1e0d872ff7b083268ca33ac3f303295c8a8da53354eb32b0be4e6d";
-  await updateCsvFile(overledger, senderChangeAddress, [txHash], csvFile);
+  try {
+    // Connect to overledger and choose which distributed ledgers to use:
+    const overledger = new OverledgerSDK(mappId, bpiKey, {
+      dlts: [{ dlt: DltNameOptions.BITCOIN }],
+      provider: { network: 'testnet' },
+    });
+    const transactionMessage = 'OVL SDK Wallet Test';
+    // const senderNewAccount = await overledger.dlts.bitcoin.createAccount();
+    // const senderChangeAddress = senderNewAccount.address.toString();
+    // senderChangeAddresses.push(senderChangeAddress);
+    const senderChangeAddress = senderAddress; // for now
+    const coinSelected = await computeCoins(overledger, csvFile, senderAddress, senderChangeAddress);
+    console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
+    const { txInputs, txOutputs } = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
 
+    console.log(`------txInputs`);
+    console.log(txInputs);
+    console.log(`------txOutputs`);
+    console.log(txOutputs);
+    console.log(`------Fee`);
+    console.log(coinSelected.fee);
+    overledger.dlts.bitcoin.setAccount(senderPrivateKey);
+
+    const signedTransaction = await overledger.sign([
+      {
+        dlt: DltNameOptions.BITCOIN,
+        type: TransactionTypeOptions.UTXO,
+        subType: { name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER },
+        message: transactionMessage,
+        // The following parameters are from the TransactionUtxoRequest object:
+        txInputs,
+        txOutputs,
+        extraFields: {
+          feePrice: coinSelected.fee // Price for the miner to add this transaction to the block
+        },
+      },
+    ]);
+
+    console.log("Signed transactions: ");
+    console.log(JSON.stringify(signedTransaction, null, 2));
+
+    // Send the transactions to Overledger.
+    const result = (await overledger.send(signedTransaction)).data;
+    let txHash;
+
+    // Log the result.
+    console.log('OVL result:');
+    console.log(JSON.stringify(result, null, 2));
+    console.log("");
+    // console.log('Your ' + result.dltData[0].dlt + ' value transfer transaction hash is: ' + result.dltData[0].transactionHash);
+    txHash = result.dltData[0].transactionHash;
+    await updateCsvFile(overledger, senderChangeAddress, coinSelected.coinsToKeep, [txHash], csvFile);
+  } catch (e) {
+    console.error('error:', e);
+  }
 })();
+
+// ; (async () => {
+//   const overledger = new OverledgerSDK(mappId, bpiKey, {
+//     dlts: [{ dlt: DltNameOptions.BITCOIN }],
+//     provider: { network: 'testnet' },
+//   });
+//   const txHash = "220de086b14a6e36263f92daf2bee8a85c85087c3ce08181ebc6555b75d89f3f";
+//   await updateCsvFile(overledger, senderChangeAddress, [txHash], csvFile);
+
+// })();
 
 
 // async function runExample() {
@@ -243,3 +276,8 @@ function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
 //   console.log(`res coin select ${JSON.stringify({ inputs, outputs, finalOutputs, fee } )}`);
 // })();
 
+
+// address,txHash,outputIndex,value
+// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,7879a3190f7ba2784e6a46c8ba452bd222dcdf0c9776156405dd168c3b0f1776,1,0.01448175
+// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,d59cbe2c485ff0d62af1aaaff9c45e35e901340c063f9ee32f5027d6665cdd7f,1,0.001
+// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,298fadd9dd97da3ad0a8f4a6767873e83cc9745b00e4ea46dad8e3c2bc77b352,1,0.001

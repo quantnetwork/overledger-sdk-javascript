@@ -21,9 +21,9 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
             provider: { network: 'testnet' },
         });
 
-        // const bitcoinAccount = await overledger.dlts.bitcoin.createAccount();
-        // console.log('Bitcoin account:\n', bitcoinAccount);
-        // console.log("");
+        const bitcoinAccount = await overledger.dlts.bitcoin.createAccount();
+        console.log('Bitcoin account:\n', bitcoinAccount);
+        console.log("");
 
         // const ethAccount = await overledger.dlts.ethereum.createAccount();
         // console.log('Ethereum account:\n', ethAccount);
@@ -32,8 +32,8 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
         // const xrpAccount = await overledger.dlts.ripple.createAccount();
         // console.log('XRP ledger account:\n', xrpAccount);
         // console.log("");
-        const feeEstimate = await overledger.dlts.bitcoin.getEstimateFeeRate();
-        console.log(feeEstimate);
+        // const feeEstimate = await overledger.dlts.bitcoin.getEstimateFeeRate();
+        // console.log(feeEstimate);
     } catch (e) {
         console.error('error', e);
     }
