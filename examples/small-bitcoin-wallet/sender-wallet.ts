@@ -1,5 +1,5 @@
-// npx ts-node sender-wallet.ts
-// npx tsc sender-wallet.ts 
+// npx ts-node sender-wallet.ts: run only the .ts file examples (if exist)
+// npx tsc sender-wallet.ts (generate the js file)
 
 const fs = require('fs');
 const neatCsv = require('neat-csv');
