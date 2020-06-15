@@ -16,7 +16,7 @@ const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
 const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
 const valueToSend = 0.0001;
-const csvFile = '/Users/najlachamseddine/dev/overledger-sdk-javascript/examples/small-bitcoin-wallet/sender-utxos.csv';
+const csvFile = './sender-utxos.csv';
 // const feeRate = 55; // satoshis per byte ? endpoint to get estimated fee rate from the connector ????
 
 

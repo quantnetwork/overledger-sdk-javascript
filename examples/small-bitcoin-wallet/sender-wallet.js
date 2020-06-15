@@ -1,6 +1,6 @@
 "use strict";
-// npx ts-node sender-wallet.ts
-// npx tsc sender-wallet.ts 
+// npx ts-node sender-wallet.ts: run only the .ts file examples (if exist)
+// npx tsc sender-wallet.ts (generate the js file)
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
