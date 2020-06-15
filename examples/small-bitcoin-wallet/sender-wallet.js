@@ -1,8 +1,6 @@
 "use strict";
-// const csv = require('csv-parser');
-// const util = require('util');
-// const csv = require('csvtojson');
-// const createReadStream = util.promisify(fs.createReadStream);
+// npx ts-node sender-wallet.ts
+// npx tsc sender-wallet.ts 
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -50,35 +48,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-// ---- sender: 
-// Bitcoin account:
-//  { privateKey: 'cTmdFnuSqY8xrUKPuVeUip2LyRAwwwv8LqA6G1nLDmBNfPjzrK3s',
-//   address: 'mgjbZZqZg1r9Yqo8gjyBL3Y2Mu4XttAu1T' }
-// Bitcoin account:
-//  { privateKey: 'cRPiTxaWGkxFtsaesEbxEn33oZ97yEjfdygS3sA5JxAwAmL37baM',
-//   address: 'mvBLrpwRYs68GzXpTUBUf33jAfWtu6cg8M' }
-// ---- receiver:
-// Bitcoin account:
-//  { privateKey: 'cNoXs1M34cVWhfQvd9cDSRkCfy9hLEGohzEfUrzUy7cdvMKTAhTk',
-//   address: 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt' }
-// Bitcoin account:
-//  { privateKey: 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G',
-//   address: 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w' }
-// npx ts-node sender-wallet.ts
-// ----------------------------------------------------------------------------
 var fs = require('fs');
 var neatCsv = require('neat-csv');
 var coinSelect = require('coinselect');
 var createCsvWriter = require('csv-writer').createObjectCsvWriter;
-var mappId = 'network.quant.testnet';
-var bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
-// const senderAddress = 'mgjbZZqZg1r9Yqo8gjyBL3Y2Mu4XttAu1T';
-var senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
-var senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
-var senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
-var receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
-var valueToSend = 0.0001;
-var csvFile = '/Users/najlachamseddine/dev/overledger-sdk-javascript/small-bitcoin-wallet/sender-utxos.csv';
+var MIN_FEE = 256;
 function getFeeRate(overledger) {
     return __awaiter(this, void 0, void 0, function () {
         var estimateFeeRate;
@@ -221,7 +195,7 @@ function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
     });
     return finalOutputs;
 }
-function computeCoins(overledger, csvFilePath, senderAddress, senderChangeAddress, addScript) {
+function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript) {
     return __awaiter(this, void 0, void 0, function () {
         var feeRate, txnInputs, senderTxnInputs, txnInputsWithSatoshisValues, coinSelected, outputsWithChangeAddress, coinSelectedHashes, coinsToKeep, diff_1;
         return __generator(this, function (_a) {
@@ -229,8 +203,6 @@ function computeCoins(overledger, csvFilePath, senderAddress, senderChangeAddres
                 case 0: return [4 /*yield*/, getFeeRate(overledger)];
                 case 1:
                     feeRate = _a.sent();
-                    // "min relay fee not met, 226 < 256 (code 66) ?????
-                    // const feeRate = computedFeeRate <= 1 ? 2 : computedFeeRate;
                     console.log("feeRate computeCoins " + feeRate);
                     return [4 /*yield*/, createUtxosObjects(overledger, csvFilePath, addScript)];
                 case 2:
@@ -242,11 +214,10 @@ function computeCoins(overledger, csvFilePath, senderAddress, senderChangeAddres
                     outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
                     coinSelectedHashes = coinSelected.inputs.map(function (sel) { return sel.txHash; });
                     coinsToKeep = txnInputs.filter(function (t) { return !coinSelectedHashes.includes(t.txHash); });
-                    console.log("computeCoins " + JSON.stringify(__assign({}, coinSelected, { outputsWithChangeAddress: outputsWithChangeAddress })));
-                    if (coinSelected.fee < 256) {
-                        diff_1 = 256 - coinSelected.fee;
-                        coinSelected = __assign({}, coinSelected, { fee: 256 });
-                        console.log("coinSelected " + JSON.stringify(coinSelected));
+                    // "min relay fee not met, 226 < 256 (code 66)
+                    if (coinSelected.fee < MIN_FEE) {
+                        diff_1 = MIN_FEE - coinSelected.fee;
+                        coinSelected = __assign({}, coinSelected, { fee: MIN_FEE });
                         outputsWithChangeAddress = outputsWithChangeAddress.map(function (output) {
                             if (output.address === senderChangeAddress) {
                                 return __assign({}, output, { value: output.value - diff_1 });
@@ -255,9 +226,6 @@ function computeCoins(overledger, csvFilePath, senderAddress, senderChangeAddres
                                 return output;
                             }
                         });
-                        console.log("newOutputsWithChangeAddress " + JSON.stringify(outputsWithChangeAddress));
-                        console.log("coinSelected " + JSON.stringify(coinSelected));
-                        console.log("outputsWithChangeAddress " + JSON.stringify(outputsWithChangeAddress));
                         return [2 /*return*/, __assign({}, coinSelected, { coinsToKeep: coinsToKeep, outputsWithChangeAddress: outputsWithChangeAddress })];
                     }
                     return [2 /*return*/, __assign({}, coinSelected, { coinsToKeep: coinsToKeep, outputsWithChangeAddress: outputsWithChangeAddress })];
@@ -284,47 +252,3 @@ function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
     return { txInputs: txInputs, txOutputs: txOutputs };
 }
 exports.computeBtcRequestTxns = computeBtcRequestTxns;
-// ; (async () => {
-//   const overledger = new OverledgerSDK(mappId, bpiKey, {
-//     dlts: [{ dlt: DltNameOptions.BITCOIN }],
-//     provider: { network: 'testnet' },
-//   });
-//   const txHash = "220de086b14a6e36263f92daf2bee8a85c85087c3ce08181ebc6555b75d89f3f";
-//   await updateCsvFile(overledger, senderChangeAddress, [txHash], csvFile);
-// })();
-// async function runExample() {
-//   const utxos: UtxoCSVObject[] = await createUtxosObjects(csvFile);
-//   console.log(`CSV OBJECT ${JSON.stringify(utxos)}`);
-//   const values = utxos.filter((txn) => txn.value > valueToSend);
-//   console.log(`values ${JSON.stringify(values)}`);
-// }
-// async function runExample2() {
-//   const utxos: UtxoCSVObject[] = await createUtxosObjects(csvFile);
-//   console.log(`CSV OBJECT ${JSON.stringify(utxos)}`);
-//   // const values = utxos.filter((txn) => txn.value > valueToSend);
-//   const values = utxos.map((txn) => { 
-//     return { ...txn, value: btcToSatoshiValue(txn.value)};
-//   });
-//   console.log(`values ${JSON.stringify(values)}`);
-// }
-// ;(async () => {
-//   // return runExample2();
-//   const txnInputs = await createUtxosObjects(csvFile);
-//   console.log(`txnInputs ${JSON.stringify(txnInputs)}`);
-//   const txnInputsWithSatoshisValues = utxosWithSatoshisValues(txnInputs);
-//   const { inputs, outputs, fee } = coinSelect( txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend)}], 50);
-//   const finalOutputs = addChangeAddressForChangeOutput(outputs, senderChangeAddress);
-//   console.log(`res coin select ${JSON.stringify({ inputs, outputs, finalOutputs, fee } )}`);
-// })();
-// ;(async () => {
-//   const overledger = new OverledgerSDK(mappId, bpiKey, {
-//     dlts: [{ dlt: DltNameOptions.BITCOIN }],
-//     provider: { network: 'testnet' },
-//   });
-//   // const txHash = "d59cbe2c485ff0d62af1aaaff9c45e35e901340c063f9ee32f5027d6665cdd7f";
-//   const objects = await createUtxosObjects(overledger, csvFile, false);
-//   console.log(objects);
-// })();
-// NEED TO ADD SCRIPT SIZE OF EACH TXN IN BYTES !!!
-// BnB algorithm
-// TRANSACTION BUILDER DEPRECATED ---> NEEDS TO USE psbt

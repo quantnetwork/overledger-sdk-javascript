@@ -32,7 +32,7 @@ const csvFile = '/Users/najlachamseddine/dev/overledger-sdk-javascript/examples/
     // const senderChangeAddress = senderNewAccount.address.toString();
     // senderChangeAddresses.push(senderChangeAddress);
     const senderChangeAddress = senderAddress; // for now
-    const coinSelected = await computeCoins(overledger, csvFile, senderAddress, senderChangeAddress, true);
+    const coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false);
     console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
     const { txInputs, txOutputs } = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
 
@@ -70,7 +70,6 @@ const csvFile = '/Users/najlachamseddine/dev/overledger-sdk-javascript/examples/
     console.log('OVL result:');
     console.log(JSON.stringify(result, null, 2));
     console.log("");
-    // console.log('Your ' + result.dltData[0].dlt + ' value transfer transaction hash is: ' + result.dltData[0].transactionHash);
     txHash = result.dltData[0].transactionHash;
     await updateCsvFile(overledger, senderChangeAddress, coinSelected.coinsToKeep, [txHash], csvFile);
   } catch (e) {
