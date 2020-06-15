@@ -26,10 +26,6 @@
 // npx ts-node sender-wallet.ts
 // ----------------------------------------------------------------------------
 
-const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
-const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
-const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
-const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
 const fs = require('fs');
 const neatCsv = require('neat-csv');
 const coinSelect = require('coinselect');
@@ -56,18 +52,6 @@ interface UtxoCSVObject {
   script?: Buffer;
 }
 
-interface UtxoInput {
-  address: string;
-  txHash: string;
-  outputIndex: number;
-  value: number; // satoshis
-}
-
-interface UtxoOutput {
-  address: string;
-  value: number; // satoshis
-}
-
 async function getFeeRate(overledger) {
   const estimateFeeRate = await overledger.dlts.bitcoin.getEstimateFeeRate();
   console.log(estimateFeeRate.data);
@@ -78,26 +62,26 @@ async function getFeeRate(overledger) {
 async function createUtxosObjects(overledger, csvFilePath: string, addScript: boolean): Promise<UtxoCSVObject[]> {
   const readStream = fs.createReadStream(csvFilePath);
   const txnInputs = await neatCsv(readStream);
-  if(addScript){
-   return Promise.all(txnInputs.map(async (tx) => { 
-     const script = await getUtxoScriptPubKey(overledger, tx.txHash, parseInt(tx.outputIndex, 10));
-     return { ...tx, script };
+  if (addScript) {
+    return Promise.all(txnInputs.map(async (tx) => {
+      const script = await getUtxoScriptPubKey(overledger, tx.txHash, parseInt(tx.outputIndex, 10));
+      return { ...tx, script };
     }));
   }
   return txnInputs;
 }
 
-async function getUtxoScriptPubKey(overledger, txnHash, index){
+async function getUtxoScriptPubKey(overledger, txnHash, index) {
   const bitcoinTransaction = await overledger.search.getTransaction(txnHash);
-  const scriptPubKey = bitcoinTransaction.data.data.vout.filter( out => { 
-    return  out.n === index 
+  const scriptPubKey = bitcoinTransaction.data.data.vout.filter(out => {
+    return out.n === index
   });
   const scriptHex = scriptPubKey[0].scriptPubKey.hex;
   // const scriptAsm = scriptPubKey[0].scriptPubKey.asm;
   return Buffer.from(scriptHex.toString(), "hex");
 }
 
-async function updateCsvFile(overledger, senderChangeAddress, txnsInputsNotUsed, txnHashInputsToAdd, csvFilePath) {
+export async function updateCsvFile(overledger, senderChangeAddress, txnsInputsNotUsed, txnHashInputsToAdd, csvFilePath) {
   const csvWriter = createCsvWriter({
     path: csvFilePath,
     header: [
@@ -161,9 +145,9 @@ function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
   return finalOutputs;
 }
 
-async function computeCoins(overledger, csvFilePath, senderAddress, senderChangeAddress, addScript) {
+export async function computeCoins(overledger, csvFilePath, senderAddress, senderChangeAddress, addScript) {
   const feeRate = await getFeeRate(overledger);
-   // "min relay fee not met, 226 < 256 (code 66) ?????
+  // "min relay fee not met, 226 < 256 (code 66) ?????
   // const feeRate = computedFeeRate <= 1 ? 2 : computedFeeRate;
   console.log(`feeRate computeCoins ${feeRate}`)
   const txnInputs = await createUtxosObjects(overledger, csvFilePath, addScript);
@@ -171,15 +155,31 @@ async function computeCoins(overledger, csvFilePath, senderAddress, senderChange
   // const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress || senderChangeAddresses.includes(t.address));
   const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress); // for now
   const txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
-  const coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
-  const outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
+  let coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
+  let outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
   const coinSelectedHashes = coinSelected.inputs.map(sel => { return sel.txHash });
   const coinsToKeep = txnInputs.filter(t => !coinSelectedHashes.includes(t.txHash));
   console.log(`computeCoins ${JSON.stringify({ ...coinSelected, outputsWithChangeAddress })}`);
+  if (coinSelected.fee < 256) {
+    const diff = 256 - coinSelected.fee;
+    coinSelected = { ...coinSelected, fee: 256 };
+    console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
+    outputsWithChangeAddress = outputsWithChangeAddress.map(output => {
+      if (output.address === senderChangeAddress) {
+        return { ...output, value: output.value - diff }
+      } else {
+        return output;
+      }
+    });
+    console.log(`newOutputsWithChangeAddress ${JSON.stringify(outputsWithChangeAddress)}`);
+    console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
+    console.log(`outputsWithChangeAddress ${JSON.stringify(outputsWithChangeAddress)}`);
+    return { ...coinSelected, coinsToKeep, outputsWithChangeAddress };
+  }
   return { ...coinSelected, coinsToKeep, outputsWithChangeAddress };
 }
 
-function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
+export function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
   const txInputs = coinSelectTxInputs.map(input => {
     return {
       linkedTx: input.txHash,
@@ -196,65 +196,7 @@ function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
   });
   return { txInputs, txOutputs };
 }
-/*
-; (async () => {
-  try {
-    // Connect to overledger and choose which distributed ledgers to use:
-    const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.BITCOIN }],
-      provider: { network: 'testnet' },
-    });
-    const transactionMessage = 'OVL SDK Wallet Test';
-    // const senderNewAccount = await overledger.dlts.bitcoin.createAccount();
-    // const senderChangeAddress = senderNewAccount.address.toString();
-    // senderChangeAddresses.push(senderChangeAddress);
-    const senderChangeAddress = senderAddress; // for now
-    const coinSelected = await computeCoins(overledger, csvFile, senderAddress, senderChangeAddress, false);
-    console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
-    const { txInputs, txOutputs } = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
 
-    console.log(`------txInputs`);
-    console.log(txInputs);
-    console.log(`------txOutputs`);
-    console.log(txOutputs);
-    console.log(`------Fee`);
-    console.log(coinSelected.fee);
-    overledger.dlts.bitcoin.setAccount(senderPrivateKey);
-
-    const signedTransaction = await overledger.sign([
-      {
-        dlt: DltNameOptions.BITCOIN,
-        type: TransactionTypeOptions.UTXO,
-        subType: { name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER },
-        message: transactionMessage,
-        // The following parameters are from the TransactionUtxoRequest object:
-        txInputs,
-        txOutputs,
-        extraFields: {
-          feePrice: coinSelected.fee // Price for the miner to add this transaction to the block
-        },
-      },
-    ]);
-
-    console.log("Signed transactions: ");
-    console.log(JSON.stringify(signedTransaction, null, 2));
-
-    // Send the transactions to Overledger.
-    const result = (await overledger.send(signedTransaction)).data;
-    let txHash;
-
-    // Log the result.
-    console.log('OVL result:');
-    console.log(JSON.stringify(result, null, 2));
-    console.log("");
-    // console.log('Your ' + result.dltData[0].dlt + ' value transfer transaction hash is: ' + result.dltData[0].transactionHash);
-    txHash = result.dltData[0].transactionHash;
-    await updateCsvFile(overledger, senderChangeAddress, coinSelected.coinsToKeep, [txHash], csvFile);
-  } catch (e) {
-    console.error('error:', e);
-  }
-})();
-*/
 
 // ; (async () => {
 //   const overledger = new OverledgerSDK(mappId, bpiKey, {
@@ -296,15 +238,15 @@ function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
 // })();
 
 
-;(async () => {
-  const overledger = new OverledgerSDK(mappId, bpiKey, {
-    dlts: [{ dlt: DltNameOptions.BITCOIN }],
-    provider: { network: 'testnet' },
-  });
-  // const txHash = "d59cbe2c485ff0d62af1aaaff9c45e35e901340c063f9ee32f5027d6665cdd7f";
-  const objects = await createUtxosObjects(overledger, csvFile, false);
-  console.log(objects);
-})();
+// ;(async () => {
+//   const overledger = new OverledgerSDK(mappId, bpiKey, {
+//     dlts: [{ dlt: DltNameOptions.BITCOIN }],
+//     provider: { network: 'testnet' },
+//   });
+//   // const txHash = "d59cbe2c485ff0d62af1aaaff9c45e35e901340c063f9ee32f5027d6665cdd7f";
+//   const objects = await createUtxosObjects(overledger, csvFile, false);
+//   console.log(objects);
+// })();
 
 
 // NEED TO ADD SCRIPT SIZE OF EACH TXN IN BYTES !!!
