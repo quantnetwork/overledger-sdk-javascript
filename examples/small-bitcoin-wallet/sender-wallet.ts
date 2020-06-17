@@ -4,10 +4,10 @@
 const fs = require('fs');
 const neatCsv = require('neat-csv');
 const coinSelect = require('coinselect');
+const fetch = require('node-fetch');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const MIN_FEE = 256;
-// const feeRate = 55; // satoshis per byte ? endpoint to get estimated fee rate from the connector ????
-
+const previousEstimateFee = { fastestFee: 44, halfHourFee: 42, hourFee: 36 }; // (curl https://bitcoinfees.earn.com/api/v1/fees/recommended)
+const serviceEstimateFeeUrl = 'https://bitcoinfees.earn.com/api/v1/fees/recommended';
 
 interface UtxoCSVObject {
   address: string;
@@ -16,13 +16,6 @@ interface UtxoCSVObject {
   value: number; // satoshis
   script?: Buffer;
 }
-
-async function getFeeRate(overledger) {
-  const estimateFeeRate = await overledger.dlts.bitcoin.getEstimateFeeRate();
-  console.log(estimateFeeRate.data);
-  return estimateFeeRate.data.feerate * 1e5; // satoshis/byte
-}
-
 
 async function createUtxosObjects(overledger, csvFilePath: string, addScript: boolean): Promise<UtxoCSVObject[]> {
   const readStream = fs.createReadStream(csvFilePath);
@@ -110,8 +103,8 @@ function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
   return finalOutputs;
 }
 
-export async function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript) {
-  const feeRate = await getFeeRate(overledger);
+export async function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority) {
+  const feeRate = await getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority);
   console.log(`feeRate computeCoins ${feeRate}`);
   const txnInputs = await createUtxosObjects(overledger, csvFilePath, addScript);
   console.log(`txnInputs ${JSON.stringify(txnInputs)}`);
@@ -119,10 +112,12 @@ export async function computeCoins(overledger, csvFilePath, senderAddress, recei
   const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress); // for now
   const txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
   let coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
+  console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
   let outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
   const coinSelectedHashes = coinSelected.inputs.map(sel => { return sel.txHash });
   const coinsToKeep = txnInputs.filter(t => !coinSelectedHashes.includes(t.txHash));
   // "min relay fee not met, 226 < 256 (code 66)
+  const MIN_FEE = 256;
   if (coinSelected.fee < MIN_FEE) {
     const diff = MIN_FEE - coinSelected.fee;
     coinSelected = { ...coinSelected, fee: MIN_FEE };
@@ -156,3 +151,43 @@ export function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
   return { txInputs, txOutputs };
 }
 
+async function getEstimateFeeFromService(url) {
+  const response = await fetch(url);
+  const estimatedFees = await response.json();
+  console.log(estimatedFees);
+  return estimatedFees;
+}
+
+export async function getEstimateFeeRate(userFeeUsed: boolean, defaultServiceFeeUsed: boolean, userEstimateFee?: number, priority?: string) {
+  if (userFeeUsed) {
+    if (userEstimateFee && userEstimateFee !== undefined) {
+      return Math.round(userEstimateFee);
+    } else {
+      console.log(`User fee is used; Please set the fee rate for the transaction. The last recommended fees are: ${JSON.stringify(previousEstimateFee)}`);
+    }
+  } else {
+    if (priority && priority !== undefined) {
+      if (defaultServiceFeeUsed) {
+        return previousEstimateFee[priority];
+      } else {
+        if (serviceEstimateFeeUrl && serviceEstimateFeeUrl !== undefined) {
+          try {
+            const estimatedfFees = await getEstimateFeeFromService(serviceEstimateFeeUrl.toString());
+            return estimatedfFees[priority];
+          } catch (e) {
+            console.log(`Cannot get the latest estimated fees; default fees are used: ${JSON.stringify(previousEstimateFee)}`);
+            return previousEstimateFee[priority];
+          }
+        } else {
+          console.log(`Please make sure the url service to get the estimate fee is correct`);
+        }
+      }
+    } else {
+      console.log(`Please set the priority for the default estimate fee to be used`);
+    }
+  }
+}
+
+
+// response code: 500 responseMessage Internal Server Error, response: {\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":-26,\\\"message\\\":\\\"min relay fee not met, 374 < 403 (code 66)\\\"},\\\"id\\\":\\\"1\\\"}\\n\",\"details\":\"uri=/transactions\"}],\"errorCount\":1}" 
+// 374 2 inputs/ 2 outputs

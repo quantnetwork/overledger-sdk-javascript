@@ -10,14 +10,15 @@ const updateCsvFile = require('./sender-wallet').updateCsvFile;
 const mappId = 'network.quant.testnet';
 const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
-// const senderAddress = 'mgjbZZqZg1r9Yqo8gjyBL3Y2Mu4XttAu1T';
 const senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
 const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
 const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
 const valueToSend = 0.0001;
 const csvFile = './sender-utxos.csv';
-// const feeRate = 55; // satoshis per byte ? endpoint to get estimated fee rate from the connector ????
+const userFeeRate = 32; // satoshis/byte
+const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
+
 
 
 ; (async () => {
@@ -28,11 +29,9 @@ const csvFile = './sender-utxos.csv';
       provider: { network: 'testnet' },
     });
     const transactionMessage = 'OVL SDK Wallet Test';
-    // const senderNewAccount = await overledger.dlts.bitcoin.createAccount();
-    // const senderChangeAddress = senderNewAccount.address.toString();
-    // senderChangeAddresses.push(senderChangeAddress);
     const senderChangeAddress = senderAddress; // for now
-    const coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false);
+    // computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)
+    const coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, true, false, userFeeRate, feePrority[0]);
     console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
     const { txInputs, txOutputs } = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
 
@@ -40,7 +39,7 @@ const csvFile = './sender-utxos.csv';
     console.log(txInputs);
     console.log(`------txOutputs----`);
     console.log(txOutputs);
-    console.log(`------Fee------`);
+    console.log(`------Fee--------`);
     console.log(coinSelected.fee);
     overledger.dlts.bitcoin.setAccount(senderPrivateKey);
 

@@ -51,22 +51,10 @@ exports.__esModule = true;
 var fs = require('fs');
 var neatCsv = require('neat-csv');
 var coinSelect = require('coinselect');
+var fetch = require('node-fetch');
 var createCsvWriter = require('csv-writer').createObjectCsvWriter;
-var MIN_FEE = 256;
-function getFeeRate(overledger) {
-    return __awaiter(this, void 0, void 0, function () {
-        var estimateFeeRate;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, overledger.dlts.bitcoin.getEstimateFeeRate()];
-                case 1:
-                    estimateFeeRate = _a.sent();
-                    console.log(estimateFeeRate.data);
-                    return [2 /*return*/, estimateFeeRate.data.feerate * 1e5]; // satoshis/byte
-            }
-        });
-    });
-}
+var previousEstimateFee = { fastestFee: 44, halfHourFee: 42, hourFee: 36 }; // (curl https://bitcoinfees.earn.com/api/v1/fees/recommended)
+var serviceEstimateFeeUrl = 'https://bitcoinfees.earn.com/api/v1/fees/recommended';
 function createUtxosObjects(overledger, csvFilePath, addScript) {
     return __awaiter(this, void 0, void 0, function () {
         var readStream, txnInputs;
@@ -195,12 +183,12 @@ function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
     });
     return finalOutputs;
 }
-function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript) {
+function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority) {
     return __awaiter(this, void 0, void 0, function () {
-        var feeRate, txnInputs, senderTxnInputs, txnInputsWithSatoshisValues, coinSelected, outputsWithChangeAddress, coinSelectedHashes, coinsToKeep, diff_1;
+        var feeRate, txnInputs, senderTxnInputs, txnInputsWithSatoshisValues, coinSelected, outputsWithChangeAddress, coinSelectedHashes, coinsToKeep, MIN_FEE, diff_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, getFeeRate(overledger)];
+                case 0: return [4 /*yield*/, getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)];
                 case 1:
                     feeRate = _a.sent();
                     console.log("feeRate computeCoins " + feeRate);
@@ -211,10 +199,11 @@ function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, s
                     senderTxnInputs = txnInputs.filter(function (t) { return t.address === senderAddress; });
                     txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
                     coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
+                    console.log("coinSelected " + JSON.stringify(coinSelected));
                     outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
                     coinSelectedHashes = coinSelected.inputs.map(function (sel) { return sel.txHash; });
                     coinsToKeep = txnInputs.filter(function (t) { return !coinSelectedHashes.includes(t.txHash); });
-                    // "min relay fee not met, 226 < 256 (code 66)
+                    MIN_FEE = 256;
                     if (coinSelected.fee < MIN_FEE) {
                         diff_1 = MIN_FEE - coinSelected.fee;
                         coinSelected = __assign({}, coinSelected, { fee: MIN_FEE });
@@ -252,3 +241,67 @@ function computeBtcRequestTxns(coinSelectTxInputs, coinSelectTxOutputs) {
     return { txInputs: txInputs, txOutputs: txOutputs };
 }
 exports.computeBtcRequestTxns = computeBtcRequestTxns;
+function getEstimateFeeFromService(url) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, estimatedFees;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch(url)];
+                case 1:
+                    response = _a.sent();
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    estimatedFees = _a.sent();
+                    console.log(estimatedFees);
+                    return [2 /*return*/, estimatedFees];
+            }
+        });
+    });
+}
+function getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority) {
+    return __awaiter(this, void 0, void 0, function () {
+        var estimatedfFees, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!userFeeUsed) return [3 /*break*/, 1];
+                    if (userEstimateFee && userEstimateFee !== undefined) {
+                        return [2 /*return*/, Math.round(userEstimateFee)];
+                    }
+                    else {
+                        console.log("User fee is used; Please set the fee rate for the transaction. The last recommended fees are: " + JSON.stringify(previousEstimateFee));
+                    }
+                    return [3 /*break*/, 10];
+                case 1:
+                    if (!(priority && priority !== undefined)) return [3 /*break*/, 9];
+                    if (!defaultServiceFeeUsed) return [3 /*break*/, 2];
+                    return [2 /*return*/, previousEstimateFee[priority]];
+                case 2:
+                    if (!(serviceEstimateFeeUrl && serviceEstimateFeeUrl !== undefined)) return [3 /*break*/, 7];
+                    _a.label = 3;
+                case 3:
+                    _a.trys.push([3, 5, , 6]);
+                    return [4 /*yield*/, getEstimateFeeFromService(serviceEstimateFeeUrl.toString())];
+                case 4:
+                    estimatedfFees = _a.sent();
+                    return [2 /*return*/, estimatedfFees[priority]];
+                case 5:
+                    e_1 = _a.sent();
+                    console.log("Cannot get the latest estimated fees; default fees are used: " + JSON.stringify(previousEstimateFee));
+                    return [2 /*return*/, previousEstimateFee[priority]];
+                case 6: return [3 /*break*/, 8];
+                case 7:
+                    console.log("Please make sure the url service to get the estimate fee is correct");
+                    _a.label = 8;
+                case 8: return [3 /*break*/, 10];
+                case 9:
+                    console.log("Please set the priority for the default estimate fee to be used");
+                    _a.label = 10;
+                case 10: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getEstimateFeeRate = getEstimateFeeRate;
+// response code: 500 responseMessage Internal Server Error, response: {\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":-26,\\\"message\\\":\\\"min relay fee not met, 374 < 403 (code 66)\\\"},\\\"id\\\":\\\"1\\\"}\\n\",\"details\":\"uri=/transactions\"}],\"errorCount\":1}" 
+// 374 2 inputs/ 2 outputs
