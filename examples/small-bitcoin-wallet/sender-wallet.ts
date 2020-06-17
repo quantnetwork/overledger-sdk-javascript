@@ -111,7 +111,13 @@ export async function computeCoins(overledger, csvFilePath, senderAddress, recei
   // const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress || senderChangeAddresses.includes(t.address));
   const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress); // for now
   const txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
-  let coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
+  let coinSelected;
+  try {
+    coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
+  } catch(e) {
+    // parse e ==> no outputs !!
+     // MAKE A TEST SOMME OF valueToSend + FEE RATE <= SOMME txnInputs values !!!!
+  }
   console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
   let outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
   const coinSelectedHashes = coinSelected.inputs.map(sel => { return sel.txHash });

@@ -14,9 +14,9 @@ const senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
 const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
 const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
-const valueToSend = 0.0001;
+const valueToSend = 0.0004;
 const csvFile = './sender-utxos.csv';
-const userFeeRate = 32; // satoshis/byte
+const userFeeRate = 12; // satoshis/byte
 const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
 
 
