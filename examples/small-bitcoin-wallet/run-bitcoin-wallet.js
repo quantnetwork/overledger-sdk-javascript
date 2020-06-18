@@ -14,13 +14,13 @@ const senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
 const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
 const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
-const valueToSend = 0.0002;
+const valueToSend = 0.00017;
 const csvFile = './sender-utxos.csv';
 const userFeeRate = 3; // satoshis/byte and should be more than 5
 const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
 
 
-
+// Main call
 ; (async () => {
   try {
     // Connect to overledger and choose which distributed ledgers to use:
@@ -56,11 +56,10 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
         type: TransactionTypeOptions.UTXO,
         subType: { name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER },
         message: transactionMessage,
-        // The following parameters are from the TransactionUtxoRequest object:
         txInputs,
         txOutputs,
         extraFields: {
-          feePrice: coinSelected.fee // Price for the miner to add this transaction to the block
+          feePrice: coinSelected.fee
         },
       },
     ]);
@@ -88,7 +87,6 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
       }
       n++;
     }
-
   } catch (e) {
     console.error('error:', e);
   }
