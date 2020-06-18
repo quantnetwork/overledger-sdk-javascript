@@ -14,9 +14,9 @@ const senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
 const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
 const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
-const valueToSend = 0.0004;
+const valueToSend = 0.0001;
 const csvFile = './sender-utxos.csv';
-const userFeeRate = 32; // satoshis/byte
+const userFeeRate = 3; // satoshis/byte and should be more than 5
 const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
 
 
@@ -31,21 +31,22 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
     const transactionMessage = 'OVL SDK Wallet Test';
     const senderChangeAddress = senderAddress; // for now
     let coinSelected;
+    let txns;
     try {
     // computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)
-    coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, false, true, userFeeRate, feePrority[0]);
+    coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, true, true, userFeeRate, feePrority[0]);
     console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
-    } catch(e) {
-      console.log(e);
-      return;
-    }
-    const { txInputs, txOutputs } = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
-
+    txns = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
+  } catch (e) {
+    console.log(e.message);
+    return false;
+ }
+    const { txInputs, txOutputs } = txns;
     console.log(`------txInputs-----`);
     console.log(txInputs);
     console.log(`------txOutputs----`);
     console.log(txOutputs);
-    console.log(`------Fee--------`);
+    console.log(`------Fee----------`);
     console.log(coinSelected.fee);
     overledger.dlts.bitcoin.setAccount(senderPrivateKey);
 

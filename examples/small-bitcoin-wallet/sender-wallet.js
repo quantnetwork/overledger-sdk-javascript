@@ -125,7 +125,10 @@ function updateCsvFile(overledger, senderChangeAddress, txnsInputsNotUsed, txnHa
                                     case 0: return [4 /*yield*/, overledger.search.getTransaction(txnHash)];
                                     case 1:
                                         bitcoinTransaction = _a.sent();
-                                        console.log(bitcoinTransaction);
+                                        console.log("updateCsvFile  bitcoinTransaction");
+                                        if (!bitcoinTransaction.data || bitcoinTransaction.data === undefined) {
+                                            throw new Error("Updating the csv file failed");
+                                        }
                                         vout = bitcoinTransaction.data.data.vout;
                                         console.log(bitcoinTransaction.data.data.vout);
                                         console.log(bitcoinTransaction.data.data.vin);
@@ -170,7 +173,7 @@ function utxosWithSatoshisValues(txnInputs) {
     return txnInputsWithSatoshisValues;
 }
 function btcToSatoshiValue(btcValue) {
-    return btcValue * 1e8;
+    return Math.floor(btcValue * 1e8);
 }
 function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
     var finalOutputs = outputs.map(function (output) {
@@ -185,7 +188,7 @@ function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
 }
 function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority) {
     return __awaiter(this, void 0, void 0, function () {
-        var feeRate, txnInputs, senderTxnInputs, txnInputsWithSatoshisValues, totalInputsValues, coinSelected, fees, totalToOwn, outputsWithChangeAddress, coinSelectedHashes, coinsToKeep, MIN_FEE, diff_1;
+        var feeRate, txnInputs, senderTxnInputs, txnInputsWithSatoshisValues, totalInputsValues, coinSelected, fees, totalToOwn, outputsWithChangeAddress, coinSelectedHashes, coinsToKeep;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)];
@@ -195,37 +198,25 @@ function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, s
                     return [4 /*yield*/, createUtxosObjects(overledger, csvFilePath, addScript)];
                 case 2:
                     txnInputs = _a.sent();
-                    console.log("txnInputs " + JSON.stringify(txnInputs));
                     senderTxnInputs = txnInputs.filter(function (t) { return t.address === senderAddress; });
+                    if (!senderTxnInputs || senderTxnInputs === undefined || senderTxnInputs.length === 0) {
+                        throw new Error("No utxos inputs; Please check your wallet's balance in the sender-utxo.csv file");
+                    }
                     txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
                     totalInputsValues = txnInputsWithSatoshisValues.reduce(function (t, i) { return t + i.value; }, 0);
                     coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
                     fees = coinSelected.fee;
                     totalToOwn = btcToSatoshiValue(valueToSend) + fees;
-                    console.log("totalToOwn " + totalToOwn);
-                    console.log("totalInputsValues " + Math.round(totalInputsValues));
-                    if (Math.round(totalInputsValues) < totalToOwn || !coinSelected.outputs || coinSelected.outputs.length === 0) {
-                        console.log('No enough BTC in the wallet for the transaction to be sent; Please change the fee rate or add BTC to your wallet');
-                        throw new Error("No enough BTC in the wallet for the transaction to be sent; Please change the fee rate " + feeRate + " or add BTC to your wallet");
+                    console.log("coinSelected " + JSON.stringify(coinSelected));
+                    if (Math.floor(totalInputsValues) < totalToOwn || !coinSelected.outputs || coinSelected.outputs.length === 0) {
+                        console.log("total to own (value to send + fees):  " + Math.round(totalToOwn));
+                        console.log("total inputs values in the wallet: " + Math.round(totalInputsValues));
+                        throw new Error("Not enough BTC in the wallet's balance for the transaction to be sent; Please change the fee rate " + feeRate + " or add BTC to your wallet");
                     }
                     console.log("coinSelected " + JSON.stringify(coinSelected));
                     outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
                     coinSelectedHashes = coinSelected.inputs.map(function (sel) { return sel.txHash; });
                     coinsToKeep = txnInputs.filter(function (t) { return !coinSelectedHashes.includes(t.txHash); });
-                    MIN_FEE = 256;
-                    if (coinSelected.fee < MIN_FEE) {
-                        diff_1 = MIN_FEE - coinSelected.fee;
-                        coinSelected = __assign({}, coinSelected, { fee: MIN_FEE });
-                        outputsWithChangeAddress = outputsWithChangeAddress.map(function (output) {
-                            if (output.address === senderChangeAddress) {
-                                return __assign({}, output, { value: output.value - diff_1 });
-                            }
-                            else {
-                                return output;
-                            }
-                        });
-                        return [2 /*return*/, __assign({}, coinSelected, { coinsToKeep: coinsToKeep, outputsWithChangeAddress: outputsWithChangeAddress })];
-                    }
                     return [2 /*return*/, __assign({}, coinSelected, { coinsToKeep: coinsToKeep, outputsWithChangeAddress: outputsWithChangeAddress })];
             }
         });
@@ -314,3 +305,6 @@ function getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee,
 exports.getEstimateFeeRate = getEstimateFeeRate;
 // response code: 500 responseMessage Internal Server Error, response: {\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":-26,\\\"message\\\":\\\"min relay fee not met, 374 < 403 (code 66)\\\"},\\\"id\\\":\\\"1\\\"}\\n\",\"details\":\"uri=/transactions\"}],\"errorCount\":1}" 
 // 374 2 inputs/ 2 outputs
+// address,txHash,outputIndex,value
+// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,e69d06cefe436d76aed3486a2e277d71db0547cb0d15d3ddbc98bac42875bf1f,1,0.00031979
+// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,27ab7afc5ef53fbf99348e15dc54b397d2c2e2858d89b63141ad864d97a8c614,1,0.00003724

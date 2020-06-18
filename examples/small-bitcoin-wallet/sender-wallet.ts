@@ -1,6 +1,8 @@
 // npx ts-node sender-wallet.ts: run only the .ts file examples (if exist)
 // npx tsc sender-wallet.ts (generate the js file)
 
+import Bitcoin from "../../packages/overledger-dlt-bitcoin/dist";
+
 const fs = require('fs');
 const neatCsv = require('neat-csv');
 const coinSelect = require('coinselect');
@@ -51,7 +53,10 @@ export async function updateCsvFile(overledger, senderChangeAddress, txnsInputsN
   });
   const newChangeInput = await Promise.all(txnHashInputsToAdd.map(async txnHash => {
     const bitcoinTransaction = await overledger.search.getTransaction(txnHash);
-    console.log(bitcoinTransaction);
+    console.log(`updateCsvFile  bitcoinTransaction`);
+    if (!bitcoinTransaction.data || bitcoinTransaction.data === undefined) {
+      throw new Error(`Updating the csv file failed`);
+    }
     const vout = bitcoinTransaction.data.data.vout;
     console.log(bitcoinTransaction.data.data.vout);
     console.log(bitcoinTransaction.data.data.vin);
@@ -89,7 +94,7 @@ function utxosWithSatoshisValues(txnInputs: UtxoCSVObject[]) {
 }
 
 function btcToSatoshiValue(btcValue: number): number {
-  return btcValue * 1e8;
+  return Math.floor(btcValue * 1e8);
 }
 
 function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
@@ -107,39 +112,25 @@ export async function computeCoins(overledger, csvFilePath, senderAddress, recei
   const feeRate = await getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority);
   console.log(`feeRate computeCoins ${feeRate}`);
   const txnInputs = await createUtxosObjects(overledger, csvFilePath, addScript);
-  console.log(`txnInputs ${JSON.stringify(txnInputs)}`);
-  // const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress || senderChangeAddresses.includes(t.address));
   const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress); // for now
+  if (!senderTxnInputs || senderTxnInputs === undefined || senderTxnInputs.length === 0) {
+    throw new Error(`No utxos inputs; Please check your wallet's balance in the sender-utxo.csv file`);
+  }
   const txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
   const totalInputsValues = txnInputsWithSatoshisValues.reduce((t, i) => t + i.value, 0);
-  let coinSelected;
-    coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
-    const fees = coinSelected.fee;
-    const  totalToOwn = btcToSatoshiValue(valueToSend) + fees;
-    console.log(`totalToOwn ${totalToOwn}`);
-    console.log(`totalInputsValues ${Math.round(totalInputsValues)}`);
-    if(Math.round(totalInputsValues) < totalToOwn || !coinSelected.outputs || coinSelected.outputs.length === 0 ){
-      console.log('No enough BTC in the wallet for the transaction to be sent; Please change the fee rate or add BTC to your wallet');
-      throw new Error(`No enough BTC in the wallet for the transaction to be sent; Please change the fee rate ${feeRate} or add BTC to your wallet`);
-    }
+  const coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
+  const fees = coinSelected.fee;
+  const totalToOwn = btcToSatoshiValue(valueToSend) + fees;
+  console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
+  if (Math.floor(totalInputsValues) < totalToOwn || !coinSelected.outputs || coinSelected.outputs.length === 0) {
+    console.log(`total to own (value to send + fees):  ${Math.round(totalToOwn)}`);
+    console.log(`total inputs values in the wallet: ${Math.round(totalInputsValues)}`);
+    throw new Error(`Not enough BTC in the wallet's balance for the transaction to be sent; Please change the fee rate ${feeRate} or add BTC to your wallet`);
+  }
   console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
   let outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
   const coinSelectedHashes = coinSelected.inputs.map(sel => { return sel.txHash });
   const coinsToKeep = txnInputs.filter(t => !coinSelectedHashes.includes(t.txHash));
-  // "min relay fee not met, 226 < 256 (code 66)
-  const MIN_FEE = 256;
-  if (coinSelected.fee < MIN_FEE) {
-    const diff = MIN_FEE - coinSelected.fee;
-    coinSelected = { ...coinSelected, fee: MIN_FEE };
-    outputsWithChangeAddress = outputsWithChangeAddress.map(output => {
-      if (output.address === senderChangeAddress) {
-        return { ...output, value: output.value - diff }
-      } else {
-        return output;
-      }
-    });
-    return { ...coinSelected, coinsToKeep, outputsWithChangeAddress };
-  }
   return { ...coinSelected, coinsToKeep, outputsWithChangeAddress };
 }
 
@@ -201,3 +192,7 @@ export async function getEstimateFeeRate(userFeeUsed: boolean, defaultServiceFee
 
 // response code: 500 responseMessage Internal Server Error, response: {\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":-26,\\\"message\\\":\\\"min relay fee not met, 374 < 403 (code 66)\\\"},\\\"id\\\":\\\"1\\\"}\\n\",\"details\":\"uri=/transactions\"}],\"errorCount\":1}" 
 // 374 2 inputs/ 2 outputs
+
+// address,txHash,outputIndex,value
+// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,e69d06cefe436d76aed3486a2e277d71db0547cb0d15d3ddbc98bac42875bf1f,1,0.00031979
+// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,27ab7afc5ef53fbf99348e15dc54b397d2c2e2858d89b63141ad864d97a8c614,1,0.00003724
