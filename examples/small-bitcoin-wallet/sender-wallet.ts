@@ -1,7 +1,6 @@
 // npx ts-node sender-wallet.ts: run only the .ts file examples (if exist)
 // npx tsc sender-wallet.ts (generate the js file)
 
-import Bitcoin from "../../packages/overledger-dlt-bitcoin/dist";
 
 const fs = require('fs');
 const neatCsv = require('neat-csv');
@@ -15,7 +14,7 @@ interface UtxoCSVObject {
   address: string;
   txHash: string;
   outputIndex: number;
-  value: number; // satoshis
+  value: number;
   script?: Buffer;
 }
 
@@ -53,7 +52,7 @@ export async function updateCsvFile(overledger, senderChangeAddress, txnsInputsN
   });
   const newChangeInput = await Promise.all(txnHashInputsToAdd.map(async txnHash => {
     const bitcoinTransaction = await overledger.search.getTransaction(txnHash);
-    console.log(`updateCsvFile  bitcoinTransaction`);
+    console.log(`--updating csv file with new inputs--`);
     if (!bitcoinTransaction.data || bitcoinTransaction.data === undefined) {
       throw new Error(`Updating the csv file failed; it will try automatically to update it twice, otherwise you would need to update it manually`);
     }
@@ -122,7 +121,7 @@ export async function computeCoins(overledger, csvFilePath, senderAddress, recei
   const fees = coinSelected.fee;
   const totalToOwn = btcToSatoshiValue(valueToSend) + fees;
   console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
-  if (Math.floor(totalInputsValues) < totalToOwn || !coinSelected.outputs || coinSelected.outputs.length === 0) {
+  if (Math.floor(totalInputsValues) < Math.floor(totalToOwn) || !coinSelected.outputs || coinSelected.outputs.length === 0) {
     console.log(`total to own (value to send + fees):  ${Math.round(totalToOwn)}`);
     console.log(`total inputs values in the wallet: ${Math.round(totalInputsValues)}`);
     throw new Error(`Not enough BTC in the wallet's balance for the transaction to be sent; Please change the fee rate ${feeRate} or add BTC to your wallet`);
