@@ -111,13 +111,17 @@ export async function computeCoins(overledger, csvFilePath, senderAddress, recei
   // const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress || senderChangeAddresses.includes(t.address));
   const senderTxnInputs = txnInputs.filter(t => t.address === senderAddress); // for now
   const txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
+  const totalInputsValues = txnInputsWithSatoshisValues.reduce((t, i) => t + i.value, 0);
   let coinSelected;
-  try {
     coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
-  } catch(e) {
-    // parse e ==> no outputs !!
-     // MAKE A TEST SOMME OF valueToSend + FEE RATE <= SOMME txnInputs values !!!!
-  }
+    const fees = coinSelected.fee;
+    const  totalToOwn = btcToSatoshiValue(valueToSend) + fees;
+    console.log(`totalToOwn ${totalToOwn}`);
+    console.log(`totalInputsValues ${Math.round(totalInputsValues)}`);
+    if(Math.round(totalInputsValues) < totalToOwn || !coinSelected.outputs || coinSelected.outputs.length === 0 ){
+      console.log('No enough BTC in the wallet for the transaction to be sent; Please change the fee rate or add BTC to your wallet');
+      throw new Error(`No enough BTC in the wallet for the transaction to be sent; Please change the fee rate ${feeRate} or add BTC to your wallet`);
+    }
   console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
   let outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
   const coinSelectedHashes = coinSelected.inputs.map(sel => { return sel.txHash });

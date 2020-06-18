@@ -185,7 +185,7 @@ function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
 }
 function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority) {
     return __awaiter(this, void 0, void 0, function () {
-        var feeRate, txnInputs, senderTxnInputs, txnInputsWithSatoshisValues, coinSelected, outputsWithChangeAddress, coinSelectedHashes, coinsToKeep, MIN_FEE, diff_1;
+        var feeRate, txnInputs, senderTxnInputs, txnInputsWithSatoshisValues, totalInputsValues, coinSelected, fees, totalToOwn, outputsWithChangeAddress, coinSelectedHashes, coinsToKeep, MIN_FEE, diff_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)];
@@ -198,7 +198,16 @@ function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, s
                     console.log("txnInputs " + JSON.stringify(txnInputs));
                     senderTxnInputs = txnInputs.filter(function (t) { return t.address === senderAddress; });
                     txnInputsWithSatoshisValues = utxosWithSatoshisValues(senderTxnInputs);
+                    totalInputsValues = txnInputsWithSatoshisValues.reduce(function (t, i) { return t + i.value; }, 0);
                     coinSelected = coinSelect(txnInputsWithSatoshisValues, [{ address: receiverAddress, value: btcToSatoshiValue(valueToSend) }], feeRate);
+                    fees = coinSelected.fee;
+                    totalToOwn = btcToSatoshiValue(valueToSend) + fees;
+                    console.log("totalToOwn " + totalToOwn);
+                    console.log("totalInputsValues " + Math.round(totalInputsValues));
+                    if (Math.round(totalInputsValues) < totalToOwn || !coinSelected.outputs || coinSelected.outputs.length === 0) {
+                        console.log('No enough BTC in the wallet for the transaction to be sent; Please change the fee rate or add BTC to your wallet');
+                        throw new Error("No enough BTC in the wallet for the transaction to be sent; Please change the fee rate " + feeRate + " or add BTC to your wallet");
+                    }
                     console.log("coinSelected " + JSON.stringify(coinSelected));
                     outputsWithChangeAddress = addChangeAddressForChangeOutput(coinSelected.outputs, senderChangeAddress);
                     coinSelectedHashes = coinSelected.inputs.map(function (sel) { return sel.txHash; });

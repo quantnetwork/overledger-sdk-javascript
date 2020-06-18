@@ -16,7 +16,7 @@ const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
 const valueToSend = 0.0004;
 const csvFile = './sender-utxos.csv';
-const userFeeRate = 12; // satoshis/byte
+const userFeeRate = 32; // satoshis/byte
 const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
 
 
@@ -30,9 +30,15 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
     });
     const transactionMessage = 'OVL SDK Wallet Test';
     const senderChangeAddress = senderAddress; // for now
+    let coinSelected;
+    try {
     // computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)
-    const coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, true, false, userFeeRate, feePrority[0]);
+    coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, false, true, userFeeRate, feePrority[0]);
     console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
+    } catch(e) {
+      console.log(e);
+      return;
+    }
     const { txInputs, txOutputs } = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
 
     console.log(`------txInputs-----`);
