@@ -33,14 +33,14 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
     let coinSelected;
     let txns;
     try {
-    // computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)
-    coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, true, true, userFeeRate, feePrority[0]);
-    console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
-    txns = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
-  } catch (e) {
-    console.log(e.message);
-    return false;
- }
+      // computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)
+      coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, true, true, userFeeRate, feePrority[0]);
+      console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
+      txns = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
+    } catch (e) {
+      console.log(e.message);
+      return false;
+    }
     const { txInputs, txOutputs } = txns;
     console.log(`------txInputs-----`);
     console.log(txInputs);
@@ -77,7 +77,12 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
     console.log(JSON.stringify(result, null, 2));
     console.log("");
     txHash = result.dltData[0].transactionHash;
-    await updateCsvFile(overledger, senderChangeAddress, coinSelected.coinsToKeep, [txHash], csvFile);
+    try {
+      await updateCsvFile(overledger, senderChangeAddress, coinSelected.coinsToKeep, [txHash], csvFile);
+    } catch (e) {
+      console.log(e.message);
+      return false;
+    }
   } catch (e) {
     console.error('error:', e);
   }
