@@ -14,7 +14,7 @@ const senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
 const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
 const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
-const valueToSend = 0.0001;
+const valueToSend = 0.0002;
 const csvFile = './sender-utxos.csv';
 const userFeeRate = 3; // satoshis/byte and should be more than 5
 const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
@@ -77,12 +77,18 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
     console.log(JSON.stringify(result, null, 2));
     console.log("");
     txHash = result.dltData[0].transactionHash;
-    try {
-      await updateCsvFile(overledger, senderChangeAddress, coinSelected.coinsToKeep, [txHash], csvFile);
-    } catch (e) {
-      console.log(e.message);
-      return false;
+    let n = 0; // max two attempts to update the utxos csv file
+    let csvUpdated = false;
+    while (n < 2 && !csvUpdated) {
+      try {
+        await updateCsvFile(overledger, senderChangeAddress, coinSelected.coinsToKeep, [txHash], csvFile);
+        csvUpdated = true;
+      } catch (e) {
+        console.log(e.message);
+      }
+      n++;
     }
+
   } catch (e) {
     console.error('error:', e);
   }

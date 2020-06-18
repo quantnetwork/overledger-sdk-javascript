@@ -127,7 +127,7 @@ function updateCsvFile(overledger, senderChangeAddress, txnsInputsNotUsed, txnHa
                                         bitcoinTransaction = _a.sent();
                                         console.log("updateCsvFile  bitcoinTransaction");
                                         if (!bitcoinTransaction.data || bitcoinTransaction.data === undefined) {
-                                            throw new Error("Updating the csv file failed");
+                                            throw new Error("Updating the csv file failed; it will try automatically to update it twice, otherwise you would need to update it manually");
                                         }
                                         vout = bitcoinTransaction.data.data.vout;
                                         console.log(bitcoinTransaction.data.data.vout);
