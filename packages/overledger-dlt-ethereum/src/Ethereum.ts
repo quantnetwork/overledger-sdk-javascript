@@ -293,10 +293,6 @@ class Ethereum extends AbstractDLT {
             error: 'To invoke a smart contract on Ethereum that has input parameters, where some are integers, you need to provide the type.selectedIntegerLength field for each integer, stating how many bytes length it should use, selected from UintIntOptions in the Ethereum package',
           };
         }
-        console.log(`thisSCEthereumParam.type.selectedBytesLength  ${thisSCEthereumParam.type.selectedBytesLength } ${typeof thisSCEthereumParam.type.selectedBytesLength == "string"} `);
-        console.log(`thisSCEthereumParam.type.selectedType ${thisSCEthereumParam.type.selectedType}`);
-        console.log(`thisSCEthereumParam.name ${thisSCEthereumParam.name}`);
-        console.log(`tests type ${thisSCEthereumParam.type.selectedType}, blength ${thisSCEthereumParam.type.selectedBytesLength == undefined} ${thisSCEthereumParam.type.selectedBytesLength == null} ${Object.values(BytesBOptions).includes(thisSCEthereumParam.type.selectedBytesLength)}`);
         if (((thisSCEthereumParam.type.selectedType === TypeOptions.BYTES_B) || (thisSCEthereumParam.type.selectedType === TypeOptions.BYTES_B_ARRAY))
          && ((thisSCEthereumParam.type.selectedBytesLength == undefined) || (thisSCEthereumParam.type.selectedBytesLength == null) || (!Object.values(BytesBOptions).includes(thisSCEthereumParam.type.selectedBytesLength)))) {
           return {
