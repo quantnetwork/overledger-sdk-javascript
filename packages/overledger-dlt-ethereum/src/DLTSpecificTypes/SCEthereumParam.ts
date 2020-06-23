@@ -17,7 +17,7 @@ import { SCFunctionParam } from '@quantnetwork/overledger-types';
 * @memberof module:overledger-dlt-ethereum
 */
 interface SCEthereumParam extends SCFunctionParam {
-  type: { selectedType: TypeOptions, selectedIntegerLength?: UintIntBOptions, selectedBytesLength?: BytesBOptions };
+  type: { selectedType: TypeOptions, selectedIntegerLength?: UintIntBOptions, selectedBytesLength?: BytesBOptions, selectedArrayLength?: number };
   value: Object;
   name?: string;
 }
