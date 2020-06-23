@@ -7,7 +7,7 @@ import EthereumTypeOptions from './associatedEnums/TypeOptions';
  */
 function computeParamType(param: any): string {
   let paramType = param.type.selectedType.toString();
-  let paramArrayLength = paramType.type.selectedArrayLength;
+  let paramArrayLength = param.type.selectedArrayLength;
   if (paramType === EthereumTypeOptions.ADDRESS) {
     paramType = 'address';
   } else if (paramType === EthereumTypeOptions.ADDRESS_ARRAY) {
