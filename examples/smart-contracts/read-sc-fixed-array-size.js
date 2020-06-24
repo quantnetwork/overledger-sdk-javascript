@@ -10,8 +10,8 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 //  ---------------------------------------------------------
 
 // The following are found from your Overledger Account:
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+const mappId = '...';
+const bpiKey = '...';
 
 
 // Paste in your ethereum address.

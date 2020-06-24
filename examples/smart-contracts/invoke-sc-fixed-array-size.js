@@ -12,8 +12,8 @@ const EthereumUintIntOptions = require('@quantnetwork/overledger-dlt-ethereum').
 //  ---------------------------------------------------------
 
 // The following are found from your Overledger Account:
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+const mappId = '...';
+const bpiKey = '...';
 
 // Paste in your ethereum address and private key.
 const partyAEthereumPrivateKey = '0xe352ad01a835ec50ba301ed7ffb305555cbf3b635082af140b3864f8e3e443d3'; //should have 0x in front
