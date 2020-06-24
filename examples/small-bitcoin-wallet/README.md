@@ -3,6 +3,17 @@
 This example contains a script ```run-bitcoin-wallet.js``` which allows you to send a bitcoin transaction. It contains the sender address, the receiver address, the sender changer output address (for now, it will be the same as the sender address) and the value to send.
 
 Unspent transactions output must be specified in the ```sender-utxos.csv``` file for the sender address used in the JS file.
+An example of the ```sender-utxos.csv``` would be:
+
+```
+address,txHash,outputIndex,value
+muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,27ab7afc5ef53fbf99348e15dc54b397d2c2e2858d89b63141ad864d97a8c614,1,0.00003724
+muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,9240fae9789b80895851792d0aac73e6aa744ebb6bf8a88044e39fd7af57b968,1,0.00007366
+muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,68480372e0b35e0e23df8aaf018eeb747b110e1f6e621095202691ba0fc2d83a,1,0.0001
+muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,0b4c7c60b36c077130da3496ff2ef781ad761845c4bb262375732af8322270b1,1,0.00098322
+muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,fb50c2cb326b2d95250d07f13174fa7239021b9d234fe321261219aa0bf6d62b,1,0.00013544
+```
+
 
 ## Building
 

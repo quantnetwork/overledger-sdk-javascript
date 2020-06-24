@@ -192,7 +192,7 @@ class Ethereum extends AbstractDLT {
       };
     }
     if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY)
-      && ((!ethereumSC.functionCall[0].functionType) || (!Object.values(SCFunctionTypeOptions).includes(ethereumSC.functionCall[0].functionType)))) {
+    && ((!ethereumSC.functionCall[0].functionType) || (!Object.values(SCFunctionTypeOptions).includes(ethereumSC.functionCall[0].functionType)))) {
       return {
         success: false,
         failingField: 'smartContract.functionCall[0].functionType',
@@ -200,8 +200,8 @@ class Ethereum extends AbstractDLT {
       };
     }
     if ((thisEthereumTx.subType.name === TransactionEthereumSubTypeOptions.SMART_CONTRACT_DEPLOY)
-      && ((ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_NO_PARAMETERS)
-        || (ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS))) {
+     && ((ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_NO_PARAMETERS)
+       || (ethereumSC.functionCall[0].functionType === SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS))) {
       return {
         success: false,
         failingField: 'smartContract.functionCall[0].functionType',

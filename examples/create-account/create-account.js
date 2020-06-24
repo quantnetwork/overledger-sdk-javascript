@@ -15,8 +15,8 @@ const bpiKey = '...';
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: DltNameOptions.BITCOIN },
-                { dlt: DltNameOptions.ETHEREUM }, 
-                { dlt: DltNameOptions.XRP_LEDGER }
+            { dlt: DltNameOptions.ETHEREUM },
+            { dlt: DltNameOptions.XRP_LEDGER }
             ],
             provider: { network: 'testnet' },
         });
