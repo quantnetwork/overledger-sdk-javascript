@@ -7,8 +7,8 @@ const computeBtcRequestTxns = require('./sender-wallet.js').computeBtcRequestTxn
 const updateCsvFile = require('./sender-wallet').updateCsvFile;
 
 
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+const mappId = '...';
+const bpiKey = '...';
 
 const senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
 const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];

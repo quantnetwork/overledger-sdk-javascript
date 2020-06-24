@@ -303,10 +303,4 @@ function getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee,
     });
 }
 exports.getEstimateFeeRate = getEstimateFeeRate;
-// response code: 500 responseMessage Internal Server Error, response: {\\\"result\\\":null,\\\"error\\\":{\\\"code\\\":-26,\\\"message\\\":\\\"min relay fee not met, 374 < 403 (code 66)\\\"},\\\"id\\\":\\\"1\\\"}\\n\",\"details\":\"uri=/transactions\"}],\"errorCount\":1}" 
-// 374 2 inputs/ 2 outputs
-// address,txHash,outputIndex,value
-// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,e69d06cefe436d76aed3486a2e277d71db0547cb0d15d3ddbc98bac42875bf1f,1,0.00031979
-// muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w,27ab7afc5ef53fbf99348e15dc54b397d2c2e2858d89b63141ad864d97a8c614,1,0.00003724
-
 
