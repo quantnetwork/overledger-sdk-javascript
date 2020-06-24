@@ -68,7 +68,7 @@ const smartContractDemoCode = "0x608060405234801561001057600080fd5b5060405161035
             {
                 type: { selectedType: EthereumTypeOptions.UINT_B_ARRAY, selectedIntegerLength: EthereumUintIntOptions.B16, selectedArrayLength: 4 },
                 name: 'thisTestUintArrayFixed',
-                value: [3,4,6,9]
+                value: [0,9,6,1]
             }
             ]
           }

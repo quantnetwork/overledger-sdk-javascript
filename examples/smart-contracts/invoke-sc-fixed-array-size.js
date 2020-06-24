@@ -64,7 +64,7 @@ const smartContractAddress = '0x4Bf94Ec7A50cE7C3fdFEE3ACab545DF51d279D5F';
               {  
                 type: { selectedType: EthereumTypeOptions.UINT_B_ARRAY, selectedIntegerLength: EthereumUintIntOptions.B16, selectedArrayLength: 4 },
                 name: 'newTestUintArrayFixed', // Name of parameter
-                value: [1,2,3,10], // Value of the boolean array
+                value: [1,2,5,9], // Value of the boolean array
               }
             ]
           }
