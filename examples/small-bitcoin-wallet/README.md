@@ -23,9 +23,7 @@ In order to run the example, first, make sure you have built the sdk by running 
 yarn run build
 ```
 
-Run the .ts file containing the utility functions to compute from the .csv file inputs and outputs for the Bitcoin transaction:
-
-```npx tsc sender-wallet.ts (generate the js file) ```
+If you want to run the .ts file containing the utility functions to compute from the .csv file inputs and outputs for the Bitcoin transaction: npx tsc sender-wallet.ts (generate the js file)
 
 And then send the transaction by running:
 
@@ -38,7 +36,7 @@ Next you will need to add some information into the script for it to run correct
 * Your MAPPID and BPIKey
 * sender's blockchain address and associated private key
 * Receiver's blockchain address 
-* sender's change address: will be the same for now as the initial sender's address
+* sender's change address: is required (for now) to be the same as the initial sender's address
 * Value to send
 * userFeeRate in case you would like to set your own fee
 

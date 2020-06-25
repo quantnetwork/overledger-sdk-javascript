@@ -11,13 +11,12 @@ const mappId = '...';
 const bpiKey = '...';
 
 const senderAddress = 'muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w';
-const senderChangeAddresses = ['muxP7kJNsV6v32m52gvsqHJTKLHiB53p9w'];
 const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
 const valueToSend = 0.0017;
 const csvFile = './sender-utxos.csv';
 const userFeeRate = 5; // satoshis/byte and should be more than 2
-const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
+const feePriorityOptions = ["fastestFee", "halfHourFee", "hourFee"];
 
 
 // Main call
@@ -34,7 +33,7 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
     let txns;
     try {
       // computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority)
-      coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, false, true, userFeeRate, feePrority[0]);
+      coinSelected = await computeCoins(overledger, csvFile, senderAddress, receiverAddress, senderChangeAddress, valueToSend, false, false, true, userFeeRate, feePriorityOptions[0]);
       console.log(`coinSelected ${JSON.stringify(coinSelected)}`);
       txns = computeBtcRequestTxns(coinSelected.inputs, coinSelected.outputsWithChangeAddress);
     } catch (e) {
@@ -76,6 +75,7 @@ const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
     console.log(JSON.stringify(result, null, 2));
     console.log("");
     txHash = result.dltData[0].transactionHash;
+    console.log(`transaction hash created: ${txHash}`);
     let n = 0; // max two attempts to update the utxos csv file
     let csvUpdated = false;
     while (n < 2 && !csvUpdated) {
