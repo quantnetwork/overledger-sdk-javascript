@@ -7,15 +7,15 @@ import EthereumTypeOptions from './associatedEnums/TypeOptions';
  */
 function computeParamType(param: any): string {
   let paramType = param.type.selectedType.toString();
-  let paramArrayLength = param.type.selectedArrayLength;
+  const paramArrayLength = param.type.selectedArrayLength;
   if (paramType === EthereumTypeOptions.ADDRESS) {
     paramType = 'address';
   } else if (paramType === EthereumTypeOptions.ADDRESS_ARRAY) {
-    paramType = paramArrayLength ? `address[${paramArrayLength.toString()}]`:'address[]';
+    paramType = paramArrayLength ? `address[${paramArrayLength.toString()}]` : 'address[]';
   } else if (paramType === EthereumTypeOptions.BOOLEAN) {
     paramType = 'bool';
   } else if (paramType === EthereumTypeOptions.BOOLEAN_ARRAY) {
-    paramType = paramArrayLength ? `bool[${paramArrayLength.toString()}]`:'bool[]';
+    paramType = paramArrayLength ? `bool[${paramArrayLength.toString()}]` : 'bool[]';
   } else if (paramType === EthereumTypeOptions.BYTES_B) {
     paramType = `bytes${param.type.selectedBytesLength.toString()}`;
   } else if (paramType === EthereumTypeOptions.BYTES_B_ARRAY) {

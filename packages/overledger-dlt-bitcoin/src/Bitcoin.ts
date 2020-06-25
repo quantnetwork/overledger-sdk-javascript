@@ -14,8 +14,6 @@ class Bitcoin extends AbstractDLT {
   request: AxiosInstance;
   account: Account;
   options: Object;
-  
-
   /**
    * Name of the DLT
    */
@@ -25,7 +23,6 @@ class Bitcoin extends AbstractDLT {
    * Symbol of the DLT
    */
   symbol: string = 'XBT';
-
 
   /**
    * @param {any} sdk - the sdk instance
@@ -43,11 +40,10 @@ class Bitcoin extends AbstractDLT {
     }
   }
 
-
-  getEstimateFeeRate(): AxiosPromise {
+  getEstimateFeeRate():AxiosPromise {
     try {
       this.request = this.sdk.provider.createRequest('/bitcoin');
-      return this.request.get(`/transactions/fee`);
+      return this.request.get('/transactions/fee');
     } catch (e) {
       return e.response;
     }
