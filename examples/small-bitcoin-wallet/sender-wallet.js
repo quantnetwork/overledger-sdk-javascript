@@ -1,5 +1,5 @@
 "use strict";
-// npx ts-node sender-wallet.ts: run only the .ts file examples (if exist)
+// npx ts-node sender-wallet.ts: run only the .ts file examples (if it exists)
 // npx tsc sender-wallet.ts (generate the js file)
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
@@ -104,7 +104,7 @@ function getUtxoScriptPubKey(overledger, txnHash, index) {
 }
 function updateCsvFile(overledger, senderChangeAddress, txnsInputsNotUsed, txnHashInputsToAdd, csvFilePath) {
     return __awaiter(this, void 0, void 0, function () {
-        var csvWriter, newChangeInput, totalRecords;
+        var csvWriter, newChangeInput, finalNewChangeInput, totalRecords;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -125,7 +125,7 @@ function updateCsvFile(overledger, senderChangeAddress, txnsInputsNotUsed, txnHa
                                     case 0: return [4 /*yield*/, overledger.search.getTransaction(txnHash)];
                                     case 1:
                                         bitcoinTransaction = _a.sent();
-                                        console.log("updateCsvFile  bitcoinTransaction");
+                                        console.log("--updating csv file with new inputs--");
                                         if (!bitcoinTransaction.data || bitcoinTransaction.data === undefined) {
                                             throw new Error("Updating the csv file failed; it will try automatically to update it twice, otherwise you would need to update it manually");
                                         }
@@ -139,28 +139,39 @@ function updateCsvFile(overledger, senderChangeAddress, txnsInputsNotUsed, txnHa
                                             return false;
                                         });
                                         console.log("changeOutputVout " + JSON.stringify(changeOutputVout));
-                                        return [2 /*return*/, {
-                                                address: changeOutputVout[0].scriptPubKey.addresses[0],
-                                                txHash: bitcoinTransaction.data.data.txid,
-                                                outputIndex: changeOutputVout[0].n,
-                                                value: changeOutputVout[0].value
-                                            }];
+                                        if (changeOutputVout !== undefined && changeOutputVout.length > 0) {
+                                            return [2 /*return*/, {
+                                                    address: changeOutputVout[0].scriptPubKey.addresses[0],
+                                                    txHash: bitcoinTransaction.data.data.txid,
+                                                    outputIndex: changeOutputVout[0].n,
+                                                    value: changeOutputVout[0].value
+                                                }];
+                                        }
+                                        else {
+                                            return [2 /*return*/, false];
+                                        }
+                                        return [2 /*return*/];
                                 }
                             });
                         }); }))];
                 case 1:
                     newChangeInput = _a.sent();
+                    console.log("newChangeInput " + JSON.stringify(newChangeInput));
+                    finalNewChangeInput = newChangeInput.filter(function (i) { return i; });
+                    console.log("finalNewChangeInput " + JSON.stringify(finalNewChangeInput));
                     if (txnsInputsNotUsed !== undefined) {
-                        totalRecords = txnsInputsNotUsed.concat(newChangeInput);
+                        totalRecords = txnsInputsNotUsed.concat(finalNewChangeInput);
                     }
                     else {
-                        totalRecords = newChangeInput;
+                        totalRecords = finalNewChangeInput;
                     }
-                    console.log("newChangeInput " + JSON.stringify(totalRecords));
+                    console.log("newChangeInputs " + JSON.stringify(totalRecords));
+                    if (!(totalRecords !== undefined && totalRecords.length > 0)) return [3 /*break*/, 3];
                     return [4 /*yield*/, csvWriter.writeRecords(totalRecords)];
                 case 2:
                     _a.sent();
-                    return [2 /*return*/];
+                    _a.label = 3;
+                case 3: return [2 /*return*/, false];
             }
         });
     });
@@ -186,6 +197,19 @@ function addChangeAddressForChangeOutput(outputs, senderChangeAddress) {
     });
     return finalOutputs;
 }
+/***
+ * Return the list of inputs, outputs, fee
+ * overledger: instance of overledgerSDK
+ * csvFilePath: path of the csv file that contains utxos: address,txHash,outputIndex,value
+ * senderAddress: the address of the sender
+ * receiverAddress: the address the btc are sent to
+ * senderChangeAddress: change output address, this address will be the same as the sender address for this version of the wallet
+ * valueToSend: btc amount to send
+ * addScript: boolean used to call or not the scriptPubKey to compute the estimated transaction bytes instead of the defaults/estimated values for scriptPubKey length proposed by coinselect library
+ * userFeeUsed: boolean used to call or not the fee rate set by the user in userEstimateFee. If false it will get the service's fee rates
+ * defaultServiceFeeUsed: boolean used to call or not the default service rate. If false it will call the service to get the latest fee rates
+ * priority: in case of using the service fee rates, priority should be choosen from "fastestFee", "halfHourFee", "hourFee"
+ */
 function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority) {
     return __awaiter(this, void 0, void 0, function () {
         var feeRate, txnInputs, senderTxnInputs, txnInputsWithSatoshisValues, totalInputsValues, coinSelected, fees, totalToOwn, outputsWithChangeAddress, coinSelectedHashes, coinsToKeep;
@@ -208,7 +232,7 @@ function computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, s
                     fees = coinSelected.fee;
                     totalToOwn = btcToSatoshiValue(valueToSend) + fees;
                     console.log("coinSelected " + JSON.stringify(coinSelected));
-                    if (Math.floor(totalInputsValues) < totalToOwn || !coinSelected.outputs || coinSelected.outputs.length === 0) {
+                    if (Math.floor(totalInputsValues) < Math.floor(totalToOwn) || !coinSelected.outputs || coinSelected.outputs.length === 0) {
                         console.log("total to own (value to send + fees):  " + Math.round(totalToOwn));
                         console.log("total inputs values in the wallet: " + Math.round(totalInputsValues));
                         throw new Error("Not enough BTC in the wallet's balance for the transaction to be sent; Please change the fee rate " + feeRate + " or add BTC to your wallet");
@@ -303,4 +327,3 @@ function getEstimateFeeRate(userFeeUsed, defaultServiceFeeUsed, userEstimateFee,
     });
 }
 exports.getEstimateFeeRate = getEstimateFeeRate;
-

@@ -66,23 +66,32 @@ export async function updateCsvFile(overledger, senderChangeAddress, txnsInputsN
       return false;
     });
     console.log(`changeOutputVout ${JSON.stringify(changeOutputVout)}`);
-    return {
-      address: changeOutputVout[0].scriptPubKey.addresses[0],
-      txHash: bitcoinTransaction.data.data.txid,
-      outputIndex: changeOutputVout[0].n,
-      value: changeOutputVout[0].value
+    if (changeOutputVout !== undefined && changeOutputVout.length > 0) {
+      return {
+        address: changeOutputVout[0].scriptPubKey.addresses[0],
+        txHash: bitcoinTransaction.data.data.txid,
+        outputIndex: changeOutputVout[0].n,
+        value: changeOutputVout[0].value
+      }
+    } else {
+      return false;
     }
   }));
-
+  console.log(`newChangeInput ${JSON.stringify(newChangeInput)}`);
+  const finalNewChangeInput = newChangeInput.filter(i => i);
+  console.log(`finalNewChangeInput ${JSON.stringify(finalNewChangeInput)}`);
   let totalRecords;
   if (txnsInputsNotUsed !== undefined) {
-    totalRecords = txnsInputsNotUsed.concat(newChangeInput);
+    totalRecords = txnsInputsNotUsed.concat(finalNewChangeInput);
   } else {
-    totalRecords = newChangeInput;
+    totalRecords = finalNewChangeInput;
   }
 
-  console.log(`newChangeInput ${JSON.stringify(totalRecords)}`);
-  await csvWriter.writeRecords(totalRecords);
+  console.log(`newChangeInputs ${JSON.stringify(totalRecords)}`);
+  if (totalRecords !== undefined && totalRecords.length > 0) {
+    await csvWriter.writeRecords(totalRecords);
+  }
+  return false;
 }
 
 function utxosWithSatoshisValues(txnInputs: UtxoCSVObject[]) {
