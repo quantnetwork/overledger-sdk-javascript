@@ -110,7 +110,7 @@ Symbol of the DLT
 
 | Param | Type | Description |
 | --- | --- | --- |
-| thisTransaction | <code>TransactionEthereumRequest</code> | details on the information to include in this transaction for the Bitcoin distributed ledger |
+| thisTransaction | <code>TransactionRequest</code> | details on the information to include in this transaction for the Bitcoin distributed ledger |
 
 Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
 
@@ -123,7 +123,7 @@ Takes the Overledger definition of a transaction and converts it into a specific
 | --- | --- |
 | thisTransaction | The transaction request |
 
-validates an OVL transactionRequest according to XRP specific rules
+validates an OVL transactionRequest according to Bitcoin specific rules
 
 <a name="module_overledger-dlt-bitcoin.Bitcoin+_sign"></a>
 
@@ -131,9 +131,9 @@ validates an OVL transactionRequest according to XRP specific rules
 
 | Param | Type | Description |
 | --- | --- | --- |
-| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of an XRP transaction |
+| thisTransaction | <code>TransactionRequest</code> | an instantiated overledger definition of a Bitcoin transaction |
 
-Takes in an overledger definition of a transaction for XRP, converts it into a form that the XRP distributed ledger will understand, and then signs the transaction
+Takes in an overledger definition of a transaction for Bitcoin, converts it into a form that the Bitcoin distributed ledger will understand, and then signs the transaction
 
 <a name="module_overledger-dlt-bitcoin.Bitcoin+createAccount"></a>
 
