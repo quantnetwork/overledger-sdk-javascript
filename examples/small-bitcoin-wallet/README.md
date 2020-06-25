@@ -25,9 +25,6 @@ yarn run build
 
 If you want to run the .ts file containing the utility functions to compute from the .csv file inputs and outputs for the Bitcoin transaction: npx tsc sender-wallet.ts (generate the js file)
 
-And then send the transaction by running:
-
-```node run-bitcoin-wallet.js```
 
 ## Configuring the script
 
