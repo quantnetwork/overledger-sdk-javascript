@@ -1,6 +1,6 @@
 {
   "name": "@quantnetwork/overledger-provider",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Quant Network Overledger provider package to be used by the other packages",
   "main": "dist/index.js",
   "publishConfig": {
@@ -30,7 +30,7 @@
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@quantnetwork/overledger-types": "^1.0.0-beta.2",
+    "@quantnetwork/overledger-types": "^1.0.0-beta.3",
     "axios": "^0.18.0"
   },
   "devDependencies": {
