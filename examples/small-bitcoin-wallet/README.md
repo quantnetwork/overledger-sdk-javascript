@@ -37,7 +37,7 @@ Next you will need to add some information into the script for it to run correct
 * Value to send
 * userFeeRate in case you would like to set your own fee
 
-You need to configure the arguments of the of function ```computeCoins``` called inside the main call of ```run-bitcoin-wallet.js```:
+You need to configure the arguments of the function ```computeCoins``` called inside the main call of ```run-bitcoin-wallet.js```:
 
 ```computeCoins(overledger, csvFilePath, senderAddress, receiverAddress, senderChangeAddress, valueToSend, addScript, userFeeUsed, defaultServiceFeeUsed, userEstimateFee, priority) ```
 
