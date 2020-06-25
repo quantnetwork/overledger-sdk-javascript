@@ -16,7 +16,7 @@ const senderPrivateKey = 'cT3Wm1SE2wqxMu9nh2wG8gWS4d4usidw4zurKbQBXA7jVu8LJe8G';
 const receiverAddress = 'mqbdQXAAipkAJeKjCVDSg3TJ92y9yxg5yt';
 const valueToSend = 0.0017;
 const csvFile = './sender-utxos.csv';
-const userFeeRate = 30; // satoshis/byte and should be more than 5
+const userFeeRate = 5; // satoshis/byte and should be more than 2
 const feePrority = ["fastestFee", "halfHourFee", "hourFee"];
 
 
