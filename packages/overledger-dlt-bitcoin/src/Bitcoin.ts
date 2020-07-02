@@ -50,8 +50,8 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
-   * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
-   * @param {TransactionEthereumRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
+   * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction.
+   * @param {TransactionRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
    * @return {Transaction} the Bitcoin transaction
    */
   buildTransaction(thisTransaction: TransactionBitcoinRequest): any {
@@ -83,7 +83,7 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
- * validates an OVL transactionRequest according to XRP specific rules
+ * Validates an OVL transactionRequest according to Bitcoin specific rules.
  * @param thisTransaction - The transaction request
  */
   _transactionValidation(thisTransaction: TransactionRequest): ValidationCheck {
@@ -155,7 +155,7 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
-   * Takes in an overledger definition of a transaction for XRP, converts it into a form that the XRP distributed ledger will understand, and then signs the transaction
+   * Takes in an overledger definition of a transaction for Bitcoin, converts it into a form that the Bitcoin distributed ledger will understand, and then signs the transaction.
    * @param {TransactionRequest} thisTransaction - an instantiated overledger definition of an XRP transaction
    */
   _sign(thisTransaction: TransactionRequest): Promise<string> {
@@ -193,7 +193,7 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
-   * Set an account for signing transactions for a specific DLT
+   * Set an account for signing transactions for a specific DLT.
    *
    * @param {string} privateKey The privateKey
    */
@@ -209,7 +209,7 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
- * Allows a user to build a smart contract query for the Bitcoin distributed ledger (currently not supported for Bitcoin)
+ * Allows a user to build a smart contract query for the Bitcoin distributed ledger (currently not supported for Bitcoin).
  * @param {string} dltAddress - the user's Bitcoin address
  * @param {Object} contractQueryDetails - the definition of the smart contract function the user wants to interact with, including information on what parameters to use in the function call.
  *
@@ -225,7 +225,7 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
- * validates an OVL smart contract query according to Bitcoin specific rules
+ * Validates an OVL smart contract query according to Bitcoin specific rules.
  * @param contractQueryDetails - the query details
  *
  * @return {Object} success indicates if this query building was correct, if yes then it will be in the response field of the object
