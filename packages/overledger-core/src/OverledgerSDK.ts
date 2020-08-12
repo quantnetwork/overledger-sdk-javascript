@@ -2,7 +2,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import {StatusRequest, SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse } from '@quantnetwork/overledger-types';
+import {StatusRequest, SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse } from '@quantnetwork/overledger-types';
 /**
  * @memberof module:overledger-core
 */
@@ -196,24 +196,6 @@ class OverledgerSDK {
    */
   public readOverledgerTransaction(overledgerTransactionId: string): AxiosPromise<Object> {
     return this.request.get(`/transactions/id/${overledgerTransactionId}`);
-  }
-
-  /**
-   * Get the fee estimation for a DLT
-   * @param {string} address The address to query for
-   * @param {number} blockNumber The number of blocks
-   * @return {Promise<AxiosResponse>}
-   */
-  public getFeeEstimation(dlt: string, blockNumber: number): AxiosPromise<FeeEstimationResponse> {
-    if (dlt === '') {
-      throw new Error('The dlt name must be passed');
-    }
-
-    try {
-      return this.request.post(`/fee/${dlt}/${blockNumber}`);
-    } catch(e) {
-      return e.response;
-    }
   }
 
   /**
