@@ -517,7 +517,7 @@ interface UtxoInput {
   witnessScript?: Buffer;
 };
 
-interface UtxoInputWithCaracteristic {
+interface UtxoInputWithCaracteristics {
   input: UtxoInput,
   tranferType?: TransactionBitcoinTransferTypeOptions,
   coSigners?: string,
@@ -536,7 +536,7 @@ interface UtxoScriptOutput {
 }
 
 interface UtxosPrepare {
-  inputs: UtxoInputWithCaracteristic[],
+  inputs: UtxoInputWithCaracteristics[],
   outputs: (UtxoAddressOutput | UtxoScriptOutput)[],
   data: Buffer
 }
