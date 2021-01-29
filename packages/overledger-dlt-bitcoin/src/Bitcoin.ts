@@ -82,14 +82,14 @@ class Bitcoin extends AbstractDLT {
       if (thisTransaction.txInputs[counter].witnessScript !== undefined) {
         input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
       }
-
-      console.log(`input ${JSON.stringify(input)}`);
       inputs.push({
-        ...input,
+        input,
         transferType: thisTransaction.txInputs[counter].transferType,
         coSigners: thisTransaction.txInputs[counter].coSigners,
         preimage: thisTransaction.txInputs[counter].preimage
       });
+      console.log(`---- INPUTS BUILD -----`);
+      console.log(inputs);
       counter = counter + 1;
     }
     console.log(`inputs added`);
@@ -126,6 +126,7 @@ class Bitcoin extends AbstractDLT {
     let counter = 0;
     while (counter < inputsOutputs.inputs.length) {
       const input = inputsOutputs.inputs[counter].input;
+      console.log(`input prepareTransaction ${JSON.stringify(input)}`);
       psbtObj.addInput(input);
       counter = counter + 1;
     }
@@ -236,9 +237,12 @@ class Bitcoin extends AbstractDLT {
 
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
     let build = this.buildTransaction(thisBitcoinTransaction);
+    console.log(`BUILD _SIGN ${JSON.stringify(build)}`);
     let { psbtObj, inputsOutputs } = this.prepareTransaction(build);
-    // for each input sign them:
-    console.log(`psbtObj ${JSON.stringify(psbtObj)}`);
+    console.log(`----- PSBT OBJECT _sign -----`);
+    console.log(psbtObj);
+    console.log(`----- PSBT inputsOutputs _sign -----`);
+    console.log(inputsOutputs);
     let myKeyPair;
     if (this.account) {
       myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
