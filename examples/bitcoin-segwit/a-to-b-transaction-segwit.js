@@ -19,11 +19,11 @@ const partyABitcoinPrivateKey = 'cPEGEmiMcEATowC5drxviWeMJoxxpUJNS8bxhiyjgd6h4bw
 const partyABitcoinAddress = 'tb1q4q4v0argtjzmgsu5ccqtkk9ckcgd7sa2k07e9y';
 const partyAs2ndBitcoinPrivateKey = 'cVbxBjsJLLVwy9M8aK1jLd7jVMuhEDn2VsxYfZsSzg4vHCad1u4U';
 const partyAs2ndBitcoinAddress = 'tb1qmaerfydd6vdldd8ghprkmlgr2sk3rmx37q2cr9';
-const bitcoinLinkedTx = 'af03c39c3d2ec147f649804abf22e597499e32a2ec3803b53c669e042c0e3c6e'; // Add the previous transaction here
+const bitcoinLinkedTx = '3dfa35edfaa30857c44dad7bb948c582d3a563ed758c7fd8d6d918c562051bf7'; // Add the previous transaction here
 const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
-const bitcoinInputAmount = 87800; // set equal to the number of satoshis in your first input
+const bitcoinInputAmount = 51200; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 75600; // set equal to the number of satoshis to send back to yourself 
+const bitcoinChangeAmount = 39000; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // Now provide three other addresses that you will be transfering value too
@@ -40,10 +40,10 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
       dlts: [{ dlt: DltNameOptions.BITCOIN }],
       provider: { network: 'testnet' },
     });
-    const transactionMessage = 'OVL SDK Test';
+    const transactionMessage = '00009320.73a56a7336B53BaF6ffa7a18ff3e16aAB69898bA.50000:31761182c63899c70ded58d2ba8bb15d46da1bfc16f4c63305674f3e2cb17cba5029cf2c9ce02650b52ed009447c6144b84fac6229576ad0224599e7d88922861b';
 
     // SET partyA accounts for signing;
-    overledger.dlts.bitcoin.setAccount({ privateKey: partyAs2ndBitcoinPrivateKey, isSegwit: true });
+    overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey, isSegwit: true });
 
     const signedTransactions = await overledger.sign([
     {
@@ -56,9 +56,9 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
         {
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
-          fromAddress: partyAs2ndBitcoinAddress,
-          rawTransaction: '02000000000101e4949064928cd7b2ec54c9fbbce11275320f80f076797a50508d504e4c62e9b70000000000ffffffff0210270000000000001600147f6fce86f10a27c539aae3e99150fc4783d09746f856010000000000160014df723491add31bf6b4e8b8476dfd03542d11ecd102483045022100f6061f2cbf8e9dca9b7c33b1af6858f2b470ce273a7759f84250a81408aa70a602204818af9139cabcb4ceb8b2e3cf4ee7117f10fb0d4eb8b9f540e349c6c0f31aff0121022a5d4247d17c2e9bbf24f1fb72fc072b7b8220c8b82e2940b702d41e6b48eec400000000',
-          scriptPubKey: '0014df723491add31bf6b4e8b8476dfd03542d11ecd1',
+          fromAddress: partyABitcoinAddress,
+          rawTransaction: '02000000000101f6d09a2a22021417d59db125dbabedb0e57580eaa8e2e85b429b5d74dce05d3b0100000000ffffffff0310270000000000001600147f6fce86f10a27c539aae3e99150fc4783d0974600c8000000000000160014a82ac7f4685c85b44394c600bb58b8b610df43aa00000000000000007b6a4c784f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b205465737402473044022053535f6e9763b638e3fcbdf2178293a8c2267554f3c2fc8e3ef45ae503856c5e02207606699d2dec622f33c6b7580c91d5ad6afae217cf651787faa47ad45b0ef3ed0121036dac9370678def34d4c6cc3190c72740da27b4d15e9b1d3a365d437f7d81bc9500000000',
+          scriptPubKey: '0014a82ac7f4685c85b44394c600bb58b8b610df43aa',
           amount: bitcoinInputAmount 
         }
       ],
@@ -68,7 +68,7 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
           amount: bitcoinPartyBAmount 
         },
         {
-          toAddress: partyABitcoinAddress, // This is the change address
+          toAddress: partyAs2ndBitcoinAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }
       ],
@@ -99,3 +99,6 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
     console.error('error:', e);
   }
 })();
+
+
+// https://blockstream.info/testnet/tx/3dfa35edfaa30857c44dad7bb948c582d3a563ed758c7fd8d6d918c562051bf7
