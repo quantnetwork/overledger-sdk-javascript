@@ -33,7 +33,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const secret = 'quantbitcoinpaymentchannel';
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);
-    const timeLock = bip65.encode({ blocks: 1903500 }); // better to call get block height later + 50 blocks
+    const timeLock = bip65.encode({ blocks: 1932600 }); // better to call get block height later + 50 blocks
     console.log(`Time Lock: ${timeLock}`);
 
     overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey} );
