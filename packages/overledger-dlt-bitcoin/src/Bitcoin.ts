@@ -88,8 +88,6 @@ class Bitcoin extends AbstractDLT {
         coSigners: thisTransaction.txInputs[counter].coSigners,
         preimage: thisTransaction.txInputs[counter].preimage
       });
-      console.log(`---- INPUTS BUILD -----`);
-      console.log(inputs);
       counter = counter + 1;
     }
     console.log(`inputs added`);
@@ -126,7 +124,6 @@ class Bitcoin extends AbstractDLT {
     let counter = 0;
     while (counter < inputsOutputs.inputs.length) {
       const input = inputsOutputs.inputs[counter].input;
-      console.log(`input prepareTransaction ${JSON.stringify(input)}`);
       psbtObj.addInput(input);
       counter = counter + 1;
     }
@@ -144,7 +141,6 @@ class Bitcoin extends AbstractDLT {
     const data = inputsOutputs.data; // Message is inserted
     const dataLength = data.length;
     if (data && dataLength > 0) {
-      console.log(`data length ${dataLength}`);
       const unspendableReturnPayment = bitcoin.payments.embed({ data: [data], network: this.addressType });
       const dataOutput = {
         value: 0,
@@ -237,12 +233,9 @@ class Bitcoin extends AbstractDLT {
 
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
     let build = this.buildTransaction(thisBitcoinTransaction);
-    console.log(`BUILD _SIGN ${JSON.stringify(build)}`);
     let { psbtObj, inputsOutputs } = this.prepareTransaction(build);
-    console.log(`----- PSBT OBJECT _sign -----`);
-    console.log(psbtObj);
-    console.log(`----- PSBT inputsOutputs _sign -----`);
-    console.log(inputsOutputs);
+    console.log(`-----INPUTS-OUTPUTS-----`);
+    console.log(inputsOutputs.inputs);
     let myKeyPair;
     if (this.account) {
       myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
@@ -261,7 +254,7 @@ class Bitcoin extends AbstractDLT {
           const privateKeys = this.multisigAccount.keys.map(k => k.privateKeyWIF.toString());
           inputsOutputs.inputs[counter].coSigners.map(signer => {
             if (!privateKeys.includes(signer)) {
-              throw new Error('The current coSigner does not belong to the current multisig account');
+              throw new Error('The current multisig co-signer does not belong to the current multisig account');
             }
             const kPair = bitcoin.ECPair.fromWIF(signer, this.addressType);
             psbtObj.signInput(counter, kPair);
@@ -284,8 +277,8 @@ class Bitcoin extends AbstractDLT {
         if (inputsOutputs.inputs[counter].transferType
           && inputsOutputs.inputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_HTLC) {
           const preImage = inputsOutputs.inputs[counter].preimage;
-          psbtObj.finalizeInput(counter, (inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
-            return this.getFinalScripts(preImage, inputIndex, input, script, isSegwit, isP2SH, isP2WSH)
+          psbtObj.finalizeInput(counter, (_inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
+            return this.getFinalScripts(preImage, _inputIndex, input, script, isSegwit, isP2SH, isP2WSH)
           });
         } else {
           psbtObj.finalizeInput(counter);
@@ -296,8 +289,8 @@ class Bitcoin extends AbstractDLT {
     return Promise.resolve(psbtObj.extractTransaction(true).toHex());
   }
 
-  getFinalScripts(preImage, inputIndex, input, script, isSegwit, isP2SH, isP2WSH) {
-    console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${JSON.stringify(input)} script: ${script.toString('hex')} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH} preimage: ${preImage}`);
+  getFinalScripts(preImage, _inputIndex, input, script, isSegwit, isP2SH, isP2WSH) {
+    // console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${JSON.stringify(input)} script: ${script.toString('hex')} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH} preimage: ${preImage}`);
     let finaliseRedeem;
     if (isSegwit && isP2SH) {
       finaliseRedeem = bitcoin.payments.p2sh({
