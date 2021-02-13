@@ -21,6 +21,8 @@ type TransactionInput = {
   fromAddress: string,
   amount?: number,
   asset?: object,
+  nLocktime?: number, // transaction level (not utxo one)
+  sequence?: number,
   smartContract?: SmartContract,
   rawTransaction?: Buffer | string,
   scriptPubKey?: Buffer | string,

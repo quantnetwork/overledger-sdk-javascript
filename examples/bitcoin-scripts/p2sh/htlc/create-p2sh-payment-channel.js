@@ -33,7 +33,8 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const secret = 'quantbitcoinpaymentchannel';
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);
-    const timeLock = bip65.encode({ blocks: 1903500 }); // better to call get block height later + 50 blocks
+    const timeLock = bip65.encode({ blocks: 1935798 }); // better to call get block height later + 50 blocks
+    // const timeLock = bip65.encode({ utc: Math.floor(Date.now() / 1000) + 60 * 10}); // better to call get block height later + 50 blocks
     console.log(`Time Lock: ${timeLock}`);
 
     overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey} );
@@ -44,6 +45,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     console.log(`refundPublicKey ${refundPublicKey}`);
 
     const currentContractCode = generateHashTimeLockContractCode(claimPublicKey, refundPublicKey, hashSecret, timeLock);
+    console.log(`currentContractCode ${currentContractCode.toString('hex')}`);
     const p2shPaymentChannel = createHashTimeLockContractPaymentChannel(currentContractCode, TransactionBitcoinScriptTypeOptions.P2SH, overledger.dlts.bitcoin.addressType);
     console.log(`p2sh ${JSON.stringify(p2shPaymentChannel)}`);
     console.log(`p2sh address: ${p2shPaymentChannel.address}`);

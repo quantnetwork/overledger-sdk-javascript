@@ -8,7 +8,7 @@ import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequ
 import TransactionBitcoinResponse from './DLTSpecificTypes/TransactionBitcoinResponse';
 import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinScriptTypeOptions';
 import TransactionBitcoinTransferTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinTransferTypeOptions';
-import { generateHashTimeLockContractCode, createHashTimeLockContractPaymentChannel } from './BitcoinSmartContractHelper';
+import { generateHashTimeLockContractCode, generateHashTimeLockContractCode2, createHashTimeLockContractPaymentChannel } from './BitcoinSmartContractHelper';
 
 /**
  * Objects and interfaces used when interacting with the Bitcoin blockchain package
@@ -20,6 +20,7 @@ export {
     TransactionBitcoinScriptTypeOptions,
     TransactionBitcoinTransferTypeOptions,
     generateHashTimeLockContractCode,
+    generateHashTimeLockContractCode2,
     createHashTimeLockContractPaymentChannel
 };
 /**

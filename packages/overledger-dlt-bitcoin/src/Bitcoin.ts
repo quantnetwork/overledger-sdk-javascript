@@ -58,6 +58,7 @@ class Bitcoin extends AbstractDLT {
   buildTransaction(thisTransaction: TransactionBitcoinRequest): UtxosPrepare {
     const inputs = new Array();
     const outputs = new Array();
+    let tLock;
     super.transactionValidation(thisTransaction);
     let counter = 0;
     while (counter < thisTransaction.txInputs.length) {
@@ -68,6 +69,7 @@ class Bitcoin extends AbstractDLT {
       let input: UtxoInput = {
         hash: thisTransaction.txInputs[counter].linkedTx.toString(),
         index: parseInt(thisTransaction.txInputs[counter].linkedIndex, 10),
+        sequence: thisTransaction.txInputs[counter].sequence ? thisTransaction.txInputs[counter].sequence : 0xffffffff,
         nonWitnessUtxo: Buffer.from(rawTransactionInput.toString(), 'hex')
       };
       if (isSegwit) {
@@ -82,11 +84,22 @@ class Bitcoin extends AbstractDLT {
       if (thisTransaction.txInputs[counter].witnessScript !== undefined) {
         input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
       }
+
+      if (thisTransaction.txInputs[counter].nLocktime !== undefined){
+        tLock = bitcoin.script.number.encode(thisTransaction.txInputs[counter].nLocktime).reverse();
+        if (tLock.length < 4) {
+          // padding for 4 bytes
+          const diff = 4 - tLock.length;
+          const buf = Buffer.alloc(diff);
+          tLock = Buffer.concat([buf, tLock]);
+        }
+      }
       inputs.push({
         input,
         transferType: thisTransaction.txInputs[counter].transferType,
         coSigners: thisTransaction.txInputs[counter].coSigners,
-        preimage: thisTransaction.txInputs[counter].preimage
+        preimage: thisTransaction.txInputs[counter].preimage,
+        nLocktime: tLock ? tLock.toString('hex') : undefined
       });
       counter = counter + 1;
     }
@@ -125,6 +138,13 @@ class Bitcoin extends AbstractDLT {
     while (counter < inputsOutputs.inputs.length) {
       const input = inputsOutputs.inputs[counter].input;
       psbtObj.addInput(input);
+      if(inputsOutputs.inputs[counter].nLocktime !== undefined){
+        // psbtObj.setLocktime(inputsOutputs.inputs[counter].nLocktime);
+        // psbtObj.setLocktime(1935270);
+        // psbtObj.setLocktime(parseInt('74881d00', 16));
+        console.log(`SET NLOCK TIME`);
+        psbtObj.setLocktime(0x1d89b6);
+      }
       counter = counter + 1;
     }
     counter = 0;
@@ -504,6 +524,7 @@ function isAddressOutput(output: UtxoAddressOutput | UtxoScriptOutput): output i
 interface UtxoInput {
   hash: string;
   index: number;
+  sequence?: number; 
   nonWitnessUtxo?: Buffer;
   witnessUtxo?: { script: Buffer, value: number };
   redeemScript?: Buffer;
@@ -514,7 +535,8 @@ interface UtxoInputWithCaracteristics {
   input: UtxoInput,
   tranferType?: TransactionBitcoinTransferTypeOptions,
   coSigners?: string,
-  preimage?: string
+  preimage?: string,
+  nLocktime?: number
 }
 
 

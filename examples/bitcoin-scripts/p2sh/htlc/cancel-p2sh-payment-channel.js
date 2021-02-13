@@ -1,4 +1,3 @@
-//NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
 const bip65 = require('bip65');
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
@@ -9,23 +8,27 @@ const TransactionBitcoinTransferTypeOptions = require('@quantnetwork/overledger-
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
+// const mappId = 'network.quant.devnet';
+// const bpiKey = 'quantbpikey';
+
 const mappId = 'network.quant.testnet';
 const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
-const partyABitcoinAddress = '2NBFdsVUtgMNS3kEJ9L8vNvBU7PDZmGnuV9';
-const bitcoinLinkedTx = '1d0f4793ab87c5e6a2d6c34c86223c2b758672eb1367680c226f41ed5a40d0f3'; // Add the previous transaction here
+const partyABitcoinAddress = '2NAfVxVzo8sg92Zo8ZiokaJMuU9B9tSKbvD';
+const bitcoinLinkedTx = 'e573a78d0c9c7aee2edcb9febf51ea8d2517371561cd22ad36c01187616ee678'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
 const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
-const nLocktime = bip65.encode({ blocks: 1935633 });
+const nLocktime = bip65.encode({ blocks: 1935798 }); // will be taken at the transaction level
+
 // Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
-const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
-// const nLocktime = bip65.encode({ blocks: 1935476 });
+const partyBBitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
+const partyBBitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
+
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
@@ -56,11 +59,12 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
           amount: bitcoinInputAmount,
-          scriptPubKey: 'a914c5863356e793685dd73c29c32e3d4d296b080c5287',
-          rawTransaction: '0200000001cdcdbc29cde44197090c9bcab5b0b32da67c927f2cdc345a19fdd7c3ed0e7215010000006a47304402204637b76bad12a93a06a38effb44ef67c05722d7c49e30781f37324fffd94a83302206cd752d25032c6383cde19f557a5ebe9c2f4aa3a274c2b716b79962720267c1c0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a914c5863356e793685dd73c29c32e3d4d296b080c5287e7841c00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
-          redeemScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167031d8911b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
-          preimage: 'quantbitcoinpaymentchannel',
+          scriptPubKey: 'a914bf1173adc28006cde44e9934bfdd2b4817bfc82787',
+          rawTransaction: '0200000001f3d0405aed416f220c686713eb7286752b3c22864cc3d6a2e6c587ab93470f1d010000006a473044022018fce8c14853d7f6a75bf5c8a4dde64067f49c9857a045c7fc4fc0c2afed9fff02206e07834495b8af16f22e49f2f40cf9ecbb5d4d39702410d13a8dab3d067a70700121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a914bf1173adc28006cde44e9934bfdd2b4817bfc827873f551c00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
+          redeemScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703b6891db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
+          preimage: '',
           nLocktime,
+          sequence: 0xfffffffe,
           transferType: TransactionBitcoinTransferTypeOptions.REDEEM_HTLC
         }
       ],
@@ -103,3 +107,6 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
 })();
 
 // https://blockstream.info/testnet/tx/b2d0d40cccccb97ece5a449af5d543fdc5acc0f6b2b1ce48d4f96403c4821e6f
+
+
+// "message": "non-mandatory-script-verify-flag (Negative locktime) (code 64)"
