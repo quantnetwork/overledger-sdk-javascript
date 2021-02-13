@@ -106,7 +106,6 @@ const partyBBitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDAp
   }
 })();
 
-// https://blockstream.info/testnet/tx/b2d0d40cccccb97ece5a449af5d543fdc5acc0f6b2b1ce48d4f96403c4821e6f
+//  https://blockstream.info/testnet/tx/08bb5b7933afdfad045d09aa8e7786f0fe885bc3fc1b993b1a4ed54261d4ba4b
 
-
-// "message": "non-mandatory-script-verify-flag (Negative locktime) (code 64)"
+// non-final until the lock time is reached
