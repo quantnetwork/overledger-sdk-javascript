@@ -58,7 +58,6 @@ class Bitcoin extends AbstractDLT {
   buildTransaction(thisTransaction: TransactionBitcoinRequest): UtxosPrepare {
     const inputs = new Array();
     const outputs = new Array();
-    let tLock;
     super.transactionValidation(thisTransaction);
     let counter = 0;
     while (counter < thisTransaction.txInputs.length) {
@@ -84,22 +83,12 @@ class Bitcoin extends AbstractDLT {
       if (thisTransaction.txInputs[counter].witnessScript !== undefined) {
         input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
       }
-
-      if (thisTransaction.txInputs[counter].nLocktime !== undefined){
-        tLock = bitcoin.script.number.encode(thisTransaction.txInputs[counter].nLocktime).reverse();
-        if (tLock.length < 4) {
-          // padding for 4 bytes
-          const diff = 4 - tLock.length;
-          const buf = Buffer.alloc(diff);
-          tLock = Buffer.concat([buf, tLock]);
-        }
-      }
       inputs.push({
         input,
         transferType: thisTransaction.txInputs[counter].transferType,
         coSigners: thisTransaction.txInputs[counter].coSigners,
         preimage: thisTransaction.txInputs[counter].preimage,
-        nLocktime: tLock ? tLock.toString('hex') : undefined
+        nLocktime: thisTransaction.txInputs[counter].nLocktime
       });
       counter = counter + 1;
     }
@@ -133,18 +122,34 @@ class Bitcoin extends AbstractDLT {
     const psbtObj = new bitcoin.Psbt({ network: this.addressType });
     psbtObj.setMaximumFeeRate(0);
     psbtObj.setVersion(2); // These are defaults. This line is not needed.
-    psbtObj.setLocktime(0);
+    let maxLockTime = 0;
+    // psbtObj.setLocktime(0);
+    if (inputsOutputs.inputs && inputsOutputs.inputs.length > 0) {
+      maxLockTime = inputsOutputs.inputs.reduce((max, input) => {
+        const tLock = input.nLocktime;
+        console.log(`tLock maxLockTime ${tLock} `);
+        if (tLock && tLock > max) {
+          return tLock;
+        } else {
+          return max;
+        }
+      }, 0);
+    }
+    console.log(`maxLockTime ${maxLockTime}`);
+    const nLockTime = Math.max(0, maxLockTime);
+    console.log(`nLockTime ${nLockTime}`);
+    psbtObj.setLocktime(nLockTime);
     let counter = 0;
     while (counter < inputsOutputs.inputs.length) {
       const input = inputsOutputs.inputs[counter].input;
       psbtObj.addInput(input);
-      if(inputsOutputs.inputs[counter].nLocktime !== undefined){
-        // psbtObj.setLocktime(inputsOutputs.inputs[counter].nLocktime);
-        // psbtObj.setLocktime(1935270);
-        // psbtObj.setLocktime(parseInt('74881d00', 16));
-        console.log(`SET NLOCK TIME`);
-        psbtObj.setLocktime(0x1d89b6);
-      }
+      // if (inputsOutputs.inputs[counter].nLocktime !== undefined) {
+      //   // psbtObj.setLocktime(inputsOutputs.inputs[counter].nLocktime);
+      //   // psbtObj.setLocktime(1935270);
+      //   // psbtObj.setLocktime(parseInt('74881d00', 16));
+      //   console.log(`SET NLOCK TIME`);
+      //   psbtObj.setLocktime(0x1d89b6);
+      // }
       counter = counter + 1;
     }
     counter = 0;
@@ -254,8 +259,6 @@ class Bitcoin extends AbstractDLT {
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
     let build = this.buildTransaction(thisBitcoinTransaction);
     let { psbtObj, inputsOutputs } = this.prepareTransaction(build);
-    console.log(`-----INPUTS-OUTPUTS-----`);
-    console.log(inputsOutputs.inputs);
     let myKeyPair;
     if (this.account) {
       myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
@@ -524,7 +527,7 @@ function isAddressOutput(output: UtxoAddressOutput | UtxoScriptOutput): output i
 interface UtxoInput {
   hash: string;
   index: number;
-  sequence?: number; 
+  sequence?: number;
   nonWitnessUtxo?: Buffer;
   witnessUtxo?: { script: Buffer, value: number };
   redeemScript?: Buffer;

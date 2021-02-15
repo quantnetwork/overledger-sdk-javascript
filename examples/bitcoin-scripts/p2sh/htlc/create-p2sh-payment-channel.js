@@ -2,6 +2,7 @@
 const bip65 = require('bip65');
 const sha256 = require('crypto-js/sha256');
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
+const OverledgerSearch = require('@quantnetwork/overledger-search').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
 const generateHashTimeLockContractCode = require('@quantnetwork/overledger-dlt-bitcoin').generateHashTimeLockContractCode;
@@ -9,8 +10,12 @@ const createHashTimeLockContractPaymentChannel = require('@quantnetwork/overledg
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+
+const mappId = 'network.quant.devnet';
+const bpiKey = 'quantbpikey';
+
+// const mappId = 'network.quant.testnet';
+// const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
@@ -27,14 +32,19 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     // Connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
       dlts: [{ dlt: DltNameOptions.BITCOIN }],
-      provider: { network: 'testnet' },
+      // provider: { network: 'testnet' },
+      provider: { network: 'http://api.devnet.overledger.io/v1' },
     });
 
+    const currentBlockHeight = await overledger.search.getBlockHeightByDlt(DltNameOptions.BITCOIN);
+    console.log(currentBlockHeight.data);
     const secret = 'quantbitcoinpaymentchannel';
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);
-    const timeLock = bip65.encode({ blocks: 1935798 }); // better to call get block height later + 50 blocks
-    // const timeLock = bip65.encode({ utc: Math.floor(Date.now() / 1000) + 60 * 10}); // better to call get block height later + 50 blocks
+    // TIMELOCK EXPRESSED IN BLOCK HEIGHT
+    const timeLock = bip65.encode({ blocks: currentBlockHeight.data + 3 });
+    // TIMELOCK EXPRESSED IN UTC TIME
+    // const timeLock = bip65.encode({ utc: Math.floor(Date.now() / 1000) + 60 * 10});
     console.log(`Time Lock: ${timeLock}`);
 
     overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey} );
