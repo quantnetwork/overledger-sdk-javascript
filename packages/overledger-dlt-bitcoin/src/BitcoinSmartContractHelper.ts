@@ -5,14 +5,7 @@ export function generateHashTimeLockContractCode(claimPublicKey: Buffer | HexStr
   let claimKey = (claimPublicKey instanceof Buffer) ? claimPublicKey.toString('hex') : claimPublicKey;
   let refundKey = (refundPublicKey instanceof Buffer) ? refundPublicKey.toString('hex') : refundPublicKey;
   let hashSecret = (paymentHashSecret instanceof Buffer) ? paymentHashSecret : Buffer.from(paymentHashSecret, 'hex');
-  // let tLock = bitcoin.script.number.encode(timelock).reverse();
   let tLock = bitcoin.script.number.encode(timelock);
-  // if (tLock.length < 4) {
-  //   // padding for 4 bytes
-  //   const diff = 4 - tLock.length;
-  //   const buf = Buffer.alloc(diff);
-  //   tLock = Buffer.concat([tLock, buf]);
-  // }
   console.log(`tLock ${tLock.toString('hex')}`);
   return bitcoin.script.fromASM(
     `
@@ -38,14 +31,7 @@ export function generateHashTimeLockContractCode2(claimPublicKey: Buffer | HexSt
   let claimKey = (claimPublicKey instanceof Buffer) ? claimPublicKey.toString('hex') : claimPublicKey;
   let refundKey = (refundPublicKey instanceof Buffer) ? refundPublicKey.toString('hex') : refundPublicKey;
   let hashSecret = (paymentHashSecret instanceof Buffer) ? paymentHashSecret : Buffer.from(paymentHashSecret, 'hex');
-  // let tLock = bitcoin.script.number.encode(timelock).reverse();
   let tLock = bitcoin.script.number.encode(timelock);
-  // if (tLock.length < 4) {
-  //   // padding for 4 bytes
-  //   const diff = 4 - tLock.length;
-  //   const buf = Buffer.alloc(diff);
-  //   tLock = Buffer.concat([tLock, buf]);
-  // }
   console.log(`tLock ${tLock.toString('hex')}`);
   return bitcoin.script.fromASM(
     `
