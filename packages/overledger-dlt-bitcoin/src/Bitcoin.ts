@@ -123,7 +123,6 @@ class Bitcoin extends AbstractDLT {
     psbtObj.setMaximumFeeRate(0);
     psbtObj.setVersion(2); // These are defaults. This line is not needed.
     let maxLockTime = 0;
-    // psbtObj.setLocktime(0);
     if (inputsOutputs.inputs && inputsOutputs.inputs.length > 0) {
       maxLockTime = inputsOutputs.inputs.reduce((max, input) => {
         const tLock = input.nLocktime;
@@ -143,13 +142,6 @@ class Bitcoin extends AbstractDLT {
     while (counter < inputsOutputs.inputs.length) {
       const input = inputsOutputs.inputs[counter].input;
       psbtObj.addInput(input);
-      // if (inputsOutputs.inputs[counter].nLocktime !== undefined) {
-      //   // psbtObj.setLocktime(inputsOutputs.inputs[counter].nLocktime);
-      //   // psbtObj.setLocktime(1935270);
-      //   // psbtObj.setLocktime(parseInt('74881d00', 16));
-      //   console.log(`SET NLOCK TIME`);
-      //   psbtObj.setLocktime(0x1d89b6);
-      // }
       counter = counter + 1;
     }
     counter = 0;
