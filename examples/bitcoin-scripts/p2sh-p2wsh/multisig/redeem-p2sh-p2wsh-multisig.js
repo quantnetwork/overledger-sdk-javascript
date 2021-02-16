@@ -4,7 +4,7 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
 const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
-const TransactionBitcoinTransferTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinTransferTypeOptions;
+const TransactionBitcoinFunctionTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinFunctionTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -64,7 +64,7 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
           redeemScript: multisigAccount.redeemScript,
           rawTransaction: '0200000001762de5dac3fa96558e4b182f2b6061614b1daaeb05cb4ebd809ea54944ba64d6000000006b483045022100f61dcf976eb897b1b6c33428eca8e87ce03cf1b9770767b62eac6a9cca7c8f230220572635c6b13bbd25974e09181f44304ef31b04b321f47cf81dbd65e14529895c0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9149917e2dde850be63f2e2f0402bb06aa2071e3db387bfd91800000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
           coSigners: [partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey],
-          transferType: TransactionBitcoinTransferTypeOptions.REDEEM_P2MS
+          transferType: TransactionBitcoinFunctionTypeOptions.REDEEM_P2MS
         }
       ],
       txOutputs: [ // Set as many outputs as required
