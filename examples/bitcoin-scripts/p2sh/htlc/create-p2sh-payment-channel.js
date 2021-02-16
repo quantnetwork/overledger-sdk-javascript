@@ -36,8 +36,9 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
       provider: { network: 'http://api.devnet.overledger.io/v1' },
     });
 
-    const currentBlockHeight = await overledger.search.getBlockHeightByDlt(DltNameOptions.BITCOIN);
-    console.log(currentBlockHeight.data);
+    // const currentBlockHeight = await overledger.search.getBlockHeightByDlt(DltNameOptions.BITCOIN);
+    // console.log(currentBlockHeight.data);
+    const currentBlockHeight = { data: 1936322 } ;
     const secret = 'quantbitcoinpaymentchannel';
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);

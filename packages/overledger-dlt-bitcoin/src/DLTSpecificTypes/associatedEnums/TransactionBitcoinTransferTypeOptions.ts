@@ -8,7 +8,8 @@
 
 export enum TransactionBitcoinTransferTypeOptions {
   REDEEM_P2MS = 'REDEEM-P2MS',
-  REDEEM_HTLC = 'REDEEM-HTLC'
+  REDEEM_HTLC = 'REDEEM-HTLC',
+  CANCEL_HTLC = 'REFUND-HTLC'
 }
 
 export default TransactionBitcoinTransferTypeOptions;

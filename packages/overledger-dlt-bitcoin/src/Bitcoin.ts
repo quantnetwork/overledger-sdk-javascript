@@ -83,11 +83,16 @@ class Bitcoin extends AbstractDLT {
       if (thisTransaction.txInputs[counter].witnessScript !== undefined) {
         input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
       }
+
+      const preimage = (thisTransaction.txInputs[counter].transferType && thisTransaction.txInputs[counter].transferType === TransactionBitcoinTransferTypeOptions.CANCEL_HTLC)
+                       ? '' 
+                       : thisTransaction.txInputs[counter].preimage;
+
       inputs.push({
         input,
         transferType: thisTransaction.txInputs[counter].transferType,
         coSigners: thisTransaction.txInputs[counter].coSigners,
-        preimage: thisTransaction.txInputs[counter].preimage,
+        preimage,
         nLocktime: thisTransaction.txInputs[counter].nLocktime
       });
       counter = counter + 1;
@@ -290,7 +295,8 @@ class Bitcoin extends AbstractDLT {
         psbtObj.signInput(counter, myKeyPair);
         psbtObj.validateSignaturesOfInput(counter);
         if (inputsOutputs.inputs[counter].transferType
-          && inputsOutputs.inputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_HTLC) {
+          && (inputsOutputs.inputs[counter].transferType === TransactionBitcoinTransferTypeOptions.REDEEM_HTLC
+            || inputsOutputs.inputs[counter].transferType === TransactionBitcoinTransferTypeOptions.CANCEL_HTLC)) {
           const preImage = inputsOutputs.inputs[counter].preimage;
           psbtObj.finalizeInput(counter, (_inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
             return this.getFinalScripts(preImage, _inputIndex, input, script, isSegwit, isP2SH, isP2WSH)
