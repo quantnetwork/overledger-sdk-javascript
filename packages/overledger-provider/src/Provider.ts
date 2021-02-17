@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { NetworkOptions, ProviderOptions } from '@quantnetwork/overledger-types';
+import log4js from 'log4js';
 
 export const TESTNET: NetworkOptions = 'testnet';
 export const MAINNET: NetworkOptions = 'mainnet';
@@ -7,6 +8,7 @@ export const MAINNET: NetworkOptions = 'mainnet';
 /**
  * @memberof module:overledger-provider
 */
+const log = log4js.getLogger('Provider');
 class Provider {
   mappId: string;
   bpiKey: string;
@@ -31,17 +33,17 @@ class Provider {
   * */
   constructor(...args: any[]) {
     if (args.length === 1) {
-      console.log("creating provider V2...");
+      log.info("Creating provider V2...");
       this.options = args[0];
       this.network = this.options.network || TESTNET;
     } else if (args.length === 3) {
-      console.log("creating provider V1...");
+      log.info("Creating provider V1...");
       this.mappId = args[0];
       this.bpiKey = args[1];
       this.options = args[2];
       this.network = this.options.network || TESTNET;
     } else {
-      console.error("Error in creating provider.");
+      log.error("Error in creating provider.");
     }
   }
 

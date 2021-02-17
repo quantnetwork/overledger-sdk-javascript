@@ -2,10 +2,12 @@ import axios, { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
+import log4js from 'log4js';
 import {StatusRequest, SignedTransactionRequest, UnsignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse, NodeResourceRequest } from '@quantnetwork/overledger-types';
 /**
  * @memberof module:overledger-core
 */
+const log = log4js.getLogger('OverledgerSDK');
 class OverledgerSDK {
   /**
    * The object storing the DLTs loaded by the Overledger SDK
@@ -39,7 +41,7 @@ class OverledgerSDK {
 * */
   constructor(...args: any[]) {
     if (args.length === 3) {
-      console.log("using V1...");
+      log.info("Using V1...");
       this.mappId = args[0];
       this.bpiKey = args[1];
       var options = args[2];
@@ -56,7 +58,7 @@ class OverledgerSDK {
       this.request = this.provider.createRequest();
       this.search = new OverledgerSearch(this);
     } else if (args.length === 2) {
-      console.log("using V2...");
+      log.info("Using V2...");
       var accessToken = args[0];
       var options = args[1];
 
@@ -69,7 +71,7 @@ class OverledgerSDK {
       this.provider = new Provider(options.provider);
       this.request = this.provider.createOAuthRequest(accessToken);
     } else {
-      console.log("creating default constructor.");
+      log.info("Creating default constructor.");
     }
   }
 
