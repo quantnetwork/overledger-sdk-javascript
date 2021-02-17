@@ -3,7 +3,7 @@ const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
-const TransactionBitcoinFunctionTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinFunctionTypeOptions;
+const TransactionBitcoinFunctionOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinFunctionOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -65,7 +65,7 @@ const partyBBitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDAp
           preimage: '',
           nLocktime,
           sequence: 0xfffffffe,
-          transferType: TransactionBitcoinFunctionTypeOptions.CANCEL_HTLC
+          transferType: TransactionBitcoinFunctionOptions.CANCEL_HTLC
         }
       ],
       txOutputs: [ // Set as many outputs as required

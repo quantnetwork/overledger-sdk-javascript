@@ -6,7 +6,7 @@ import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequ
 import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions';
 import { AxiosInstance, AxiosPromise } from 'axios';
 import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinScriptTypeOptions';
-import TransactionBitcoinFunctionTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinFunctionTypeOptions';
+import TransactionBitcoinFunctionOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinFunctionOptions';
 import * as varuint from 'bip174/src/lib/converter/varint';
 
 /**
@@ -84,7 +84,7 @@ class Bitcoin extends AbstractDLT {
         input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
       }
 
-      const preimage = (thisTransaction.txInputs[counter].transferType && thisTransaction.txInputs[counter].transferType === TransactionBitcoinFunctionTypeOptions.CANCEL_HTLC)
+      const preimage = (thisTransaction.txInputs[counter].transferType && thisTransaction.txInputs[counter].transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC)
                        ? '' 
                        : thisTransaction.txInputs[counter].preimage;
 
@@ -264,7 +264,7 @@ class Bitcoin extends AbstractDLT {
     let counter = 0;
     while (counter < inputsOutputs.inputs.length) {
       if (inputsOutputs.inputs[counter].transferType
-        && inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionTypeOptions.REDEEM_P2MS) {
+        && inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionOptions.REDEEM_P2MS) {
         if (!this.multisigAccount) {
           throw new Error('A multisig Account must be set up');
         } else {
@@ -295,8 +295,8 @@ class Bitcoin extends AbstractDLT {
         psbtObj.signInput(counter, myKeyPair);
         psbtObj.validateSignaturesOfInput(counter);
         if (inputsOutputs.inputs[counter].transferType
-          && (inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionTypeOptions.REDEEM_HTLC
-            || inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionTypeOptions.CANCEL_HTLC)) {
+          && (inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionOptions.REDEEM_HTLC
+            || inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC)) {
           const preImage = inputsOutputs.inputs[counter].preimage;
           psbtObj.finalizeInput(counter, (_inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
             return this.getFinalScripts(preImage, _inputIndex, input, script, isSegwit, isP2SH, isP2WSH)
@@ -534,7 +534,7 @@ interface UtxoInput {
 
 interface UtxoInputWithCaracteristics {
   input: UtxoInput,
-  tranferType?: TransactionBitcoinFunctionTypeOptions,
+  tranferType?: TransactionBitcoinFunctionOptions,
   coSigners?: string,
   preimage?: string,
   nLocktime?: number

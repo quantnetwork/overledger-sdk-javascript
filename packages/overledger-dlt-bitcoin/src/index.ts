@@ -7,7 +7,7 @@ import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums
 import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequest';
 import TransactionBitcoinResponse from './DLTSpecificTypes/TransactionBitcoinResponse';
 import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinScriptTypeOptions';
-import TransactionBitcoinFunctionTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinFunctionTypeOptions';
+import TransactionBitcoinFunctionOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinFunctionOptions';
 import { generateHashTimeLockContractCode, generateHashTimeLockContractCode2, createHashTimeLockContractPaymentChannel } from './BitcoinSmartContractHelper';
 
 /**
@@ -18,7 +18,7 @@ export {
     TransactionBitcoinRequest,
     TransactionBitcoinResponse,
     TransactionBitcoinScriptTypeOptions,
-    TransactionBitcoinFunctionTypeOptions,
+    TransactionBitcoinFunctionOptions,
     generateHashTimeLockContractCode,
     generateHashTimeLockContractCode2,
     createHashTimeLockContractPaymentChannel
