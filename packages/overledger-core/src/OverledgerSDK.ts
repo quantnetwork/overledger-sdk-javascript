@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosPromise } from 'axios';
+import axios, { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
@@ -18,31 +18,59 @@ class OverledgerSDK {
   provider: Provider;
   request: AxiosInstance;
   search: OverledgerSearch;
-  
 
+  constructor();
+    /**
+   * @constructor
+   * @param {string} accessToken The access token from authorisation server
+   * @param {SDKOptions} options The DLT Options and Provider Options
+   */
+  constructor(accessToken: string, options: SDKOptions);
   /**
-   * Create the Overledger SDK
-   *
    * @constructor
    * @param {string} mappId The Multi-chain Application ID
    * @param {string} bpiKey The Overledger Blockchain Programming Interface license key
    * @param {SDKOptions} options The DLT Options and Provider Options
    */
-  constructor(mappId: string, bpiKey: string, options: SDKOptions) {
-    this.mappId = mappId;
-    this.bpiKey = bpiKey;
-    this.network = options.provider && options.provider.network || TESTNET;
+  constructor(mappId: string, bpiKey: string, options: SDKOptions);
 
-    this.validateOptions(options);
+  /**
+* Create the Overledger SDK
+* */
+  constructor(...args: any[]) {
+    if (args.length === 3) {
+      console.log("using V1...");
+      this.mappId = args[0];
+      this.bpiKey = args[1];
+      var options = args[2];
+      this.network = options.provider && options.provider.network || TESTNET;
 
-    options.dlts.forEach((dltConfig: DLTOptions) => {
-      const dlt = this.loadDlt(dltConfig);
-      this.dlts[dlt.name] = dlt;
-    });
+      this.validateOptions(options);
 
-    this.provider = new Provider(mappId, bpiKey, options.provider);
-    this.request = this.provider.createRequest();
-    this.search = new OverledgerSearch(this);
+      options.dlts.forEach((dltConfig: DLTOptions) => {
+        const dlt = this.loadDlt(dltConfig);
+        this.dlts[dlt.name] = dlt;
+      });
+
+      this.provider = new Provider(this.mappId, this.bpiKey, options.provider);
+      this.request = this.provider.createRequest();
+      this.search = new OverledgerSearch(this);
+    } else if (args.length === 2) {
+      console.log("using V2...");
+      var accessToken = args[0];
+      var options = args[1];
+
+      this.validateOptions(options);
+      options.dlts.forEach((dltConfig: DLTOptions) => {
+        const dlt = this.loadDlt(dltConfig);
+        this.dlts[dlt.name] = dlt;
+      });
+
+      this.provider = new Provider(options.provider);
+      this.request = this.provider.createOAuthRequest(accessToken);
+    } else {
+      console.log("creating default constructor.");
+    }
   }
 
   /**
@@ -89,6 +117,26 @@ class OverledgerSDK {
       mappId: this.mappId,
       dltData: signedTransactionRequest,
     };
+  }
+
+  /**
+   * refresh access token
+   */
+  public refreshAccessToken(client_id: string, refresh_token: string): AxiosPromise<Object> {
+
+    const params = new URLSearchParams()
+    params.append('grant_type', 'refresh_token')
+    params.append('client_id', client_id)
+    params.append('refresh_token', refresh_token)
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      }
+    }
+    
+    return axios.post('https://qnttest6.auth.us-east-2.amazoncognito.com/oauth2/token', params, config);
   }
 
   /**
