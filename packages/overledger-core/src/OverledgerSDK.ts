@@ -135,8 +135,11 @@ class OverledgerSDK {
         'Accept': 'application/json'
       }
     }
-    
-    return axios.post('https://qnttest6.auth.us-east-2.amazoncognito.com/oauth2/token', params, config);
+
+    //<api gateway path to refresh access token>
+    var url = 'https://qnttest6.auth.us-east-2.amazoncognito.com/oauth2/token';
+
+    return axios.post(url, params, config);
   }
 
   /**
