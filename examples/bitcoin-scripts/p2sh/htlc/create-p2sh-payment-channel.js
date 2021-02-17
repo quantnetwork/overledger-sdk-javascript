@@ -36,14 +36,16 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
       provider: { network: 'http://api.devnet.overledger.io/v1' },
     });
 
-    // const currentBlockHeight = await overledger.search.getBlockHeightByDlt(DltNameOptions.BITCOIN);
-    // console.log(currentBlockHeight.data);
-    const currentBlockHeight = { data: 1936322 } ;
+    const currentBlockHeight = await overledger.search.getBlockHeightByDlt(DltNameOptions.BITCOIN);
+    console.log(currentBlockHeight.data);
+    // SECRET THAT SHOULD BE STORED BY THE SIDE WHO CAN REDEEM THE SMART CONTRACT
     const secret = 'quantbitcoinpaymentchannel';
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);
+
     // TIMELOCK EXPRESSED IN BLOCK HEIGHT
     const timeLock = bip65.encode({ blocks: currentBlockHeight.data + 3 });
+    
     // TIMELOCK EXPRESSED IN UTC TIME
     // const timeLock = bip65.encode({ utc: Math.floor(Date.now() / 1000) + 60 * 10});
     console.log(`Time Lock: ${timeLock}`);

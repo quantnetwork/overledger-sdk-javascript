@@ -62,7 +62,7 @@ class Bitcoin extends AbstractDLT {
     let counter = 0;
     while (counter < thisTransaction.txInputs.length) {
       console.log(`counter input ${counter}`);
-      const rawTransactionInput = thisTransaction.txInputs[counter].rawTransaction.toString();
+      const rawTransactionInput = thisTransaction.txInputs[counter].linkedRawTransaction.toString();
       const isSegwit = rawTransactionInput.substring(8, 12) === '0001';
       console.log(`isSegwit ${isSegwit}`);
       let input: UtxoInput = {

@@ -96,7 +96,7 @@ const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbv
           fromAddress: partyHTLCAddress,
           amount: bitcoinHTLCInputAmount,
           scriptPubKey: '0020fd4791ec0b4586fabe3668e72098455ad2f72d83e236a77510841907e99de98a',
-          rawTransaction: firstRawTransaction,
+          linkedRawTransaction: firstRawTransaction,
           witnessScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703387d1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
           preimage: 'quantbitcoinpaymentchannel',
           transferType: TransactionBitcoinFunctionOptions.REDEEM_HTLC
@@ -108,7 +108,7 @@ const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbv
           amount: bitcoinMultisigInputAmount,
           scriptPubKey: multisigAccount.script,
           witnessScript: multisigAccount.witnessScript,
-          rawTransaction: firstRawTransaction,
+          linkedRawTransaction: firstRawTransaction,
           coSigners: [party2MultisigBitcoinPrivateKey, party3MultisigBitcoinPrivateKey],
           transferType: TransactionBitcoinFunctionOptions.REDEEM_P2MS
         },
@@ -118,7 +118,7 @@ const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbv
           fromAddress: partyABitcoinAddress,
           amount: bitcoinSegwitInputAmount,
           scriptPubKey: '76a914bee377979bee7ca3b0785ff72c84fad2b938327888ac',
-          rawTransaction: secondRawTransaction,
+          linkedRawTransaction: secondRawTransaction,
         },
       ],
       txOutputs: [ // Set as many outputs as required
