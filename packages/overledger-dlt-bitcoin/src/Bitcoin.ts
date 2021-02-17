@@ -1,6 +1,7 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
+import { TransactionInput } from '@quantnetwork/overledger-types';
 import { Account, TransactionRequest, ValidationCheck, MultiSigAccount } from '@quantnetwork/overledger-types';
 import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequest';
 import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions';
@@ -8,6 +9,7 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinScriptTypeOptions';
 import TransactionBitcoinFunctionOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinFunctionOptions';
 import * as varuint from 'bip174/src/lib/converter/varint';
+
 
 /**
  * @memberof module:overledger-dlt-bitcoin
@@ -50,6 +52,32 @@ class Bitcoin extends AbstractDLT {
     }
   }
 
+  getSmartContractParameters(input: TransactionInput): any {
+    let sequence;
+    let transferType;
+    let finalSCData: any;
+    if (input.smartContract) {
+      if (input.smartContract.functionCall.length === 1) {
+        const fnCall = input.smartContract.functionCall[0];
+        transferType = fnCall.functionName;
+        finalSCData.transferType = transferType;
+        fnCall.inputParams.map(p => {
+          finalSCData[p.name] = p.value;
+        });
+      } else {
+        throw new Error(`A unique call can be made in Bitcoin`);
+      }
+      if (input.smartContract.extraFields) {
+        sequence = input.smartContract.extraFields.sequence
+          ? input.smartContract.extraFields.sequence
+          : 0xffffffff;
+        finalSCData.sequence = sequence;
+      }
+      console.log(`finalSCData ${JSON.stringify(finalSCData)}`);
+      return finalSCData;
+    }
+  }
+
   /**
   * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
   * @param {TransactionBitcoinRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
@@ -64,36 +92,41 @@ class Bitcoin extends AbstractDLT {
       console.log(`counter input ${counter}`);
       const rawTransactionInput = thisTransaction.txInputs[counter].linkedRawTransaction.toString();
       const isSegwit = rawTransactionInput.substring(8, 12) === '0001';
+      const scData = this.getSmartContractParameters(thisTransaction.txInputs[counter]);
       console.log(`isSegwit ${isSegwit}`);
       let input: UtxoInput = {
         hash: thisTransaction.txInputs[counter].linkedTx.toString(),
         index: parseInt(thisTransaction.txInputs[counter].linkedIndex, 10),
-        sequence: thisTransaction.txInputs[counter].sequence ? thisTransaction.txInputs[counter].sequence : 0xffffffff,
+        sequence: scData.sequence,
         nonWitnessUtxo: Buffer.from(rawTransactionInput.toString(), 'hex')
       };
       if (isSegwit) {
-        input.witnessUtxo = {
-          script: Buffer.from(thisTransaction.txInputs[counter].scriptPubKey.toString(), 'hex'),
-          value: thisTransaction.txInputs[counter].amount
-        };
+        if (thisTransaction.txInputs[counter].scriptPubKey !== undefined) {
+          input.witnessUtxo = {
+            script: Buffer.from(thisTransaction.txInputs[counter].scriptPubKey.toString(), 'hex'),
+            value: thisTransaction.txInputs[counter].amount
+          };
+        } else {
+          throw new Error(`scriptPubKey field must be provided in a Segwit utxo transaction input`);
+        }
       }
-      if (thisTransaction.txInputs[counter].redeemScript !== undefined) {
-        input.redeemScript = Buffer.from(thisTransaction.txInputs[counter].redeemScript.toString(), 'hex');
+      if (scData.redeemScript !== undefined) {
+        input.redeemScript = Buffer.from(scData.redeemScript.toString(), 'hex');
       }
-      if (thisTransaction.txInputs[counter].witnessScript !== undefined) {
-        input.witnessScript = Buffer.from(thisTransaction.txInputs[counter].witnessScript.toString(), 'hex')
+      if (scData.witnessScript !== undefined) {
+        input.witnessScript = Buffer.from(scData.witnessScript.toString(), 'hex')
       }
 
-      const preimage = (thisTransaction.txInputs[counter].transferType && thisTransaction.txInputs[counter].transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC)
-                       ? '' 
-                       : thisTransaction.txInputs[counter].preimage;
+      const preimage = (scData.transferType && scData.transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC)
+        ? ''
+        : scData.preimage;
 
       inputs.push({
         input,
-        transferType: thisTransaction.txInputs[counter].transferType,
-        coSigners: thisTransaction.txInputs[counter].coSigners,
+        transferType: scData.transferType,
+        coSigners: scData.coSigners,
         preimage,
-        nLocktime: thisTransaction.txInputs[counter].nLocktime
+        nLocktime: scData.nLocktime
       });
       counter = counter + 1;
     }

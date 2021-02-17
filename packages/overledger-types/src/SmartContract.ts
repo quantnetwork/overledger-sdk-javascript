@@ -19,7 +19,7 @@ type SmartContract = {
   id?: string,
   interface?: SCFunctionDefinition[],
   functionCall?: SCFunctionDefinition[],
-  extraFields?: Object,
+  extraFields?: any,
 };
 
 export default SmartContract;
