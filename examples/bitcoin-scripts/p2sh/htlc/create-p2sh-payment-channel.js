@@ -44,7 +44,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     console.log(`Hash Secret: ${hashSecret}`);
 
     // TIMELOCK EXPRESSED IN BLOCK HEIGHT
-    const timeLock = bip65.encode({ blocks: currentBlockHeight.data + 3 });
+    const timeLock = bip65.encode({ blocks: currentBlockHeight.data + 5 });
     
     // TIMELOCK EXPRESSED IN UTC TIME
     // const timeLock = bip65.encode({ utc: Math.floor(Date.now() / 1000) + 60 * 10});

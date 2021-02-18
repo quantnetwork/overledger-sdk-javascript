@@ -15,22 +15,18 @@ import SmartContract from './SmartContract';
 /**
  * @memberof module:overledger-types
  */
+
 type TransactionInput = {
   linkedTx: string,
   linkedIndex: string,
+  linkedRawTransaction?: string,
+  linkedTxLockTime?: number,
+  linkedTxSequence?: number
+  scriptPubKey?: string,
   fromAddress: string,
   amount?: number,
   asset?: object,
-  nLocktime?: number, // transaction level (not utxo one)
-  sequence?: number,
   smartContract?: SmartContract,
-  rawTransaction?: Buffer | string,
-  scriptPubKey?: Buffer | string,
-  redeemScript?: Buffer | string,
-  witnessScript?: Buffer | string,
-  preimage? : Buffer | string
-  transferType?: string,
-  coSigners?: [string]
 };
 
 export default TransactionInput;
