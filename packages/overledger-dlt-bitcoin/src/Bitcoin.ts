@@ -53,9 +53,9 @@ class Bitcoin extends AbstractDLT {
   }
 
   getSmartContractParameters(input: TransactionInput): any {
-    let sequence;
     let transferType;
-    let finalSCData: any;
+    let finalSCData: any = {};
+    console.log(`input ${JSON.stringify(input)}`);
     if (input.smartContract) {
       if (input.smartContract.functionCall.length === 1) {
         const fnCall = input.smartContract.functionCall[0];
@@ -66,12 +66,6 @@ class Bitcoin extends AbstractDLT {
         });
       } else {
         throw new Error(`A unique call can be made in Bitcoin`);
-      }
-      if (input.smartContract.extraFields) {
-        sequence = input.smartContract.extraFields.sequence
-          ? input.smartContract.extraFields.sequence
-          : 0xffffffff;
-        finalSCData.sequence = sequence;
       }
       console.log(`finalSCData ${JSON.stringify(finalSCData)}`);
       return finalSCData;
@@ -88,16 +82,20 @@ class Bitcoin extends AbstractDLT {
     const outputs = new Array();
     super.transactionValidation(thisTransaction);
     let counter = 0;
+    let preimage;
+    let transferType;
+    let coSigners;
     while (counter < thisTransaction.txInputs.length) {
       console.log(`counter input ${counter}`);
       const rawTransactionInput = thisTransaction.txInputs[counter].linkedRawTransaction.toString();
       const isSegwit = rawTransactionInput.substring(8, 12) === '0001';
       const scData = this.getSmartContractParameters(thisTransaction.txInputs[counter]);
+      console.log(`scData ${JSON.stringify(scData)}`);
       console.log(`isSegwit ${isSegwit}`);
       let input: UtxoInput = {
         hash: thisTransaction.txInputs[counter].linkedTx.toString(),
         index: parseInt(thisTransaction.txInputs[counter].linkedIndex, 10),
-        sequence: scData.sequence,
+        sequence: thisTransaction.txInputs[counter].linkedTxSequence ? thisTransaction.txInputs[counter].linkedTxSequence : 0xffffffff,
         nonWitnessUtxo: Buffer.from(rawTransactionInput.toString(), 'hex')
       };
       if (isSegwit) {
@@ -110,23 +108,24 @@ class Bitcoin extends AbstractDLT {
           throw new Error(`scriptPubKey field must be provided in a Segwit utxo transaction input`);
         }
       }
-      if (scData.redeemScript !== undefined) {
-        input.redeemScript = Buffer.from(scData.redeemScript.toString(), 'hex');
+      if (scData) {
+        if (scData.redeemScript) {
+          input.redeemScript = Buffer.from(scData.redeemScript.toString(), 'hex');
+        }
+        if (scData.witnessScript) {
+          input.witnessScript = Buffer.from(scData.witnessScript.toString(), 'hex');
+        }
+        transferType = scData.transferType ? scData.transferType : undefined;
+        coSigners = scData.coSigners ? scData.coSigners : undefined;
+        preimage = (transferType && transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC) ? '' : scData.preimage;
       }
-      if (scData.witnessScript !== undefined) {
-        input.witnessScript = Buffer.from(scData.witnessScript.toString(), 'hex')
-      }
-
-      const preimage = (scData.transferType && scData.transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC)
-        ? ''
-        : scData.preimage;
-
+      console.log(`input ${JSON.stringify(input)}`);
       inputs.push({
         input,
-        transferType: scData.transferType,
-        coSigners: scData.coSigners,
+        transferType,
+        coSigners,
         preimage,
-        nLocktime: scData.nLocktime
+        nLocktime: thisTransaction.txInputs[counter].linkedTxLockTime
       });
       counter = counter + 1;
     }

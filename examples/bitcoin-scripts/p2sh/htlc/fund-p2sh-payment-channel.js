@@ -16,15 +16,15 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 const partyABitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
-const bitcoinLinkedTx = '659468ab731d9a0d125d4c43cc12066fa0bab5e378dee9bffeace98bc014814a'; // Add the previous transaction here
+const bitcoinLinkedTx = '0f8a2b1def6368482df62e5ced18d37f005045ddc169da388d68218518a986e1'; // Add the previous transaction here
 const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
-const bitcoinInputAmount = 1844631; // set equal to the number of satoshis in your first input
+const bitcoinInputAmount = 1832431; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 1832431; // set equal to the number of satoshis to send back to yourself 
+const bitcoinChangeAmount = 1820231; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = '2N4YUKuXwxxQbi7cGSRuP4Nz4DwoT4bfism';
+const partyBBitcoinAddress = '2N7e3LqaLXAzip8KjarkPR34BZHaY36Svu1';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -55,7 +55,7 @@ const partyBBitcoinAddress = '2N4YUKuXwxxQbi7cGSRuP4Nz4DwoT4bfism';
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
-          linkedRawTransaction: '020000000178e66e618711c036ad22cd61153717258dea51bffeb9dc2eee7a9c0c8da773e5010000006a47304402203409e0d1c828afb0d393e391bf7304a63b48c28cd1d179a7dcadca7ed11c409d02204dc754c5b2725cd2fa0fdf71402fc413a97099907dbd07d5eb636d788d3b54c30121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a914c6e4ac9556537dc0a698592c2a9f5ff3aeba4ff08797251c00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
+          linkedRawTransaction: '02000000014a8114c08be9acfebfe9de78e3b5baa06f0612cc434c5d120d9a1d73ab689465010000006a47304402206d4df49874fca01efaf0c691c65e19aa117710b126c5c3cb673d3f49f7234878022076d6805ea40576e2e6e8582e43ad29134a7a5f85ca627cfbc761287b02dffe4a0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a9147bec6c8b3c18d512f5c48f9aa5c854dca208676987eff51b00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
           scriptPubKey: '76a91400406a26567183b9b3e42e5fed00f70a2d11428188ac',
           amount: bitcoinInputAmount 
         }
