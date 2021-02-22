@@ -1,9 +1,8 @@
-//NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
+const bip65 = require('bip65');
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
-const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
 const TransactionBitcoinFunctionOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinFunctionOptions;
 const BitcoinTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').BitcoinTypeOptions;
 const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFunctionTypeOptions;
@@ -11,25 +10,26 @@ const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFuncti
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+const mappId = 'network.quant.devnet';
+const bpiKey = 'quantbpikey';
 
-const bitcoinLinkedTx = 'c58924831c5f5078fd33bd0d8f4a403a92715f5d4d0217a1fe1124222d71ddb3'; // Add the previous transaction here
+// const mappId = 'network.quant.testnet';
+// const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+
+// Paste in your bitcoin, ethereum and XRP ledger private keys.
+
+const p2shp2wshSmartContractAddress = '2MwFJaijdrmy8S35o1s4n37hWV2prXsxFvG';
+const bitcoinLinkedTx = 'ed45606201bb92b807d3a152fbe6264d112d2736ea0b0a2481f0fae7403ca279'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
 const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send back to yourself 
 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
+const nLocktime = bip65.encode({ blocks: 1936805 }); // will be taken at the transaction level
 
-// mutisig accounts
-const partyB1BitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
-const partyB1BitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
-
-const partyB2BitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
-const partyB2BitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
-
-const partyB3BitcoinAddress = 'n3oitdxMxaVeo1iUQpm4EyzxyWDZagyqEu';
-const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHsuGcb32';
+// Now provide three other addresses that you will be transfering value too
+const partyBBitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
+const partyBBitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -40,13 +40,14 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
     // Connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
       dlts: [{ dlt: DltNameOptions.BITCOIN }],
-      provider: { network: 'testnet' },
+      // provider: { network: 'testnet' },
+      provider: { network: 'http://api.devnet.overledger.io/v1' },
     });
     const transactionMessage = 'OVL SDK Test';
 
-    // SET multisignature account
-    overledger.dlts.bitcoin.setMultiSigAccount(2, [partyB1BitcoinPrivateKey, partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey], TransactionBitcoinScriptTypeOptions.P2SH);
-    const multisigAccount = overledger.dlts.bitcoin.multisigAccount;
+    // SET partyA accounts for signing;
+    overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey });
+
     const signedTransactions = await overledger.sign([
       {
         // The following parameters are from the TransactionRequest object:
@@ -59,26 +60,28 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
           {
             linkedTx: bitcoinLinkedTx,
             linkedIndex: bitcoinLinkedIndex,
-            fromAddress: multisigAccount.address,
+            fromAddress: p2shp2wshSmartContractAddress,
             amount: bitcoinInputAmount,
-            scriptPubKey: multisigAccount.script,
-            linkedRawTransaction: '020000000179a23c40e7faf081240a0bea36272d114d26e6fb52a1d307b892bb01626045ed010000006a473044022047dfa2ea9bcf19df72d15ff0daf678131f9145be5ef1194f1dc68b84e9dd7bc20220661489ef4ee5c831240590732f727f4c7790612d657d693becaa0239f34f562f0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9140f9f1ed5ec59f95fd386190756608b82bccb7129876ff72100000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+            scriptPubKey: 'a9142be4567959db4393dff7985524fc420a0e223d4287',
+            linkedRawTransaction: '020000000183345279d4b08f30f83e30f19ff90f549464b418fe1842d53bb266fc8016e650010000006a47304402203f8abbc0f65db1e7887d439df1b4687849a0e753a5e0416db58854931f5a4dcc02200cacc740aa0a2f5aa06098d3d4116ec6592d2c8022ce01be8162fab5690f41280121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9142be4567959db4393dff7985524fc420a0e223d428717272200000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+            linkedTxLockTime: nLocktime,
+            linkedTxSequence: 0xfffffffe,
             smartContract: {
-              id: multisigAccount.address,
+              id: p2shp2wshSmartContractAddress,
               // type: ??
               functionCall: [{
                 functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
-                functionName: TransactionBitcoinFunctionOptions.REDEEM_P2MS, // The function name must be given
+                functionName: TransactionBitcoinFunctionOptions.CANCEL_HTLC,
                 inputParams: [
                   {
                     type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
                     name: 'redeemScript', // Name of parameter
-                    value: multisigAccount.redeemScript, // Value of the boolean array
+                    value: '0020426ddef1361f6cf4721aa0d34be8546c2b285dd27978ecf139b40655afb9d67d', // Value of the boolean array
                   },
                   {
-                    type: { selectedType: BitcoinTypeOptions.ARRAY_HEX_STRING }, // First parameter is a boolean array
-                    name: 'coSigners', // Name of parameter
-                    value: [partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey], // Value of the boolean array
+                    type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                    name: 'witnessScript', // Name of parameter
+                    value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167047aad2201b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
                   }
                 ]
               }
@@ -88,11 +91,11 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
         ],
         txOutputs: [ // Set as many outputs as required
           {
-            toAddress: partyB2BitcoinAddress,
+            toAddress: partyBBitcoinAddress,
             amount: bitcoinPartyBAmount
           },
           {
-            toAddress: partyB1BitcoinAddress, // This is the change address
+            toAddress: partyBBitcoinAddress, // This is the change address
             amount: bitcoinChangeAmount
           }
         ],
@@ -124,4 +127,6 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
   }
 })();
 
-// https://blockstream.info/testnet/tx/8921bd584ba51412b1b370a4c17356acc20831c637c8ba6db1fb38305aca8a3d
+//  https://blockstream.info/testnet/tx/08bb5b7933afdfad045d09aa8e7786f0fe885bc3fc1b993b1a4ed54261d4ba4b
+
+// non-final until the lock time is reached

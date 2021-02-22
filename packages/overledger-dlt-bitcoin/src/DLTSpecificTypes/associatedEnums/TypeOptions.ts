@@ -7,7 +7,8 @@
 export enum BitcoinTypeOptions { 
   NUMBER = 'NUMBER', 
   STRING = 'STRING', 
-  HEX_STRING = 'HEX_STRING' 
+  HEX_STRING = 'HEX_STRING' ,
+  ARRAY_HEX_STRING = 'ARRAY_HEX_STRING'
 }
 
 export default BitcoinTypeOptions;

@@ -5,6 +5,8 @@ const TransactionTypeOptions = require('@quantnetwork/overledger-types').Transac
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
 const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
 const TransactionBitcoinFunctionOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinFunctionOptions;
+const BitcoinTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').BitcoinTypeOptions;
+const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFunctionTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -60,10 +62,28 @@ const partyB3BitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHs
           fromAddress: multisigAccount.address,
           amount: bitcoinInputAmount,
           scriptPubKey: multisigAccount.script,
-          witnessScript: multisigAccount.witnessScript,
           linkedRawTransaction: '0200000001118cc46e8a3df04c2792b362c049ca8f2a44b4efb0bc6e21095e725c6b4db55e010000006b483045022100d0b68891aca10818c5629fa7d51f8a79951355996d5e7f312324c648508614a20220738de0603103ff667e2594ac8f0198b83da0605017e010b579e7717594221aa20121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff021027000000000000220020747a5f2f5822fa03b1ac4b4a83a74bf31f552c719d48b194d7d9246e7ff2cef30f391900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
-          coSigners: [partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey],
-          transferType: TransactionBitcoinFunctionOptions.REDEEM_P2MS
+          smartContract: {
+            id: multisigAccount.address,
+            // type: ??
+            functionCall: [{
+              functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
+              functionName: TransactionBitcoinFunctionOptions.REDEEM_P2MS, // The function name must be given
+              inputParams: [
+                {
+                  type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                  name: 'witnessScript', // Name of parameter
+                  value: multisigAccount.witnessScript, // Value of the boolean array
+                },
+                {
+                  type: { selectedType: BitcoinTypeOptions.ARRAY_HEX_STRING }, // First parameter is a boolean array
+                  name: 'coSigners', // Name of parameter
+                  value: [partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey], // Value of the boolean array
+                }
+              ]
+            }
+            ]
+          }
         }
       ],
       txOutputs: [ // Set as many outputs as required

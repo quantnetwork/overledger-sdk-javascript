@@ -4,6 +4,8 @@ const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
 const TransactionBitcoinFunctionOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinFunctionOptions;
+const BitcoinTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').BitcoinTypeOptions;
+const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFunctionTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -13,7 +15,7 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
-const partyABitcoinAddress = '2MwFJaijdrmy8S35o1s4n37hWV2prXsxFvG';
+const p2shp2wshSmartContractAddress = '2MwFJaijdrmy8S35o1s4n37hWV2prXsxFvG';
 const bitcoinLinkedTx = 'ed45606201bb92b807d3a152fbe6264d112d2736ea0b0a2481f0fae7403ca279'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
@@ -52,14 +54,36 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
         { 
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
-          fromAddress: partyABitcoinAddress,
+          fromAddress: p2shp2wshSmartContractAddress,
           amount: bitcoinInputAmount,
           scriptPubKey: 'a9142be4567959db4393dff7985524fc420a0e223d4287',
           linkedRawTransaction: '020000000183345279d4b08f30f83e30f19ff90f549464b418fe1842d53bb266fc8016e650010000006a47304402203f8abbc0f65db1e7887d439df1b4687849a0e753a5e0416db58854931f5a4dcc02200cacc740aa0a2f5aa06098d3d4116ec6592d2c8022ce01be8162fab5690f41280121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9142be4567959db4393dff7985524fc420a0e223d428717272200000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
-          witnessScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167047aad2201b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
-          redeemScript: '0020426ddef1361f6cf4721aa0d34be8546c2b285dd27978ecf139b40655afb9d67d',
-          preimage: 'quantbitcoinpaymentchannel',
-          transferType: TransactionBitcoinFunctionOptions.REDEEM_HTLC
+          smartContract: {
+            id: p2shp2wshSmartContractAddress,
+            // type: ??
+            functionCall: [{
+              functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
+              functionName: TransactionBitcoinFunctionOptions.REDEEM_HTLC, // The function name must be given
+              inputParams: [
+                {
+                  type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                  name: 'redeemScript', // Name of parameter
+                  value: '0020426ddef1361f6cf4721aa0d34be8546c2b285dd27978ecf139b40655afb9d67d', // Value of the boolean array
+                },
+                {
+                  type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                  name: 'witnessScript', // Name of parameter
+                  value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167047aad2201b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
+                },
+                {
+                  type: { selectedType: BitcoinTypeOptions.STRING }, // First parameter is a boolean array
+                  name: 'preimage', // Name of parameter
+                  value: 'quantbitcoinpaymentchannel', // Value of the boolean array
+                }
+              ]
+            }
+            ]
+          }
         }
       ],
       txOutputs: [ // Set as many outputs as required
