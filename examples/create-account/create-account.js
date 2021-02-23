@@ -15,8 +15,8 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
     try {
         const overledger = new OverledgerSDK(mappId, bpiKey, {
             dlts: [{ dlt: DltNameOptions.BITCOIN },
-            // { dlt: DltNameOptions.ETHEREUM },
-            // { dlt: DltNameOptions.XRP_LEDGER }
+            { dlt: DltNameOptions.ETHEREUM },
+            { dlt: DltNameOptions.XRP_LEDGER }
             ],
             provider: { network: 'testnet' },
         });
@@ -29,13 +29,13 @@ const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
         console.log('Bitcoin account segwit:\n', bitcoinAccountSegwit);
         console.log("");
 
-        // const ethAccount = await overledger.dlts.ethereum.createAccount();
-        // console.log('Ethereum account:\n', ethAccount);
-        // console.log("");
+        const ethAccount = await overledger.dlts.ethereum.createAccount();
+        console.log('Ethereum account:\n', ethAccount);
+        console.log("");
 
-        // const xrpAccount = await overledger.dlts.ripple.createAccount();
-        // console.log('XRP ledger account:\n', xrpAccount);
-        // console.log("");
+        const xrpAccount = await overledger.dlts.ripple.createAccount();
+        console.log('XRP ledger account:\n', xrpAccount);
+        console.log("");
     } catch (e) {
         console.error('error', e);
     }

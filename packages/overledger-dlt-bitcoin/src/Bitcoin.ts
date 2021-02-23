@@ -152,10 +152,7 @@ class Bitcoin extends AbstractDLT {
   */
   prepareTransaction(inputsOutputs: UtxosPrepare): any {
 
-    // const feePrice = Number(thisTransaction.extraFields.feePrice);
-    // console.log(`network ${JSON.stringify(this.addressType)}`);
-    // const NETWORK = bitcoin.networks.testnet;
-    // const psbtObj = new bitcoin.Psbt({ network: NETWORK }); // set maximum fee rate = 0 to be flexible on fee rate
+    // const feePrice = Number(thisTransaction.extraFields.feePrice); // set maximum fee rate = 0 to be flexible on fee rate
     const psbtObj = new bitcoin.Psbt({ network: this.addressType });
     psbtObj.setMaximumFeeRate(0);
     psbtObj.setVersion(2); // These are defaults. This line is not needed.
@@ -253,8 +250,6 @@ class Bitcoin extends AbstractDLT {
     }
     counter = 0;
     while (counter < thisBitcoinTx.txOutputs.length) {
-
-      // if (!thisBitcoinTx.txOutputs[counter].amount || thisBitcoinTx.txOutputs[counter].amount === undefined) {
       if (thisBitcoinTx.txOutputs[counter].amount === undefined) {
         return {
           success: false,
@@ -312,9 +307,7 @@ class Bitcoin extends AbstractDLT {
             psbtObj.signInput(counter, kPair);
           });
           inputsOutputs.inputs[counter].coSigners.map(signer => {
-            console.log(`signer ${signer}`);
             const key = this.multisigAccount.keys.filter(k => k.privateKeyWIF.toString() === signer.toString());
-            console.log(`key ${JSON.stringify(key)}`);
             if (key.length === 1) {
               psbtObj.validateSignaturesOfInput(counter, key[0].publicKey);
             } else {
@@ -343,7 +336,6 @@ class Bitcoin extends AbstractDLT {
   }
 
   getFinalScripts(preImage, _inputIndex, input, script, isSegwit, isP2SH, isP2WSH) {
-    // console.log(`getFinalScripts inputIndex: ${JSON.stringify(inputIndex)} input: ${JSON.stringify(input)} script: ${script.toString('hex')} isSegwit: ${isSegwit} isP2SH: ${isP2SH} isP2WSH: ${isP2WSH} preimage: ${preImage}`);
     let finaliseRedeem;
     if (isSegwit && isP2SH) {
       finaliseRedeem = bitcoin.payments.p2sh({
@@ -430,13 +422,11 @@ class Bitcoin extends AbstractDLT {
       isSegwit,
       publicKey,
       provider,
-      password,
+      password
     }
-    console.log(`this.account ${JSON.stringify(this.account)}`);
   }
 
   createNestedSegwitAccount(accountInfo: Account) {
-    console.log(`setAccount ${accountInfo.privateKey}`);
     if (!accountInfo.privateKey) {
       throw new Error("accountInfo.privateKey must be set");
     }

@@ -56,14 +56,14 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount({privateKey: partyAs2ndBitcoinPrivateKey});
-    // overledger.dlts.ethereum.setAccount({privateKey: partyAEthereumPrivateKey});
-    // overledger.dlts.ripple.setAccount({privateKey: partyAxrpPrivateKey});
+    overledger.dlts.ethereum.setAccount({privateKey: partyAEthereumPrivateKey});
+    overledger.dlts.ripple.setAccount({privateKey: partyAxrpPrivateKey});
     
     // Get the address sequences.
-    // const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
-    // const xrpSequenceRequest = await overledger.dlts.ripple.getSequence(partyAxrpAddress);
-    // const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
-    // const xrpAccountSequence = xrpSequenceRequest.data.dltData[0].sequence;
+    const ethereumSequenceRequest = await overledger.dlts.ethereum.getSequence(partyAEthereumAddress);
+    const xrpSequenceRequest = await overledger.dlts.ripple.getSequence(partyAxrpAddress);
+    const ethereumAccountSequence = ethereumSequenceRequest.data.dltData[0].sequence;
+    const xrpAccountSequence = xrpSequenceRequest.data.dltData[0].sequence;
 
     // Sign the transactions.
     // As input to this function, we will be providing:
@@ -103,40 +103,40 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
         feePrice: '2200' // Price for the miner to add this transaction to the block
       },
     },
-    // {
-    //         // The following parameters are from the TransactionRequest object:
-    //   dlt: DltNameOptions.ETHEREUM,
-    //   type: TransactionTypeOptions.ACCOUNTS,
-    //   subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER},
-    //   message: transactionMessage,
-    //         // The following parameters are from the TransactionAccountRequest object:
-    //   fromAddress: partyAEthereumAddress,
-    //   toAddress: partyBEthereumAddress,
-    //   sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
-    //   amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
-    //   extraFields: {
-    //           // The following parameters are from the TransactionEthereumRequest object:
-    //     compUnitPrice: '8000000000', // Price for each individual gas unit this transaction will consume
-    //     compLimit: '80000', // The maximum fee that this transaction will use
-    //   },
-    // },
-    // {
-    //         // The following parameters are from the TransactionRequest object:
-    //   dlt: DltNameOptions.XRP_LEDGER,
-    //   type: TransactionTypeOptions.ACCOUNTS,
-    //   subType: { name: TransactionXRPSubTypeOptions.VALUE_TRANSFER },
-    //   message: transactionMessage,
-    //         // The following parameters are from the TransactionAccountRequest object:
-    //   fromAddress: partyAxrpAddress,
-    //   toAddress: partyBxrpAddress,
-    //   sequence: xrpAccountSequence, // Sequence starts at 0 for newly created addresses
-    //   amount: '1', // Minimum allowed amount of drops is 1.      
-    //   extraFields: {
-    //                   // The following parameters are from the TransactionXRPRequest object:
-    //     feePrice: '12', // Minimum feePrice on XRP Ledger is 12 drops.
-    //     maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
-    //   },
-    // },
+    {
+            // The following parameters are from the TransactionRequest object:
+      dlt: DltNameOptions.ETHEREUM,
+      type: TransactionTypeOptions.ACCOUNTS,
+      subType: {name: TransactionEthereumSubTypeOptions.VALUE_TRANSFER},
+      message: transactionMessage,
+            // The following parameters are from the TransactionAccountRequest object:
+      fromAddress: partyAEthereumAddress,
+      toAddress: partyBEthereumAddress,
+      sequence: ethereumAccountSequence, // Sequence starts at 0 for newly created addresses
+      amount: '0', // On Ethereum you can send 0 amount transactions. But you still pay network fees
+      extraFields: {
+              // The following parameters are from the TransactionEthereumRequest object:
+        compUnitPrice: '8000000000', // Price for each individual gas unit this transaction will consume
+        compLimit: '80000', // The maximum fee that this transaction will use
+      },
+    },
+    {
+            // The following parameters are from the TransactionRequest object:
+      dlt: DltNameOptions.XRP_LEDGER,
+      type: TransactionTypeOptions.ACCOUNTS,
+      subType: { name: TransactionXRPSubTypeOptions.VALUE_TRANSFER },
+      message: transactionMessage,
+            // The following parameters are from the TransactionAccountRequest object:
+      fromAddress: partyAxrpAddress,
+      toAddress: partyBxrpAddress,
+      sequence: xrpAccountSequence, // Sequence starts at 0 for newly created addresses
+      amount: '1', // Minimum allowed amount of drops is 1.      
+      extraFields: {
+                      // The following parameters are from the TransactionXRPRequest object:
+        feePrice: '12', // Minimum feePrice on XRP Ledger is 12 drops.
+        maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
+      },
+    },
   ]);
 
     console.log("Signed transactions: ");
@@ -159,12 +159,3 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
     console.error('error:', e);
   }
 })();
-
-
-// --- PSBT object ------
-// Psbt {
-//   data:
-//    Psbt {
-//      inputs: [ [Object] ],
-//      outputs: [ [Object], [Object], [Object] ],
-//      globalMap: { unsignedTx: PsbtTransaction {} } } }
