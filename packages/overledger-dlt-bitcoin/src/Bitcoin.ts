@@ -405,8 +405,6 @@ class Bitcoin extends AbstractDLT {
     };
   }
 
-  // createMultiSigAccount(): 
-
   /**
    * Set an account for signing transactions for a specific DLT
    *
@@ -435,6 +433,24 @@ class Bitcoin extends AbstractDLT {
       password,
     }
     console.log(`this.account ${JSON.stringify(this.account)}`);
+  }
+
+  createNestedSegwitAccount(accountInfo: Account) {
+    console.log(`setAccount ${accountInfo.privateKey}`);
+    if (!accountInfo.privateKey) {
+      throw new Error("accountInfo.privateKey must be set");
+    }
+    const keyPair = bitcoin.ECPair.fromWIF(accountInfo.privateKey, this.addressType);
+    const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType });
+    console.log(`createNestedSegwitAddress p2wpkh ${p2wpkh}`);
+    const p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh, network: this.addressType });
+    console.log(`createNestedSegwitAddress p2sh ${p2sh}`);
+    return {
+      key: { publicKey: keyPair.publicKey, privateKey: keyPair.privateKey, privateKeyWIF: accountInfo.privateKey }, 
+      address: p2sh.address,
+      script: p2sh.output.toString('hex'),
+      redeemScript: p2sh.redeem.output.toString('hex')
+    };
   }
 
 
