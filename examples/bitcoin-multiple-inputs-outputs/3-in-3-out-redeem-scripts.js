@@ -51,7 +51,7 @@ const bitcoinSegwitInputAmount = 91800;
 const bitcoinPartyAAmount = 125000;
 const bitcoinPartyCAmount = 5000;
 const bitcoinChangeAmount = 3600; // set equal to the number of satoshis to send back to yourself 
-                            
+
 
 // MULTISIG P2WPKH PARTICIPANTS ACCOUNTS: created with script examples/create-account/create-account.js
 const party1MultisigBitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
@@ -61,7 +61,7 @@ const party2MultisigBitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
 const party2MultisigBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
 
 const party3MultisigBitcoinAddress = 'n3oitdxMxaVeo1iUQpm4EyzxyWDZagyqEu';
-const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHsuGcb32';    
+const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHsuGcb32';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -78,69 +78,105 @@ const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbv
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey });
-    overledger.dlts.bitcoin.setMultiSigAccount(2, [party1MultisigBitcoinPrivateKey, party2MultisigBitcoinPrivateKey, party3MultisigBitcoinPrivateKey ], TransactionBitcoinScriptTypeOptions.P2WSH);
+    overledger.dlts.bitcoin.setMultiSigAccount(2, [party1MultisigBitcoinPrivateKey, party2MultisigBitcoinPrivateKey, party3MultisigBitcoinPrivateKey], TransactionBitcoinScriptTypeOptions.P2WSH);
     const multisigAccount = overledger.dlts.bitcoin.multisigAccount;
 
 
     const signedTransactions = await overledger.sign([
-    {
-          // The following parameters are from the TransactionRequest object:
-      dlt: DltNameOptions.BITCOIN,
-      type: TransactionTypeOptions.UTXO,
-      subType: {name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER},
-      message: transactionMessage,
-      txInputs: [ // Set as many inputs as required in order to fund your outputs
-        { 
-          linkedTx: bitcoinFirstLinkedTx,
-          linkedIndex: bitcoinHTLCLinkedIndex,
-          fromAddress: partyHTLCAddress,
-          amount: bitcoinHTLCInputAmount,
-          scriptPubKey: '0020fd4791ec0b4586fabe3668e72098455ad2f72d83e236a77510841907e99de98a',
-          linkedRawTransaction: firstRawTransaction,
-          witnessScript: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703387d1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac',
-          preimage: 'quantbitcoinpaymentchannel',
-          transferType: TransactionBitcoinFunctionOptions.REDEEM_HTLC
+      {
+        // The following parameters are from the TransactionRequest object:
+        dlt: DltNameOptions.BITCOIN,
+        type: TransactionTypeOptions.UTXO,
+        subType: { name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER },
+        message: transactionMessage,
+        txInputs: [ // Set as many inputs as required in order to fund your outputs
+          {
+            linkedTx: bitcoinFirstLinkedTx,
+            linkedIndex: bitcoinHTLCLinkedIndex,
+            fromAddress: partyHTLCAddress,
+            amount: bitcoinHTLCInputAmount,
+            scriptPubKey: '0020fd4791ec0b4586fabe3668e72098455ad2f72d83e236a77510841907e99de98a',
+            linkedRawTransaction: firstRawTransaction,
+            smartContract: {
+              id: p2shSmartContractAddress,
+              // type: ??
+              functionCall: [{
+                functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
+                functionName: TransactionBitcoinFunctionOptions.REDEEM_HTLC, // The function name must be given
+                inputParams: [
+                  {
+                    type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                    name: 'witnessScript', // Name of parameter
+                    value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703387d1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
+                  },
+                  {
+                    type: { selectedType: BitcoinTypeOptions.STRING }, // First parameter is a boolean array
+                    name: 'preimage', // Name of parameter
+                    value: 'quantbitcoinpaymentchannel', // Value of the boolean array
+                  }
+                ]
+              }
+              ]
+            }
+          },
+          {
+            linkedTx: bitcoinFirstLinkedTx,
+            linkedIndex: bitcoinMultisigLinkedIndex,
+            fromAddress: multisigAccount.address,
+            amount: bitcoinMultisigInputAmount,
+            scriptPubKey: multisigAccount.script,
+            linkedRawTransaction: firstRawTransaction,
+            smartContract: {
+              id: multisigAccount.address,
+              // type: ??
+              functionCall: [{
+                functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
+                functionName: TransactionBitcoinFunctionOptions.REDEEM_P2MS, // The function name must be given
+                inputParams: [
+                  {
+                    type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                    name: 'witnessScript', // Name of parameter
+                    value: multisigAccount.witnessScript, // Value of the boolean array
+                  },
+                  {
+                    type: { selectedType: BitcoinTypeOptions.ARRAY_HEX_STRING }, // First parameter is a boolean array
+                    name: 'coSigners', // Name of parameter
+                    value: [party2MultisigBitcoinPrivateKey, party3MultisigBitcoinPrivateKey]
+                  }
+                ]
+              }
+              ]
+            }
+          },
+          {
+            linkedTx: bitcoinSecondLinkedTx,
+            linkedIndex: bitcoinSegwitLinkedIndex,
+            fromAddress: partyABitcoinAddress,
+            amount: bitcoinSegwitInputAmount,
+            scriptPubKey: '76a914bee377979bee7ca3b0785ff72c84fad2b938327888ac',
+            linkedRawTransaction: secondRawTransaction,
+          },
+        ],
+        txOutputs: [ // Set as many outputs as required
+          {
+            toAddress: partyABitcoinAddress,
+            amount: bitcoinPartyAAmount
+          },
+          {
+            toAddress: partyCBitcoinAddress,
+            amount: bitcoinPartyCAmount
+          },
+          {
+            toAddress: partyAs2ndBitcoinAddress, // This is the change address of Party A
+            amount: bitcoinChangeAmount
+          }
+        ],
+        extraFields: {
+          // The following parameters are from the TransactionBitcoinRequest object:
+          feePrice: '2200' // Price for the miner to add this transaction to the block
         },
-        { 
-          linkedTx: bitcoinFirstLinkedTx,
-          linkedIndex: bitcoinMultisigLinkedIndex,
-          fromAddress: multisigAccount.address,
-          amount: bitcoinMultisigInputAmount,
-          scriptPubKey: multisigAccount.script,
-          witnessScript: multisigAccount.witnessScript,
-          linkedRawTransaction: firstRawTransaction,
-          coSigners: [party2MultisigBitcoinPrivateKey, party3MultisigBitcoinPrivateKey],
-          transferType: TransactionBitcoinFunctionOptions.REDEEM_P2MS
-        },
-        { 
-          linkedTx: bitcoinSecondLinkedTx,
-          linkedIndex: bitcoinSegwitLinkedIndex,
-          fromAddress: partyABitcoinAddress,
-          amount: bitcoinSegwitInputAmount,
-          scriptPubKey: '76a914bee377979bee7ca3b0785ff72c84fad2b938327888ac',
-          linkedRawTransaction: secondRawTransaction,
-        },
-      ],
-      txOutputs: [ // Set as many outputs as required
-        { 
-          toAddress: partyABitcoinAddress,
-          amount: bitcoinPartyAAmount 
-        },
-        { 
-          toAddress: partyCBitcoinAddress,
-          amount: bitcoinPartyCAmount 
-        },
-        {
-          toAddress: partyAs2ndBitcoinAddress, // This is the change address of Party A
-          amount: bitcoinChangeAmount 
-        }
-      ],
-      extraFields: {
-              // The following parameters are from the TransactionBitcoinRequest object:
-        feePrice: '2200' // Price for the miner to add this transaction to the block
-      },
-    }
-  ]);
+      }
+    ]);
 
     console.log("Signed transactions: ");
     console.log(JSON.stringify(signedTransactions, null, 2));
@@ -153,7 +189,7 @@ const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbv
     console.log(JSON.stringify(result, null, 2));
     console.log("");
     counter = 0;
-    while (counter < result.dltData.length){
+    while (counter < result.dltData.length) {
       console.log('Your ' + result.dltData[counter].dlt + ' value transfer transaction hash is: ' + result.dltData[counter].transactionHash);
       console.log("");
       counter = counter + 1;
