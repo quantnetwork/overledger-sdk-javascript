@@ -1,13 +1,12 @@
-import axios, { AxiosInstance, AxiosPromise } from 'axios';
+import { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
-import log4js from 'log4js';
+import {StatusRequest, SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse  } from '@quantnetwork/overledger-types';
 import {StatusRequest, SignedTransactionRequest, UnsignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse, NodeResourceRequest } from '@quantnetwork/overledger-types';
 /**
  * @memberof module:overledger-core
-*/
-const log = log4js.getLogger('OverledgerSDK');
+ */
 class OverledgerSDK {
   /**
    * The object storing the DLTs loaded by the Overledger SDK
@@ -21,58 +20,30 @@ class OverledgerSDK {
   request: AxiosInstance;
   search: OverledgerSearch;
 
-  constructor();
-    /**
-   * @constructor
-   * @param {string} accessToken The access token from authorisation server
-   * @param {SDKOptions} options The DLT Options and Provider Options
-   */
-  constructor(accessToken: string, options: SDKOptions);
+
   /**
+   * Create the Overledger SDK
+   *
    * @constructor
    * @param {string} mappId The Multi-chain Application ID
    * @param {string} bpiKey The Overledger Blockchain Programming Interface license key
    * @param {SDKOptions} options The DLT Options and Provider Options
    */
-  constructor(mappId: string, bpiKey: string, options: SDKOptions);
+  constructor(mappId: string, bpiKey: string, options: SDKOptions) {
+    this.mappId = mappId;
+    this.bpiKey = bpiKey;
+    this.network = options.provider && options.provider.network || TESTNET;
 
-  /**
-* Create the Overledger SDK
-* */
-  constructor(...args: any[]) {
-    if (args.length === 3) {
-      log.info("Using V1...");
-      this.mappId = args[0];
-      this.bpiKey = args[1];
-      var options = args[2];
-      this.network = options.provider && options.provider.network || TESTNET;
+    this.validateOptions(options);
 
-      this.validateOptions(options);
+    options.dlts.forEach((dltConfig: DLTOptions) => {
+      const dlt = this.loadDlt(dltConfig);
+      this.dlts[dlt.name] = dlt;
+    });
 
-      options.dlts.forEach((dltConfig: DLTOptions) => {
-        const dlt = this.loadDlt(dltConfig);
-        this.dlts[dlt.name] = dlt;
-      });
-
-      this.provider = new Provider(this.mappId, this.bpiKey, options.provider);
-      this.request = this.provider.createRequest();
-      this.search = new OverledgerSearch(this);
-    } else if (args.length === 2) {
-      log.info("Using V2...");
-      var accessToken = args[0];
-      var options = args[1];
-
-      this.validateOptions(options);
-      options.dlts.forEach((dltConfig: DLTOptions) => {
-        const dlt = this.loadDlt(dltConfig);
-        this.dlts[dlt.name] = dlt;
-      });
-
-      this.provider = new Provider(options.provider);
-      this.request = this.provider.createOAuthRequest(accessToken);
-    } else {
-      log.info("Creating default constructor.");
-    }
+    this.provider = new Provider(mappId, bpiKey, options.provider);
+    this.request = this.provider.createRequest();
+    this.search = new OverledgerSearch(this);
   }
 
   /**
@@ -122,29 +93,6 @@ class OverledgerSDK {
   }
 
   /**
-   * refresh access token
-   */
-  public refreshAccessToken(client_id: string, refresh_token: string): AxiosPromise<Object> {
-
-    const params = new URLSearchParams()
-    params.append('grant_type', 'refresh_token')
-    params.append('client_id', client_id)
-    params.append('refresh_token', refresh_token)
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      }
-    }
-
-    //<api gateway path to refresh access token>
-    var url = 'https://qnttest6.auth.us-east-2.amazoncognito.com/oauth2/token';
-
-    return axios.post(url, params, config);
-  }
-
-  /**
    * Sign the provided transactions
    *
    * @param {TransactionRequest[]} - the provided transactions in the standard overledger form
@@ -174,9 +122,9 @@ class OverledgerSDK {
    * @param {SignedTransactionRequest[]} signedTransactions Array of Overledger signed transaction data
    */
   public send(signedTransactions: SignedTransactionRequest[]): AxiosPromise<Object> {
-    
+
     const apiCall = signedTransactions.map(
-      stx => this.dlts[stx.dlt].buildSignedTransactionsApiCall(stx),
+        stx => this.dlts[stx.dlt].buildSignedTransactionsApiCall(stx),
     );
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
@@ -219,7 +167,7 @@ class OverledgerSDK {
   public callNodeResource(nodeResourceRequest: NodeResourceRequest): Object {
     try{
       return this.request.post(nodeResourceRequest.endpoint, nodeResourceRequest.resourceObject);
-      //.catch( err => err.response);  
+      //.catch( err => err.response);
     }catch(e){
       return e.response;
     }
@@ -235,12 +183,12 @@ class OverledgerSDK {
     try{
       let subStatusReqJson = JSON.stringify(subStatusRequest);
       return this.request.post('/webhook/subscribe', subStatusReqJson)
-      //.catch( err => err.response);  
+      //.catch( err => err.response);
     }catch(e){
       return e.response;
     }
   }
-  
+
   /**
    * unsubscribe status of transaction
    *
@@ -341,3 +289,4 @@ class OverledgerSDK {
 }
 
 export default OverledgerSDK;
+
