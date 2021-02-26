@@ -10,11 +10,9 @@ const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFuncti
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.devnet';
-const bpiKey = 'quantbpikey';
+const mappId = '...';
+const bpiKey = '...';
 
-// const mappId = 'network.quant.testnet';
-// const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 

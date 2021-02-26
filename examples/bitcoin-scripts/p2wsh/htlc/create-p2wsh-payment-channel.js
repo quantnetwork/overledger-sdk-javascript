@@ -9,8 +9,8 @@ const createHashTimeLockContractPaymentChannel = require('@quantnetwork/overledg
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+const mappId = '...';
+const bpiKey = '...';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 

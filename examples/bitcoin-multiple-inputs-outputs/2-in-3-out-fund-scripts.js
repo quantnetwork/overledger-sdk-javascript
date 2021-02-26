@@ -7,8 +7,8 @@ const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dl
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+const mappId = '...';
+const bpiKey = '...';
 
 
 // P2WPKH SENDER ACCOUNT: created with script examples/create-account/create-account.js

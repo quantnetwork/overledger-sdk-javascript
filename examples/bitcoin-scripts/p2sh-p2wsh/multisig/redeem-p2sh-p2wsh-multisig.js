@@ -11,8 +11,8 @@ const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFuncti
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = 'network.quant.testnet';
-const bpiKey = 'joNp29bJkQHwEwP3FmNZFgHTqCmciVu5NYD3LkEtk1I';
+const mappId = '...';
+const bpiKey = '...';
 
 const bitcoinLinkedTx = '3703c43909eb0f9e99b55cf584c2521ab283c94a820509355cc79b140b0bcc3a'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
