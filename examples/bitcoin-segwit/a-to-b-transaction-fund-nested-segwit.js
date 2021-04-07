@@ -42,7 +42,7 @@ const partyBBitcoinAddress = 'tb1q4q4v0argtjzmgsu5ccqtkk9ckcgd7sa2k07e9y';
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey, isSegwit: true });
-    const nestedSegwit = overledger.dlts.bitcoin.createNestedSegwitAccount({ privateKey: partyBBitcoinPrivateKey });
+    const nestedSegwitAccount = overledger.dlts.bitcoin.createAccount({ privateKey: partyBBitcoinPrivateKey, isNestedSegwit: true });
 
     const signedTransactions = await overledger.sign([
     {
@@ -63,7 +63,7 @@ const partyBBitcoinAddress = 'tb1q4q4v0argtjzmgsu5ccqtkk9ckcgd7sa2k07e9y';
       ],
       txOutputs: [ // Set as many outputs as required
         {  
-          toAddress: nestedSegwit.address,
+          toAddress: nestedSegwitAccount.address,
           amount: bitcoinPartyBAmount 
         },
         {

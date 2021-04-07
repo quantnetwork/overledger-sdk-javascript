@@ -43,8 +43,8 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey, isSegwit: true });
-    const nestedSegwit = overledger.dlts.bitcoin.createNestedSegwitAccount({ privateKey: partyABitcoinPrivateKey });
-    console.log(`nestedSegwit ${JSON.stringify(nestedSegwit)}`);
+    const nestedSegwitAccount = overledger.dlts.bitcoin.createAccount({ privateKey: partyABitcoinPrivateKey, isNestedSegwit: true });
+    console.log(`nestedSegwitAccount ${JSON.stringify(nestedSegwitAccount)}`);
 
     const signedTransactions = await overledger.sign([
     {
@@ -57,12 +57,12 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
         {
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
-          fromAddress: nestedSegwit.address,
+          fromAddress: nestedSegwitAccount.address,
           linkedRawTransaction: '020000000001019adec52b89f236598d0a2d499cafb3f8feb7527ce1702359c3675f453a0263b60100000000ffffffff03102700000000000017a9141b465d2f0233792df48a8719e2291457623fdd0b87a0d7000000000000160014df723491add31bf6b4e8b8476dfd03542d11ecd100000000000000000e6a0c4f564c2053444b205465737402483045022100fdaa360357860115ac64156f71f686900c715167fab9ac7b8e7d31c03f40f49c02200794a218e2230a66f5dac6d9662f2f7e77a4e644d3cd354ab35ea1a8074448750121036dac9370678def34d4c6cc3190c72740da27b4d15e9b1d3a365d437f7d81bc9500000000',
-          scriptPubKey: nestedSegwit.script,
+          scriptPubKey: nestedSegwitAccount.script,
           amount: bitcoinInputAmount,
           smartContract: {
-            id: nestedSegwit.address,
+            id: nestedSegwitAccount.address,
             // type: ??
             functionCall: [{
               functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
@@ -71,7 +71,7 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
                 {
                   type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
                   name: 'redeemScript', // Name of parameter
-                  value: nestedSegwit.redeemScript, // Value of the boolean array
+                  value: nestedSegwitAccount.redeemScript, // Value of the boolean array
                 }
               ]
             }

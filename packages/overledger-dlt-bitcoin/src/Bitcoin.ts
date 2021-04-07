@@ -381,18 +381,20 @@ class Bitcoin extends AbstractDLT {
    * @return {Account} the new Bitcoin account
    */
   createAccount(isSegwit: boolean = false, isNestedSegwit: boolean = false): Account {
-
     const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
     const privateKey = keyPair.toWIF();
-    const { address, pubkey } = isSegwit
-      ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType })
-      : bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType });
+    const payment = !isSegwit && !isNestedSegwit
+      ? bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType })
+      : isSegwit ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType })
+        : bitcoin.payments.p2sh({ redeem: bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType }), network: this.addressType });
     return {
       privateKey,
-      address,
-      publicKey: pubkey.toString('hex'),
+      address: payment.address,
+      publicKey: keyPair.publicKey.toString('hex'),
       isSegwit,
       isNestedSegwit,
+      script: isNestedSegwit ? payment.output.toString('hex') : undefined,
+      redeemScript: isNestedSegwit ? payment.redeem.output.toString('hex') : undefined,
       password: "",
       provider: "",
     };
@@ -405,47 +407,35 @@ class Bitcoin extends AbstractDLT {
    */
   setAccount(accountInfo: Account): void {
     console.log(`setAccount ${accountInfo.privateKey}`);
-    if (!accountInfo.privateKey) {
+    const privateKey = accountInfo.privateKey;
+    if (!privateKey) {
       throw new Error("accountInfo.privateKey must be set");
     }
-    const keyPair = bitcoin.ECPair.fromWIF(accountInfo.privateKey, this.addressType);
-    let privateKey = accountInfo.privateKey;
-    let isSegwit = accountInfo.isSegwit;
-    let isNestedSegwit = accountInfo.isNestedSegwit;
-    let address = isSegwit
-      ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType }).address
-      : bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address;
-    let publicKey = keyPair.publicKey.toString('hex');
-    let provider = accountInfo.provider ? accountInfo.provider : "";
-    let password = accountInfo.password ? accountInfo.password : "";
+    const keyPair = bitcoin.ECPair.fromWIF(privateKey, this.addressType);
+    const publicKey = keyPair.publicKey.toString('hex');
+    const isSegwit = accountInfo.isSegwit;
+    const isNestedSegwit = accountInfo.isNestedSegwit;
+    const payment = !isSegwit && !isNestedSegwit
+      ? bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType })
+      : isSegwit ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType })
+        : bitcoin.payments.p2sh({ redeem: bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType }), network: this.addressType });
+    const address = payment.address;
+    const script = isNestedSegwit ? payment.output.toString('hex') : undefined;
+    const redeemScript = isNestedSegwit ? payment.redeem.output.toString('hex') : undefined;
+    const provider = accountInfo.provider ? accountInfo.provider : "";
+    const password = accountInfo.password ? accountInfo.password : "";
     this.account = {
       privateKey,
       address,
       publicKey,
       isSegwit,
       isNestedSegwit,
+      script,
+      redeemScript,
       provider,
       password
     }
   }
-
-  createNestedSegwitAccount(accountInfo: Account) {
-    if (!accountInfo.privateKey) {
-      throw new Error("accountInfo.privateKey must be set");
-    }
-    const keyPair = bitcoin.ECPair.fromWIF(accountInfo.privateKey, this.addressType);
-    const p2wpkh = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType });
-    console.log(`createNestedSegwitAddress p2wpkh ${p2wpkh}`);
-    const p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh, network: this.addressType });
-    console.log(`createNestedSegwitAddress p2sh ${p2sh}`);
-    return {
-      key: { publicKey: keyPair.publicKey, privateKey: accountInfo.privateKey },
-      address: p2sh.address,
-      script: p2sh.output.toString('hex'),
-      redeemScript: p2sh.redeem.output.toString('hex')
-    };
-  }
-
 
   setMultiSigAccount(multisigAccountInfo: MultisigNOfMAccount): void {
     if (multisigAccountInfo.accounts.length < multisigAccountInfo.numberCoSigners) {
