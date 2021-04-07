@@ -63,6 +63,11 @@ const party2MultisigBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMR
 const party3MultisigBitcoinAddress = 'n3oitdxMxaVeo1iUQpm4EyzxyWDZagyqEu';
 const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbvvX9WiHsuGcb32';
 
+const accountParty1 = {privateKey: party1MultisigBitcoinPrivateKey, address: party1MultisigBitcoinAddress};
+const accountParty2 = {privateKey: party2MultisigBitcoinPrivateKey, address: party2MultisigBitcoinAddress};
+const accountParty3 = {privateKey: party3MultisigBitcoinPrivateKey, address: party3MultisigBitcoinAddress};
+
+
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
 //  ---------------------------------------------------------
@@ -78,7 +83,7 @@ const party3MultisigBitcoinPrivateKey = 'cSiJocehbCKWFGivZdN56jt2AE467EKQGcAuDbv
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey });
-    overledger.dlts.bitcoin.setMultiSigAccount(2, [party1MultisigBitcoinPrivateKey, party2MultisigBitcoinPrivateKey, party3MultisigBitcoinPrivateKey], TransactionBitcoinScriptTypeOptions.P2WSH);
+    overledger.dlts.bitcoin.setMultiSigAccount({ numberCoSigners: 2, accounts: [accountParty1, accountParty2, accountParty3], isSegwit: true } );
     const multisigAccount = overledger.dlts.bitcoin.multisigAccount;
 
 

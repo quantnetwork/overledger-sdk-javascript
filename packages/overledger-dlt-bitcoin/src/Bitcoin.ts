@@ -2,7 +2,7 @@ import * as bitcoin from 'bitcoinjs-lib';
 import { MAINNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
 import { TransactionInput } from '@quantnetwork/overledger-types';
-import { Account, TransactionRequest, ValidationCheck, MultiSigAccount } from '@quantnetwork/overledger-types';
+import { Account, TransactionRequest, ValidationCheck, MultisigNOfMAccount } from '@quantnetwork/overledger-types';
 import TransactionBitcoinRequest from './DLTSpecificTypes/TransactionBitcoinRequest';
 import TransactionBitcoinSubTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinSubTypeOptions';
 import { AxiosInstance, AxiosPromise } from 'axios';
@@ -18,7 +18,7 @@ class Bitcoin extends AbstractDLT {
   addressType: bitcoin.Network;
   request: AxiosInstance;
   account: Account;
-  multisigAccount: MultiSigAccount;
+  multisigAccount: MultisigNOfMAccount;
 
   /**
    * Name of the DLT
@@ -298,7 +298,7 @@ class Bitcoin extends AbstractDLT {
           if (inputsOutputs.inputs[counter].coSigners.length !== this.multisigAccount.numberCoSigners) {
             throw new Error(`coSigners must be ${this.multisigAccount.numberCoSigners}`);
           }
-          const privateKeys = this.multisigAccount.keys.map(k => k.privateKeyWIF.toString());
+          const privateKeys = this.multisigAccount.accounts.map(k => k.privateKey.toString());
           inputsOutputs.inputs[counter].coSigners.map(signer => {
             if (!privateKeys.includes(signer)) {
               throw new Error('The current multisig co-signer does not belong to the current multisig account');
@@ -307,9 +307,9 @@ class Bitcoin extends AbstractDLT {
             psbtObj.signInput(counter, kPair);
           });
           inputsOutputs.inputs[counter].coSigners.map(signer => {
-            const key = this.multisigAccount.keys.filter(k => k.privateKeyWIF.toString() === signer.toString());
+            const key = this.multisigAccount.accounts.filter(k => k.privateKey.toString() === signer.toString());
             if (key.length === 1) {
-              psbtObj.validateSignaturesOfInput(counter, key[0].publicKey);
+              psbtObj.validateSignaturesOfInput(counter, Buffer.from(key[0].publicKey, 'hex'));
             } else {
               throw new Error('Signer is duplicated');
             }
@@ -380,7 +380,7 @@ class Bitcoin extends AbstractDLT {
    *
    * @return {Account} the new Bitcoin account
    */
-  createAccount(isSegwit: boolean = false): Account {
+  createAccount(isSegwit: boolean = false, isNestedSegwit: boolean = false): Account {
 
     const keyPair = bitcoin.ECPair.makeRandom({ network: this.addressType });
     const privateKey = keyPair.toWIF();
@@ -390,8 +390,9 @@ class Bitcoin extends AbstractDLT {
     return {
       privateKey,
       address,
-      isSegwit,
       publicKey: pubkey.toString('hex'),
+      isSegwit,
+      isNestedSegwit,
       password: "",
       provider: "",
     };
@@ -410,6 +411,7 @@ class Bitcoin extends AbstractDLT {
     const keyPair = bitcoin.ECPair.fromWIF(accountInfo.privateKey, this.addressType);
     let privateKey = accountInfo.privateKey;
     let isSegwit = accountInfo.isSegwit;
+    let isNestedSegwit = accountInfo.isNestedSegwit;
     let address = isSegwit
       ? bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network: this.addressType }).address
       : bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: this.addressType }).address;
@@ -419,8 +421,9 @@ class Bitcoin extends AbstractDLT {
     this.account = {
       privateKey,
       address,
-      isSegwit,
       publicKey,
+      isSegwit,
+      isNestedSegwit,
       provider,
       password
     }
@@ -436,7 +439,7 @@ class Bitcoin extends AbstractDLT {
     const p2sh = bitcoin.payments.p2sh({ redeem: p2wpkh, network: this.addressType });
     console.log(`createNestedSegwitAddress p2sh ${p2sh}`);
     return {
-      key: { publicKey: keyPair.publicKey, privateKey: keyPair.privateKey, privateKeyWIF: accountInfo.privateKey }, 
+      key: { publicKey: keyPair.publicKey, privateKey: accountInfo.privateKey },
       address: p2sh.address,
       script: p2sh.output.toString('hex'),
       redeemScript: p2sh.redeem.output.toString('hex')
@@ -444,37 +447,41 @@ class Bitcoin extends AbstractDLT {
   }
 
 
-  setMultiSigAccount(numberCoSigners: number, privateKeys: [string], scriptType: string): void {
-    if (privateKeys.length < numberCoSigners) {
+  setMultiSigAccount(multisigAccountInfo: MultisigNOfMAccount): void {
+    if (multisigAccountInfo.accounts.length < multisigAccountInfo.numberCoSigners) {
       throw new Error('Number of cosigners must be less or equal to the length of private keys');
     }
-    const keys = <[{ publicKey: Buffer, privateKey: Buffer, privateKeyWIF: string }]>privateKeys.map(pk => {
-      const keyPair = bitcoin.ECPair.fromWIF(pk, this.addressType);
-      return { publicKey: keyPair.publicKey, privateKey: keyPair.privateKey, privateKeyWIF: pk }
+    const accounts = multisigAccountInfo.accounts.map(account => {
+      const keyPair = bitcoin.ECPair.fromWIF(account.privateKey, this.addressType);
+      return { ...account, publicKey: keyPair.publicKey.toString('hex') }
     });
     const p2ms = bitcoin.payments.p2ms({
-      m: numberCoSigners,
-      pubkeys: keys.map(k => k.publicKey),
+      m: multisigAccountInfo.numberCoSigners,
+      pubkeys: accounts.map(k => Buffer.from(k.publicKey, 'hex')),
       network: this.addressType
     });
-    console.log(`p2ms ${JSON.stringify(p2ms)}`);
+    const scriptType = !multisigAccountInfo.isSegwit && !multisigAccountInfo.isNestedSegwit
+      ? TransactionBitcoinScriptTypeOptions.P2SH
+      : multisigAccountInfo.isSegwit ? TransactionBitcoinScriptTypeOptions.P2WSH
+        : TransactionBitcoinScriptTypeOptions.P2SH_P2WSH;
+
     if (scriptType !== undefined) {
       if (scriptType === TransactionBitcoinScriptTypeOptions.P2SH) {
         const p2sh = bitcoin.payments.p2sh({ redeem: p2ms, network: this.addressType });
         console.log(`p2sh ${JSON.stringify(p2sh)}`);
         this.multisigAccount = {
-          keys,
-          address: p2sh.address,
-          numberCoSigners,
+          accounts,
+          multisigAddress: p2sh.address,
+          numberCoSigners: multisigAccountInfo.numberCoSigners,
           script: p2sh.output.toString('hex'),
           redeemScript: p2sh.redeem.output.toString('hex')
         }
       } else if (scriptType === TransactionBitcoinScriptTypeOptions.P2WSH) {
         const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
         this.multisigAccount = {
-          keys,
-          address: p2wsh.address,
-          numberCoSigners,
+          accounts,
+          multisigAddress: p2wsh.address,
+          numberCoSigners: multisigAccountInfo.numberCoSigners,
           script: p2wsh.output.toString('hex'),
           witnessScript: p2wsh.redeem.output.toString('hex')
         }
@@ -482,9 +489,9 @@ class Bitcoin extends AbstractDLT {
         const p2wsh = bitcoin.payments.p2wsh({ redeem: p2ms, network: this.addressType });
         const p2sh = bitcoin.payments.p2sh({ redeem: p2wsh, network: this.addressType });
         this.multisigAccount = {
-          keys,
-          address: p2sh.address,
-          numberCoSigners,
+          accounts,
+          multisigAddress: p2sh.address,
+          numberCoSigners: multisigAccountInfo.numberCoSigners,
           script: p2sh.output.toString('hex'),
           redeemScript: p2sh.redeem.output.toString('hex'),
           witnessScript: p2wsh.redeem.output.toString('hex')
@@ -570,12 +577,12 @@ interface UtxoInput {
   witnessScript?: Buffer;
 };
 
-interface UtxoInputWithCaracteristics {
-  input: UtxoInput,
-  tranferType?: TransactionBitcoinFunctionOptions,
-  coSigners?: string,
-  preimage?: string,
-  nLocktime?: number
+interface UtxoInputWithCharacteristics {
+  input: UtxoInput;
+  tranferType?: TransactionBitcoinFunctionOptions;
+  coSigners?: string;
+  preimage?: string;
+  nLocktime?: number;
 }
 
 
@@ -590,7 +597,7 @@ interface UtxoScriptOutput {
 }
 
 interface UtxosPrepare {
-  inputs: UtxoInputWithCaracteristics[],
+  inputs: UtxoInputWithCharacteristics[],
   outputs: (UtxoAddressOutput | UtxoScriptOutput)[],
   data: Buffer
 }

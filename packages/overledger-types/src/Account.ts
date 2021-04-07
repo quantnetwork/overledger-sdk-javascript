@@ -13,27 +13,13 @@
  * @memberof module:overledger-types
  */
 type Account = {
-  keys: AccountBase,
+  privateKey: string,
   address: string,
+  publicKey?: string,
   isSegwit?: boolean,
-  password?: string,
+  isNestedSegwit?: boolean,
   provider?: string,
+  password?: string
 };
 
 export default Account;
-
-
-type MultiSigAccount = {
-  keys: [AccountBase],
-  address: string,
-  numberCoSigners: number,
-  script?: string,
-  redeemScript?: string,
-  witnessScript?: string
-};
-
-type AccountBase = {
-  privateKeyWIF: string,
-  privateKey?: Buffer | string
-  publicKey?: Buffer | string
-}
