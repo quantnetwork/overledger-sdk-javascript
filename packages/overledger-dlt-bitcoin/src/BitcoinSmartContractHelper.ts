@@ -1,7 +1,7 @@
 const bitcoin = require('bitcoinjs-lib');
 import TransactionBitcoinScriptTypeOptions from './DLTSpecificTypes/associatedEnums/TransactionBitcoinScriptTypeOptions';
 
-export function generateHashTimeLockContractCode(claimPublicKey: Buffer | HexString, refundPublicKey: Buffer | HexString, paymentHashSecret: Buffer | HexString, timelock: number) {
+export function generateHashTimeLockContractCodeHASH160(claimPublicKey: Buffer | HexString, refundPublicKey: Buffer | HexString, paymentHashSecret: Buffer | HexString, timelock: number) {
   let claimKey = (claimPublicKey instanceof Buffer) ? claimPublicKey.toString('hex') : claimPublicKey;
   let refundKey = (refundPublicKey instanceof Buffer) ? refundPublicKey.toString('hex') : refundPublicKey;
   let hashSecret = (paymentHashSecret instanceof Buffer) ? paymentHashSecret : Buffer.from(paymentHashSecret, 'hex');
@@ -27,7 +27,7 @@ export function generateHashTimeLockContractCode(claimPublicKey: Buffer | HexStr
   );
 }
 
-export function generateHashTimeLockContractCode2(claimPublicKey: Buffer | HexString, refundPublicKey: Buffer | HexString, paymentHashSecret: Buffer | HexString, timelock: number) {
+export function generateHashTimeLockContractCodeSHA256(claimPublicKey: Buffer | HexString, refundPublicKey: Buffer | HexString, paymentHashSecret: Buffer | HexString, timelock: number) {
   let claimKey = (claimPublicKey instanceof Buffer) ? claimPublicKey.toString('hex') : claimPublicKey;
   let refundKey = (refundPublicKey instanceof Buffer) ? refundPublicKey.toString('hex') : refundPublicKey;
   let hashSecret = (paymentHashSecret instanceof Buffer) ? paymentHashSecret : Buffer.from(paymentHashSecret, 'hex');
@@ -35,19 +35,18 @@ export function generateHashTimeLockContractCode2(claimPublicKey: Buffer | HexSt
   console.log(`tLock ${tLock.toString('hex')}`);
   return bitcoin.script.fromASM(
     `
-     OP_HASH160
-      ${bitcoin.crypto.ripemd160(hashSecret).toString('hex')}
+     OP_SHA256
+      ${hashSecret.toString('hex')}
       OP_EQUAL
       OP_IF
         ${claimKey}
-        OP_CHECKSIG
-      OP_ELSE 
+      OP_ELSE
         ${tLock.toString('hex')}
         OP_CHECKLOCKTIMEVERIFY
         OP_DROP
         ${refundKey}
-        OP_CHECKSIG
       OP_ENDIF
+      OP_CHECKSIG
     `
       .trim()
       .replace(/\s+/g, ' '),
