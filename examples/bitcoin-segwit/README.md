@@ -17,14 +17,6 @@ Next you will need to add some information into the script for it to run correct
 
 ## Running the examples
 
-### Native SegWit transaction
-
-
-### Nested SegWit transaction 
-
-A nested SegWit account `p2sh-p2wpkh` is created for wallet not supporting SegWit transaction. A nested witness `p2wpkh` is then wrapped with a legacy `p2sh` script type address.
-
-
 The scripts that might be needed in the UTXOs inputs of the transaction you are building, are the following:
 
 * The `ScriptPubKey`, the locking script of the utxo (PubKey Script). It is the script placed on the output of the utxo to ensure that only the correct receiver can unlock and spend the utxo.
@@ -33,6 +25,19 @@ The scripts that might be needed in the UTXOs inputs of the transaction you are 
 
 Noting also that the field `linkedRawTransaction` is needed, the raw of the transaction the UTXO input is part of.
 
+### Native SegWit transaction
+
+A normal Segwit transaction is performed from a SegWit `p2wpkh` address to a `p2wpkh` address. It shows the way to create a SegWit `p2pkh` account by setting the field `isSegwit` to `true`.
+
+To run the example, you should provide the fields needed for the UTXOs inputs and then do:
+
+```
+node a-to-b-transaction-native-segwit.js
+```
+
+### Nested SegWit transaction 
+
+A nested SegWit account `p2sh-p2wpkh` is created for wallet not supporting SegWit transaction. A nested witness `p2wpkh` is then wrapped with a legacy `p2sh` script type address.
 
 
 #### Create and fund the account
@@ -42,7 +47,6 @@ After having performed the necessary changes to the script with the fields neede
 ```
 node a-to-b-transaction-fund-nested-segwit.js
 ```
-
 
 #### Redeem the fund
 

@@ -23,6 +23,11 @@ The examples are supporting three types of scripts addresses:
 * `p2wsh`: pay-to-witness-script-hash which is the SegWit (Segregated Witness) type of script for smart contract addresses
 * `p2sh-p2wsh`: nested witness script hash used to wrap a witness script hash `p2wsh` address within a legacy `p2sh` script type address, used in the wallets which are not supporting SegWit (Segregated Witness) transactions.
 
+Inside each sub-section of script type, two sort of smart contracts are used:
+
+* Hash Time Lock Contract `HTLC`
+* Multisignature n-of-m
+
 
 The scripts that are needed in the UTXOs inputs of the transaction you are building, are the following:
 
