@@ -19,7 +19,7 @@ Next you will need to add some information into the script for it to run correct
 
 The examples are supporting three types of scripts addresses:
 
-* `p2sh`: pay-to-script-hash which is the legacy type of script for smart contract addresses
+* `p2sh`: pay-to-script-hash which is the legacy type of script for smart contract addresses.
 * `p2wsh`: pay-to-witness-script-hash which is the SegWit (Segregated Witness) type of script for smart contract addresses
 * `p2sh-p2wsh`: nested witness script hash used to wrap a witness script hash `p2wsh` address within a legacy `p2sh` script type address, used in the wallets which are not supporting SegWit (Segregated Witness) transactions.
 
@@ -30,11 +30,17 @@ The scripts that are needed in the UTXOs inputs of the transaction you are build
 
 * The `redeemScript`, it is the script which must be provided to unlock bitcoin sent to a `p2sh` or `p2sh-p2wsh`, bitcoin is locked to the hash of the of a redeemScript, ensuring that only someone who  an provide the redeemScript and add any required signatures and secret can spend the bitcoin at that address.
 
-* The `witnessScript`, it is the script which must be provided to unlock bitcoin sent to a `p2wsh` or `p2sh-p2wsh`, bitcoin is locked to the hash of the of a redeemScript, ensuring that only someone who  an provide the redeemScript and add any required signatures and secret can spend the bitcoin at that address. The witness script is equivalent to the redeem script but in case of a SegWit address.
-
-* The `preimage`, it is the secret that must be provided to unlock bitcoin at a `Hash Time Lock Contract (HTLC)` address.
+* The `witnessScript`, it is the script which must be provided to unlock bitcoin sent to a `p2wsh` or `p2sh-p2wsh`, bitcoin is locked to the hash of the of a witnessScript, ensuring that only someone who can provide the witnessScript and add any required signatures and secret can spend the bitcoin at that address. The witness script is equivalent to the redeem script but in case of a SegWit address.
 
 Noting also that the field `linkedRawTransaction` is needed, the raw of the transaction the UTXO input is part of.
+
+Other fields can be involved in the creation or refund of a `Hash Time Lock Contract (HTLC)` address: 
+
+* The `preimage` or the `secret` that must be provided to create a `HTLC` address or to unlock bitcoin at a `HTLC` address.
+
+* The `timeLock` to be set in case of a `HTLC` address creation.
+
+* The `nLocktime` and the `sequence` must be provided to cancel and refund the bitcoin at a `HTLC` address. The `nLocktime` is a time condition placed on the transaction level that you are building.
 
 
 ### Hash Time Lock Contract (HTLC) scripts
