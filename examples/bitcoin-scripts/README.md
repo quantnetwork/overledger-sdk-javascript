@@ -40,7 +40,7 @@ Additional fields are involved in the creation or refund of a `Hash Time Lock Co
 
 * The `timeLock` to be set in case of a `HTLC` address creation. It is a time condition placed at a UTXO level to refund bitcoin at a `HTLC` address.
 
-* The `nLocktime` and the `sequence` must be provided to cancel and refund the bitcoin at a `HTLC` address. The `nLocktime` is a time condition placed on the transaction level that you are building.
+* The `nLocktime` and the `sequence` must be provided to cancel and refund the bitcoin at a `HTLC` address. The `nLocktime` is a time condition placed on the transaction level that you are building. The `nLocktime` should be greater or equal to the `timeLock` and the `sequence` smaller than the max `0xffffffff` because the transaction is not executed until the time lock is reached, if it is sent before it is reached. The transaction stays in a `non-final` state until times condition are verified.
 
 
 ### Hash Time Lock Contract (HTLC) scripts
@@ -54,7 +54,7 @@ For example, in the case of a `p2sh` smart contract address, you should run:
 node create-p2sh-payment-channel.js
 ```
 
-It gives the `p2sh` smart contract address (`p2wsh` address in case of a SegWit address), the scriptPubKey (output script), and the redeem script (witness script in case of a p2wsh adress and both in case of a p2sh-p2wsh) that should be provided to redeem or refund the bitcoin at the smart contract address.
+It gives the `p2sh` smart contract address (`p2wsh` address in case of a SegWit address), the scriptPubKey (output script), and the redeem script (witness script in case of a p2wsh adress and both in case of a p2sh-p2wsh address) that must be provided to redeem or refund the bitcoin locked at the smart contract address.
 
 #### Fund the smart contract address
 
