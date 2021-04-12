@@ -28,17 +28,17 @@ The scripts that are needed in the UTXOs inputs of the transaction you are build
 
 * The `ScriptPubKey`, the locking script of the utxo (PubKey Script). It is the script placed on the output of the utxo to ensure that only the correct receiver can unlock and spend the utxo.
 
-* The `redeemScript`, it is the script which must be provided to unlock bitcoin sent to a `p2sh` or `p2sh-p2wsh`, bitcoin is locked to the hash of the of a redeemScript, ensuring that only someone who  an provide the redeemScript and add any required signatures and secret can spend the bitcoin at that address.
+* The `redeemScript`, it is the script which must be provided to unlock bitcoin sent to a `p2sh` or `p2sh-p2wsh`, bitcoin is locked to the hash of the of a redeemScript, ensuring that only someone who  an provide the redeemScript and add any required signatures and secret in case of a `Hash Time Lock Contract (HTLC)` can spend the bitcoin at that address.
 
-* The `witnessScript`, it is the script which must be provided to unlock bitcoin sent to a `p2wsh` or `p2sh-p2wsh`, bitcoin is locked to the hash of the of a witnessScript, ensuring that only someone who can provide the witnessScript and add any required signatures and secret can spend the bitcoin at that address. The witness script is equivalent to the redeem script but in case of a SegWit address.
+* The `witnessScript`, it is the script which must be provided to unlock bitcoin sent to a `p2wsh` or `p2sh-p2wsh`, bitcoin is locked to the hash of the of a witnessScript, ensuring that only someone who can provide the witnessScript and add any required signatures and secret in case of a `Hash Time Lock Contract (HTLC)` can spend the bitcoin at that address. The witness script is equivalent to the redeem script but in case of a SegWit address.
 
 Noting also that the field `linkedRawTransaction` is needed, the raw of the transaction the UTXO input is part of.
 
-Other fields can be involved in the creation or refund of a `Hash Time Lock Contract (HTLC)` address: 
+Additional fields are involved in the creation or refund of a `Hash Time Lock Contract (HTLC)` address: 
 
 * The `preimage` or the `secret` that must be provided to create a `HTLC` address or to unlock bitcoin at a `HTLC` address.
 
-* The `timeLock` to be set in case of a `HTLC` address creation.
+* The `timeLock` to be set in case of a `HTLC` address creation. It is a time condition placed at a UTXO level to refund bitcoin at a `HTLC` address.
 
 * The `nLocktime` and the `sequence` must be provided to cancel and refund the bitcoin at a `HTLC` address. The `nLocktime` is a time condition placed on the transaction level that you are building.
 
@@ -54,11 +54,13 @@ For example, in the case of a `p2sh` smart contract address, you should run:
 node create-p2sh-payment-channel.js
 ```
 
+It gives the `p2sh` smart contract address (`p2wsh` address in case of a SegWit address), the scriptPubKey (output script), and the redeem script (witness script in case of a p2wsh adress and both in case of a p2sh-p2wsh) that should be provided to redeem or refund the bitcoin at the smart contract address.
+
 #### Fund the smart contract address
 
 After having performed the necessary changes to the script with the fields obtained at the previous creation step, you should run:
 
-For example, in the case of a `p2sh` smart contract address, you should run:
+For example, to fund the `p2sh` smart contract address you obtained at the previous step, you should run:
 
 ```
 node fund-p2sh-payment-channel.js
@@ -81,6 +83,8 @@ node cancel-p2sh-payment-channel.js
 ```
 
 ### Multisignature scripts
+
+The n-of-m multisig addresses and related scripts (redeem script and witness script) are created by setting up a multisig account, passing to the function `setMultisigAccount` the number of co-signers (number of signatures) needed to spend the bitcoin, the list of the accounts and the type of the address, `isSegwit` (`p2wsh`) or `isNestedSegwit` (`p2sh-p2wsh`). By default it will create a `p2sh` non Segwit address.
 
 #### Create and fund a multisig n-of-m address
 
