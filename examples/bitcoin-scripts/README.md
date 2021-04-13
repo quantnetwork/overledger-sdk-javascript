@@ -29,7 +29,7 @@ Inside each sub-section of script type, two sort of smart contracts are used:
 * Multisignature n-of-m
 
 
-The scripts that are needed in the UTXOs inputs of the transaction you are building, are the following:
+The scripts that might be needed in the UTXOs inputs of the transaction you are building, are the following:
 
 * The `ScriptPubKey`, the locking script of the utxo (PubKey Script). It is the script placed on the output of the utxo to ensure that only the correct receiver can unlock and spend the utxo.
 
@@ -45,7 +45,7 @@ Additional fields are involved in the creation or refund of a `Hash Time Lock Co
 
 * The `timeLock` to be set in case of a `HTLC` address creation. It is a time condition placed at a UTXO level to refund bitcoin at a `HTLC` address.
 
-* The `nLocktime` and the `sequence` must be provided to cancel and refund the bitcoin at a `HTLC` address. The `nLocktime` is a time condition placed on the transaction level that you are building. The `nLocktime` should be greater or equal to the `timeLock` and the `sequence` smaller than the max `0xffffffff` because the transaction is not executed until the time lock is reached, if it is sent before it is reached. The transaction stays in a `non-final` state until times condition are verified.
+* The `nLocktime` and the `sequence` must be provided to cancel and refund the bitcoin at a `HTLC` address. The `nLocktime` is a time condition placed on the transaction level that you are building. The `nLocktime` should be greater or equal to the `timeLock` and the `sequence` smaller than the max `0xffffffff` because the transaction is not executed until the time lock is reached, if it is sent before it is reached. The transaction stays in a non-final state pool until times condition are verified.
 
 
 ### Hash Time Lock Contract (HTLC) scripts

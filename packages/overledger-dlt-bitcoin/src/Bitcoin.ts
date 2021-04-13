@@ -81,28 +81,24 @@ class Bitcoin extends AbstractDLT {
     const inputs = new Array();
     const outputs = new Array();
     super.transactionValidation(thisTransaction);
-    let counter = 0;
     let preimage;
     let transferType;
     let coSigners;
-    while (counter < thisTransaction.txInputs.length) {
-      console.log(`counter input ${counter}`);
-      const rawTransactionInput = thisTransaction.txInputs[counter].linkedRawTransaction.toString();
+    thisTransaction.txInputs.forEach(txInput => {
+      const rawTransactionInput = txInput.linkedRawTransaction.toString();
       const isSegwit = rawTransactionInput.substring(8, 12) === '0001';
-      const scData = this.getSmartContractParameters(thisTransaction.txInputs[counter]);
-      console.log(`scData ${JSON.stringify(scData)}`);
-      console.log(`isSegwit ${isSegwit}`);
+      const scData = this.getSmartContractParameters(txInput);
       let input: UtxoInput = {
-        hash: thisTransaction.txInputs[counter].linkedTx.toString(),
-        index: parseInt(thisTransaction.txInputs[counter].linkedIndex, 10),
-        sequence: thisTransaction.txInputs[counter].linkedTxSequence ? thisTransaction.txInputs[counter].linkedTxSequence : 0xffffffff,
+        hash: txInput.linkedTx.toString(),
+        index: parseInt(txInput.linkedIndex, 10),
+        sequence: txInput.linkedTxSequence ? txInput.linkedTxSequence : 0xffffffff,
         nonWitnessUtxo: Buffer.from(rawTransactionInput.toString(), 'hex')
       };
       if (isSegwit) {
-        if (thisTransaction.txInputs[counter].scriptPubKey !== undefined) {
+        if (txInput.scriptPubKey !== undefined) {
           input.witnessUtxo = {
-            script: Buffer.from(thisTransaction.txInputs[counter].scriptPubKey.toString(), 'hex'),
-            value: thisTransaction.txInputs[counter].amount
+            script: Buffer.from(txInput.scriptPubKey.toString(), 'hex'),
+            value: txInput.amount
           };
         } else {
           throw new Error(`scriptPubKey field must be provided in a Segwit utxo transaction input`);
@@ -119,27 +115,21 @@ class Bitcoin extends AbstractDLT {
         coSigners = scData.coSigners ? scData.coSigners : undefined;
         preimage = (transferType && transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC) ? '' : scData.preimage;
       }
-      console.log(`input ${JSON.stringify(input)}`);
       inputs.push({
         input,
         transferType,
         coSigners,
         preimage,
-        nLocktime: thisTransaction.txInputs[counter].linkedTxLockTime
+        nLocktime: txInput.linkedTxLockTime
       });
-      counter = counter + 1;
-    }
-    console.log(`inputs added`);
-    counter = 0;
-    while (counter < thisTransaction.txOutputs.length) {
+    });
+    thisTransaction.txOutputs.forEach(txOutput => {
       let output = {
-        value: thisTransaction.txOutputs[counter].amount,
-        address: thisTransaction.txOutputs[counter].toAddress.toString()
+        value: txOutput.amount,
+        address: txOutput.toAddress.toString()
       } as UtxoAddressOutput;
       outputs.push(output);
-      console.log(`output ${output}`);
-      counter = counter + 1;
-    }
+    });
     const data = Buffer.from(thisTransaction.message, 'utf8'); // Message is inserted
 
     return { inputs, outputs, data };
@@ -172,22 +162,20 @@ class Bitcoin extends AbstractDLT {
     const nLockTime = Math.max(0, maxLockTime);
     console.log(`nLockTime ${nLockTime}`);
     psbtObj.setLocktime(nLockTime);
-    let counter = 0;
-    while (counter < inputsOutputs.inputs.length) {
-      const input = inputsOutputs.inputs[counter].input;
+
+    inputsOutputs.inputs.forEach(inp => {
+      const input = inp.input;
       psbtObj.addInput(input);
-      counter = counter + 1;
-    }
-    counter = 0;
-    while (counter < inputsOutputs.outputs.length) {
-      const output = inputsOutputs.outputs[counter];
+    });
+
+    inputsOutputs.outputs.forEach(outp => {
+      const output = outp;
       if (isAddressOutput(output)) {
         psbtObj.addOutput(<{ value: number, address: string }>output);
       } else {
         psbtObj.addOutput(<{ value: number, script: Buffer }>output);
       }
-      counter = counter + 1;
-    }
+    });
 
     const data = inputsOutputs.data; // Message is inserted
     const dataLength = data.length;
@@ -287,51 +275,48 @@ class Bitcoin extends AbstractDLT {
     if (this.account) {
       myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
     }
-
-    let counter = 0;
-    while (counter < inputsOutputs.inputs.length) {
-      if (inputsOutputs.inputs[counter].transferType
-        && inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionOptions.REDEEM_P2MS) {
+    inputsOutputs.inputs.forEach((input, pos) => {
+      if (input.transferType
+        && input.transferType === TransactionBitcoinFunctionOptions.REDEEM_P2MS) {
         if (!this.multisigAccount) {
           throw new Error('A multisig Account must be set up');
         } else {
-          if (inputsOutputs.inputs[counter].coSigners.length !== this.multisigAccount.numberCoSigners) {
+          if (input.coSigners.length !== this.multisigAccount.numberCoSigners) {
             throw new Error(`coSigners must be ${this.multisigAccount.numberCoSigners}`);
           }
           const privateKeys = this.multisigAccount.accounts.map(k => k.privateKey.toString());
-          inputsOutputs.inputs[counter].coSigners.map(signer => {
+          input.coSigners.map(signer => {
             if (!privateKeys.includes(signer)) {
               throw new Error('The current multisig co-signer does not belong to the current multisig account');
             }
             const kPair = bitcoin.ECPair.fromWIF(signer, this.addressType);
-            psbtObj.signInput(counter, kPair);
+            psbtObj.signInput(pos, kPair);
           });
-          inputsOutputs.inputs[counter].coSigners.map(signer => {
+          input.coSigners.map(signer => {
             const key = this.multisigAccount.accounts.filter(k => k.privateKey.toString() === signer.toString());
             if (key.length === 1) {
-              psbtObj.validateSignaturesOfInput(counter, Buffer.from(key[0].publicKey, 'hex'));
+              psbtObj.validateSignaturesOfInput(pos, Buffer.from(key[0].publicKey, 'hex'));
             } else {
               throw new Error('Signer is duplicated');
             }
           });
-          psbtObj.finalizeInput(counter);
+          psbtObj.finalizeInput(pos);
         }
       } else {
-        psbtObj.signInput(counter, myKeyPair);
-        psbtObj.validateSignaturesOfInput(counter);
-        if (inputsOutputs.inputs[counter].transferType
-          && (inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionOptions.REDEEM_HTLC
-            || inputsOutputs.inputs[counter].transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC)) {
-          const preImage = inputsOutputs.inputs[counter].preimage;
-          psbtObj.finalizeInput(counter, (_inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
+        psbtObj.signInput(pos, myKeyPair);
+        psbtObj.validateSignaturesOfInput(pos);
+        if (input.transferType
+          && (input.transferType === TransactionBitcoinFunctionOptions.REDEEM_HTLC
+            || input.transferType === TransactionBitcoinFunctionOptions.CANCEL_HTLC)) {
+          const preImage = input.preimage;
+          psbtObj.finalizeInput(pos, (_inputIndex, input, script, isSegwit, isP2SH, isP2WSH) => {
             return this.getFinalScripts(preImage, _inputIndex, input, script, isSegwit, isP2SH, isP2WSH)
           });
         } else {
-          psbtObj.finalizeInput(counter);
+          psbtObj.finalizeInput(pos);
         }
       }
-      counter = counter + 1;
-    }
+    });
     return Promise.resolve(psbtObj.extractTransaction(true).toHex());
   }
 

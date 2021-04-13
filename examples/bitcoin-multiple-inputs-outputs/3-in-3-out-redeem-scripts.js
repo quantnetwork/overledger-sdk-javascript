@@ -104,20 +104,19 @@ const accountParty3 = {privateKey: party3MultisigBitcoinPrivateKey, address: par
             linkedRawTransaction: firstRawTransaction,
             smartContract: {
               id: p2shSmartContractAddress,
-              // type: ??
               functionCall: [{
                 functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
                 functionName: TransactionBitcoinFunctionOptions.REDEEM_HTLC, // The function name must be given
                 inputParams: [
                   {
-                    type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                    type: { selectedType: BitcoinTypeOptions.HEX_STRING },
                     name: 'witnessScript', // Name of parameter
                     value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703387d1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
                   },
                   {
-                    type: { selectedType: BitcoinTypeOptions.STRING }, // First parameter is a boolean array
+                    type: { selectedType: BitcoinTypeOptions.STRING },
                     name: 'preimage', // Name of parameter
-                    value: 'quantbitcoinpaymentchannel', // Value of the boolean array
+                    value: 'quantbitcoinpaymentchannel',
                   }
                 ]
               }
