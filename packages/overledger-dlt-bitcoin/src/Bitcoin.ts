@@ -326,6 +326,10 @@ class Bitcoin extends AbstractDLT {
     return Promise.resolve(psbtObj.extractTransaction(true).toHex());
   }
 
+  /**
+   * Function overloading for the getFinalScripts in the psbt library. This function will be called in case of a non supported type of redeem script, like HTLC.
+   * Finalize the psbt object with the data that should be provided to unlock the bitcoin
+   */
   getFinalScripts(preImage, _inputIndex, input, script, isSegwit, isP2SH, isP2WSH) {
     let finaliseRedeem;
     if (isSegwit && isP2SH) {
@@ -428,6 +432,12 @@ class Bitcoin extends AbstractDLT {
     }
   }
 
+
+  /**
+   * Set a multisig n-of-m account for signing transactions for a specific DLT
+   *
+   * @param {MultisigNOfMAccount} multisigAccountInfo
+   */
   setMultiSigAccount(multisigAccountInfo: MultisigNOfMAccount): void {
     if (multisigAccountInfo.accounts.length < multisigAccountInfo.numberCoSigners) {
       throw new Error('Number of cosigners must be less or equal to the length of private keys');
@@ -518,7 +528,9 @@ class Bitcoin extends AbstractDLT {
   }
 }
 
-// From psbt library : not exported in psbt nor in bitcoinjs-lib yet
+/**
+ * From psbt library : not exported in psbt nor in bitcoinjs-lib yet but needed in the finalize step of psbt signing (getFinalScripts function)
+ */
 function witnessStackToScriptWitness(witness) {
   let buffer = Buffer.allocUnsafe(0);
   function writeSlice(slice) {
@@ -542,7 +554,9 @@ function witnessStackToScriptWitness(witness) {
   return buffer;
 }
 
-
+/**
+ * Test if the data passed in the utxo output is an address or a script pub key
+ */
 function isAddressOutput(output: UtxoAddressOutput | UtxoScriptOutput): output is UtxoAddressOutput {
   return (output as UtxoAddressOutput).address !== undefined;
 }
