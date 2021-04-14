@@ -75,9 +75,9 @@ class Bitcoin extends AbstractDLT {
   /**
   * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
   * @param {TransactionBitcoinRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
-  * @return {Transaction} the Bitcoin transaction
+  * @return {UtxosPrepare} Utxos in a form accepted to build the psbt object for signing
   */
-  buildTransaction(thisTransaction: TransactionBitcoinRequest): UtxosPrepare {
+  prepareTransaction(thisTransaction: TransactionBitcoinRequest): UtxosPrepare {
     const inputs = new Array();
     const outputs = new Array();
     super.transactionValidation(thisTransaction);
@@ -136,11 +136,11 @@ class Bitcoin extends AbstractDLT {
   }
 
   /**
-  * Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
-  * @param {TransactionBitcoinRequest} thisTransaction - details on the information to include in this transaction for the Bitcoin distributed ledger
-  * @return {Transaction} the Bitcoin transaction
+  * Takes the inputs, outputs and the data resulting from the prepareTransaction and create a psbt object for signing
+  * @param {UtxosPrepare} inputsOutputs - inputs, outputs and data needed to build the psbt object
+  * @return {any} The psbt object filled and the inputs outputs initially obtained from the prepareTransaction needed to know the type of utxos transactions it will be signed
   */
-  prepareTransaction(inputsOutputs: UtxosPrepare): any {
+  preparePsbtObject(inputsOutputs: UtxosPrepare): any {
 
     // const feePrice = Number(thisTransaction.extraFields.feePrice); // set maximum fee rate = 0 to be flexible on fee rate
     const psbtObj = new bitcoin.Psbt({ network: this.addressType });
@@ -269,8 +269,8 @@ class Bitcoin extends AbstractDLT {
   _sign(thisTransaction: TransactionRequest): Promise<string> {
 
     const thisBitcoinTransaction = <TransactionBitcoinRequest>thisTransaction;
-    let build = this.buildTransaction(thisBitcoinTransaction);
-    let { psbtObj, inputsOutputs } = this.prepareTransaction(build);
+    let build = this.prepareTransaction(thisBitcoinTransaction);
+    let { psbtObj, inputsOutputs } = this.preparePsbtObject(build);
     let myKeyPair;
     if (this.account) {
       myKeyPair = bitcoin.ECPair.fromWIF(this.account.privateKey, this.addressType);
