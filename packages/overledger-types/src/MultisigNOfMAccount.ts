@@ -1,4 +1,4 @@
-import Account from "./Account";
+import Account from './Account';
 
 /**
  * An Overledger Account instance for a single DLT.
@@ -24,7 +24,7 @@ type MultisigNOfMAccount = {
     isNestedSegwit?: boolean,
     script?: string,
     redeemScript?: string,
-    witnessScript?: string
+    witnessScript?: string,
 };
 
 export default MultisigNOfMAccount;

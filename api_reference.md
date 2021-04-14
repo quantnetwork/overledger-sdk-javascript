@@ -28,6 +28,12 @@
 ## Functions
 
 <dl>
+<dt><a href="#witnessStackToScriptWitness">witnessStackToScriptWitness()</a></dt>
+<dd><p>From psbt library : not exported in psbt nor in bitcoinjs-lib yet but needed in the finalize step of psbt signing (getFinalScripts function)</p>
+</dd>
+<dt><a href="#isAddressOutput">isAddressOutput()</a></dt>
+<dd><p>Test if the data passed in the utxo output is an address or a script pub key</p>
+</dd>
 <dt><a href="#computeParamType">computeParamType(param)</a></dt>
 <dd><p>This function is used to prepare the parameter definition for the web3 package</p>
 </dd>
@@ -591,6 +597,8 @@ Wrap a specific DLT signed transaction with the Overledger required fields
 * [overledger-dlt-bitcoin](#module_overledger-dlt-bitcoin)
 
     * _static_
+        * [.BitcoinTypeOptions](#module_overledger-dlt-bitcoin.BitcoinTypeOptions)
+
         * [.default](#module_overledger-dlt-bitcoin.default)
 
     * _inner_
@@ -602,21 +610,32 @@ Wrap a specific DLT signed transaction with the Overledger required fields
 
             * [.symbol](#module_overledger-dlt-bitcoin.Bitcoin+symbol)
 
-            * [.buildTransaction(thisTransaction)](#module_overledger-dlt-bitcoin.Bitcoin+buildTransaction)
+            * [.getSmartContractParameters(input)](#module_overledger-dlt-bitcoin.Bitcoin+getSmartContractParameters)
+
+            * [.prepareTransaction(thisTransaction)](#module_overledger-dlt-bitcoin.Bitcoin+prepareTransaction)
+
+            * [.preparePsbtObject(inputsOutputs)](#module_overledger-dlt-bitcoin.Bitcoin+preparePsbtObject)
 
             * [._transactionValidation(thisTransaction)](#module_overledger-dlt-bitcoin.Bitcoin+_transactionValidation)
 
             * [._sign(thisTransaction)](#module_overledger-dlt-bitcoin.Bitcoin+_sign)
 
+            * [.getFinalScripts()](#module_overledger-dlt-bitcoin.Bitcoin+getFinalScripts)
+
             * [.createAccount()](#module_overledger-dlt-bitcoin.Bitcoin+createAccount)
 
             * [.setAccount(accountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
+
+            * [.setMultiSigAccount(multisigAccountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setMultiSigAccount)
 
             * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery)
 
             * [._smartContractQueryValidation(contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_smartContractQueryValidation)
 
 
+<a name="module_overledger-dlt-bitcoin.BitcoinTypeOptions"></a>
+
+### *overledger-dlt-bitcoin*.BitcoinTypeOptions
 <a name="module_overledger-dlt-bitcoin.default"></a>
 
 ### *overledger-dlt-bitcoin*.default
@@ -634,15 +653,23 @@ Development package for Bitcoin blockchain.
 
     * [.symbol](#module_overledger-dlt-bitcoin.Bitcoin+symbol)
 
-    * [.buildTransaction(thisTransaction)](#module_overledger-dlt-bitcoin.Bitcoin+buildTransaction)
+    * [.getSmartContractParameters(input)](#module_overledger-dlt-bitcoin.Bitcoin+getSmartContractParameters)
+
+    * [.prepareTransaction(thisTransaction)](#module_overledger-dlt-bitcoin.Bitcoin+prepareTransaction)
+
+    * [.preparePsbtObject(inputsOutputs)](#module_overledger-dlt-bitcoin.Bitcoin+preparePsbtObject)
 
     * [._transactionValidation(thisTransaction)](#module_overledger-dlt-bitcoin.Bitcoin+_transactionValidation)
 
     * [._sign(thisTransaction)](#module_overledger-dlt-bitcoin.Bitcoin+_sign)
 
+    * [.getFinalScripts()](#module_overledger-dlt-bitcoin.Bitcoin+getFinalScripts)
+
     * [.createAccount()](#module_overledger-dlt-bitcoin.Bitcoin+createAccount)
 
     * [.setAccount(accountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setAccount)
+
+    * [.setMultiSigAccount(multisigAccountInfo)](#module_overledger-dlt-bitcoin.Bitcoin+setMultiSigAccount)
 
     * [._buildSmartContractQuery(dltAddress, contractQueryDetails)](#module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery)
 
@@ -668,17 +695,39 @@ Name of the DLT
 #### *bitcoin*.symbol
 Symbol of the DLT
 
-<a name="module_overledger-dlt-bitcoin.Bitcoin+buildTransaction"></a>
+<a name="module_overledger-dlt-bitcoin.Bitcoin+getSmartContractParameters"></a>
 
-#### *bitcoin*.buildTransaction(thisTransaction)
+#### *bitcoin*.getSmartContractParameters(input)
 
 | Param | Type | Description |
 | --- | --- | --- |
-| thisTransaction | <code>TransactionEthereumRequest</code> | details on the information to include in this transaction for the Bitcoin distributed ledger |
+| input | <code>TransactionInput</code> | utxo input |
+
+Takes the utxo input and if it includes a smart contract field extract its parameters into a structure used for psbt data input objects
+
+**Returns**: <code>any</code> - smart contract parameters for that input  
+<a name="module_overledger-dlt-bitcoin.Bitcoin+prepareTransaction"></a>
+
+#### *bitcoin*.prepareTransaction(thisTransaction)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| thisTransaction | <code>TransactionBitcoinRequest</code> | details on the information to include in this transaction for the Bitcoin distributed ledger |
 
 Takes the Overledger definition of a transaction and converts it into a specific Bitcoin transaction
 
-**Returns**: <code>Transaction</code> - the Bitcoin transaction  
+**Returns**: <code>UtxosPrepare</code> - Utxos in a form accepted to build the psbt object for signing  
+<a name="module_overledger-dlt-bitcoin.Bitcoin+preparePsbtObject"></a>
+
+#### *bitcoin*.preparePsbtObject(inputsOutputs)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| inputsOutputs | <code>UtxosPrepare</code> | inputs, outputs and data needed to build the psbt object |
+
+Takes the inputs, outputs and the data resulting from the prepareTransaction and create a psbt object for signing
+
+**Returns**: <code>any</code> - The psbt object filled and the inputs outputs initially obtained from the prepareTransaction needed to know the type of utxos transactions it will be signed  
 <a name="module_overledger-dlt-bitcoin.Bitcoin+_transactionValidation"></a>
 
 #### *bitcoin*._transactionValidation(thisTransaction)
@@ -699,6 +748,12 @@ validates an OVL transactionRequest according to XRP specific rules
 
 Takes in an overledger definition of a transaction for XRP, converts it into a form that the XRP distributed ledger will understand, and then signs the transaction
 
+<a name="module_overledger-dlt-bitcoin.Bitcoin+getFinalScripts"></a>
+
+#### *bitcoin*.getFinalScripts()
+Function overloading for the getFinalScripts in the psbt library. This function will be called in case of a non supported type of redeem script, like HTLC.
+Finalize the psbt object with the data that should be provided to unlock the bitcoin
+
 <a name="module_overledger-dlt-bitcoin.Bitcoin+createAccount"></a>
 
 #### *bitcoin*.createAccount()
@@ -714,6 +769,16 @@ Create a Bitcoin account
 | accountInfo | [<code>Account</code>](#Account) | The standardised account information |
 
 Set an account for signing transactions for a specific DLT
+
+<a name="module_overledger-dlt-bitcoin.Bitcoin+setMultiSigAccount"></a>
+
+#### *bitcoin*.setMultiSigAccount(multisigAccountInfo)
+
+| Param | Type |
+| --- | --- |
+| multisigAccountInfo | <code>MultisigNOfMAccount</code> | 
+
+Set a multisig n-of-m account for signing transactions for a specific DLT
 
 <a name="module_overledger-dlt-bitcoin.Bitcoin+_buildSmartContractQuery"></a>
 
@@ -1786,6 +1851,16 @@ Query a smart contract
 <a name="module_overledger-types.SCInteropOptions"></a>
 
 ### *overledger-types*.SCInteropOptions
+<a name="witnessStackToScriptWitness"></a>
+
+## witnessStackToScriptWitness()
+From psbt library : not exported in psbt nor in bitcoinjs-lib yet but needed in the finalize step of psbt signing (getFinalScripts function)
+
+<a name="isAddressOutput"></a>
+
+## isAddressOutput()
+Test if the data passed in the utxo output is an address or a script pub key
+
 <a name="computeParamType"></a>
 
 ## computeParamType(param)
@@ -1859,6 +1934,10 @@ A generic object used to describe an Overledger transaction request for the XRP 
 | privateKey | <code>string</code> | The private key of the account, used for signing transactions. |
 | address | <code>string</code> | The address of the account, used for receiving messages |
 | publicKey | <code>string</code> | The public key of the account. The address parameter will be a representation of this public key. |
+| isSegwit | <code>boolean</code> | Define if the account is a segwit p2wpkh account in the Bitcoin DLT |
+| isNestedSegwit | <code>boolean</code> | Define if the account is a  nested segwit account p2sh-p2wpkh in the Bitcoin DLT |
+| script | <code>string</code> | locking script or scriptPubKey, needed for a nested segwit account |
+| redeemScript | <code>string</code> | script to unlock the BTC, needed for a nested segwit account |
 | password | <code>string</code> | For some accounts, they may be protected by a password, or a password is used instead of a private key |
 | provider | <code>string</code> | If the account is stored or managed not by the user, then this person is the provider |
 

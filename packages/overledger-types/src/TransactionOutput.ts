@@ -17,7 +17,7 @@ type TransactionOutput = {
   toAddress: string,
   asset?: string,
   amount?: number,
-  smartContract?: SmartContract
+  smartContract?: SmartContract,
 };
 
 export default TransactionOutput;
