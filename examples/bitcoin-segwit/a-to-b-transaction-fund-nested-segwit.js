@@ -16,16 +16,27 @@ const bpiKey = '...';
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cVbxBjsJLLVwy9M8aK1jLd7jVMuhEDn2VsxYfZsSzg4vHCad1u4U';
 const partyABitcoinAddress = 'tb1qmaerfydd6vdldd8ghprkmlgr2sk3rmx37q2cr9';
-const bitcoinLinkedTx = 'b663023a455f67c3592370e17c52b7fef8b3af9c492d0a8d5936f2892bc5de9a'; // Add the previous transaction here
+const bitcoinLinkedTx = '38b7d4a9fdd1d9972144d280e211d6101c144cfb5ac8c55d633817a12c7921f8'; // Add the previous transaction here
 const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
-const bitcoinInputAmount = 67400; // set equal to the number of satoshis in your first input
+const bitcoinInputAmount = 75600; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 55200; // set equal to the number of satoshis to send back to yourself 
+const bitcoinChangeAmount = 63400; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
-const partyBBitcoinPrivateKey = 'cPEGEmiMcEATowC5drxviWeMJoxxpUJNS8bxhiyjgd6h4bwA1qgX';
-const partyBBitcoinAddress = 'tb1q4q4v0argtjzmgsu5ccqtkk9ckcgd7sa2k07e9y';
-
+// Bitcoin account nested segwit created with examples/create-account/create-account.js
+ const nestedAccountPrivateKey = 'cRQEvRZBdxLgCRLHcTDANvU4JA5Qpt5aJDmK9Q6iKgVJRPacDKPL';
+ const nestedAccountAddress = '2MvoLoTt1SJb5anXAT2JfUrrDm4jZLp7NQa';
+//  { privateKey: 'cRQEvRZBdxLgCRLHcTDANvU4JA5Qpt5aJDmK9Q6iKgVJRPacDKPL',
+//   address: '2MvoLoTt1SJb5anXAT2JfUrrDm4jZLp7NQa',
+//   publicKey:
+//    '024f81dc1b5f3028baba2eeaf5f2c0756eaad62541e80d730df68484be0788e387',
+//   isSegwit: false,
+//   isNestedSegwit: true,
+//   script: 'a91426fb602ebc9bb980d5fb6d1ef42611a9ab5c5d0c87',
+//   redeemScript: '00142f543d88c245db79a2f2120f31766055f9d5332d',
+//   password: '',
+//   provider: '' }
+  
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -42,7 +53,7 @@ const partyBBitcoinAddress = 'tb1q4q4v0argtjzmgsu5ccqtkk9ckcgd7sa2k07e9y';
 
     // SET partyA accounts for signing;
     overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey, isSegwit: true });
-    const nestedSegwitAccount = overledger.dlts.bitcoin.createAccount({ privateKey: partyBBitcoinPrivateKey, isNestedSegwit: true });
+    
 
     const signedTransactions = await overledger.sign([
     {
@@ -56,14 +67,14 @@ const partyBBitcoinAddress = 'tb1q4q4v0argtjzmgsu5ccqtkk9ckcgd7sa2k07e9y';
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
-          linkedRawTransaction: '020000000001011142874f657473851898da976126fa6902598b31bd4e28f710ce402c56e82a640100000000ffffffff0310270000000000001600147f6fce86f10a27c539aae3e99150fc4783d097464807010000000000160014df723491add31bf6b4e8b8476dfd03542d11ecd10000000000000000bd6a4cba30303030393332302e373361353661373333364235334261463666666137613138666633653136614142363938393862412e35303030303a333137363131383263363338393963373064656435386432626138626231356434366461316266633136663463363333303536373466336532636231376362613530323963663263396365303236353062353265643030393434376336313434623834666163363232393537366164303232343539396537643838393232383631620248304502210084587e1a541bbedae0b3fa2716bc7e2beea2f4fd7c13ff5c72dbd7a84f173f0a02204e4ebaaa37bfc915be9c36cfe37bea0aaa3dd4abcb85979819881321148d6c910121036dac9370678def34d4c6cc3190c72740da27b4d15e9b1d3a365d437f7d81bc9500000000',
+          linkedRawTransaction: '02000000000101d9cd94083ac474e0fb2e4fc3e473b10588b3a030cdf0c34063bb70738b4908eb0100000000ffffffff031027000000000000160014b953bab25b4b86ee2a104a7ab43b61add58ed1ca5027010000000000160014df723491add31bf6b4e8b8476dfd03542d11ecd100000000000000000e6a0c4f564c2053444b20546573740247304402201f9c8fffe11310152e7a5e337394cbdd21e8c1a068bc0b9567053dff668dcc4b022067d55f4f70e6865b71ee556e15accb20a73477fd61f191afb84d956974db8db80121036dac9370678def34d4c6cc3190c72740da27b4d15e9b1d3a365d437f7d81bc9500000000',
           scriptPubKey: '0014df723491add31bf6b4e8b8476dfd03542d11ecd1',
           amount: bitcoinInputAmount 
         }
       ],
       txOutputs: [ // Set as many outputs as required
         {  
-          toAddress: nestedSegwitAccount.address,
+          toAddress: nestedAccountAddress,
           amount: bitcoinPartyBAmount 
         },
         {

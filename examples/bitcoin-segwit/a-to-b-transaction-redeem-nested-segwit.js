@@ -18,7 +18,7 @@ const bpiKey = '...';
 
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cPEGEmiMcEATowC5drxviWeMJoxxpUJNS8bxhiyjgd6h4bwA1qgX';
-const bitcoinLinkedTx = '979ee59e6f4a9b9145f108f623fe3ee06da0ef665201bcc0719e0966bbe5ee99'; // Add the previous transaction here
+const bitcoinLinkedTx = '272d8f1a932c7a70a9d0e3db89b31128653f032a7807140692f3806c32e5af7f'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
@@ -27,6 +27,20 @@ const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send ba
 
 // Now provide three other addresses that you will be transfering value too
 const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
+
+// Bitcoin account nested segwit created with examples/create-account/create-account.js
+const nestedAccountPrivateKey = 'cRQEvRZBdxLgCRLHcTDANvU4JA5Qpt5aJDmK9Q6iKgVJRPacDKPL';
+const nestedAccountAddress = '2MvoLoTt1SJb5anXAT2JfUrrDm4jZLp7NQa';
+//  { privateKey: 'cRQEvRZBdxLgCRLHcTDANvU4JA5Qpt5aJDmK9Q6iKgVJRPacDKPL',
+//   address: '2MvoLoTt1SJb5anXAT2JfUrrDm4jZLp7NQa',
+//   publicKey:
+//    '024f81dc1b5f3028baba2eeaf5f2c0756eaad62541e80d730df68484be0788e387',
+//   isSegwit: false,
+//   isNestedSegwit: true,
+//   script: 'a91426fb602ebc9bb980d5fb6d1ef42611a9ab5c5d0c87',
+//   redeemScript: '00142f543d88c245db79a2f2120f31766055f9d5332d',
+//   password: '',
+//   provider: '' }
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -42,9 +56,7 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
-    overledger.dlts.bitcoin.setAccount({ privateKey: partyABitcoinPrivateKey, isSegwit: true });
-    const nestedSegwitAccount = overledger.dlts.bitcoin.createAccount({ privateKey: partyABitcoinPrivateKey, isNestedSegwit: true });
-    console.log(`nestedSegwitAccount ${JSON.stringify(nestedSegwitAccount)}`);
+    overledger.dlts.bitcoin.setAccount({ privateKey: nestedAccountPrivateKey, isNestedSegwit: true });
 
     const signedTransactions = await overledger.sign([
     {
@@ -57,21 +69,20 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
         {
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
-          fromAddress: nestedSegwitAccount.address,
-          linkedRawTransaction: '020000000001019adec52b89f236598d0a2d499cafb3f8feb7527ce1702359c3675f453a0263b60100000000ffffffff03102700000000000017a9141b465d2f0233792df48a8719e2291457623fdd0b87a0d7000000000000160014df723491add31bf6b4e8b8476dfd03542d11ecd100000000000000000e6a0c4f564c2053444b205465737402483045022100fdaa360357860115ac64156f71f686900c715167fab9ac7b8e7d31c03f40f49c02200794a218e2230a66f5dac6d9662f2f7e77a4e644d3cd354ab35ea1a8074448750121036dac9370678def34d4c6cc3190c72740da27b4d15e9b1d3a365d437f7d81bc9500000000',
-          scriptPubKey: nestedSegwitAccount.script,
+          fromAddress: nestedAccountAddress,
+          linkedRawTransaction: '02000000000101f821792ca11738635dc5c85afb4c141c10d611e280d2442197d9d1fda9d4b7380100000000ffffffff03102700000000000017a91426fb602ebc9bb980d5fb6d1ef42611a9ab5c5d0c87a8f7000000000000160014df723491add31bf6b4e8b8476dfd03542d11ecd100000000000000000e6a0c4f564c2053444b205465737402483045022100fd67b305fbd3a89ef391ddad0198fc47074797f20f6a0f778540c9bb1fcfdb1402205ec86a6c173b5d6ff31bf43e90d50c20d3019320a9e54bba34d9c3ec8bda5c0a0121036dac9370678def34d4c6cc3190c72740da27b4d15e9b1d3a365d437f7d81bc9500000000',
+          scriptPubKey: 'a91426fb602ebc9bb980d5fb6d1ef42611a9ab5c5d0c87',
           amount: bitcoinInputAmount,
           smartContract: {
-            id: nestedSegwitAccount.address,
-            // type: ??
+            id: nestedAccountAddress,
             functionCall: [{
               functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
               functionName: TransactionBitcoinFunctionOptions.REDEEM_P2SH, // The function name must be given
               inputParams: [
                 {
-                  type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                  type: { selectedType: BitcoinTypeOptions.HEX_STRING },
                   name: 'redeemScript', // Name of parameter
-                  value: nestedSegwitAccount.redeemScript, // Value of the boolean array
+                  value: '00142f543d88c245db79a2f2120f31766055f9d5332d',
                 }
               ]
             }
@@ -85,7 +96,7 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
           amount: bitcoinPartyBAmount 
         },
         {
-          toAddress: nestedSegwit.address, // This is the change address
+          toAddress: nestedAccountAddress, // This is the change address
           amount: bitcoinChangeAmount 
         }
       ],
@@ -117,5 +128,3 @@ const partyBBitcoinAddress = 'tb1q0ahuaph3pgnu2wd2u05ez58ug7pap96xdcjx0z';
   }
 })();
 
-
-// https://blockstream.info/testnet/tx/3dfa35edfaa30857c44dad7bb948c582d3a563ed758c7fd8d6d918c562051bf7
