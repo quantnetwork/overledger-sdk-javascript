@@ -1,6 +1,6 @@
 {
   "name": "@quantnetwork/overledger-core",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "publishConfig": {
@@ -40,9 +40,9 @@
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@quantnetwork/overledger-provider": "^1.0.0-beta.4",
-    "@quantnetwork/overledger-search": "^1.0.0-beta.4",
-    "@quantnetwork/overledger-types": "^1.0.0-beta.4",
+    "@quantnetwork/overledger-provider": "^1.0.0-beta.5",
+    "@quantnetwork/overledger-search": "^1.0.0-beta.5",
+    "@quantnetwork/overledger-types": "^1.0.0-beta.5",
     "axios": "^0.18.0"
   },
   "devDependencies": {
