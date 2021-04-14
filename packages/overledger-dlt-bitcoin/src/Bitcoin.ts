@@ -52,6 +52,12 @@ class Bitcoin extends AbstractDLT {
     }
   }
 
+
+  /**
+  * Takes the utxo input and if it includes a smart contract field extract its parameters into a structure used for psbt data input objects
+  * @param {TransactionInput} input - utxo input
+  * @return {any} smart contract parameters for that input
+  */
   getSmartContractParameters(input: TransactionInput): any {
     let transferType;
     let finalSCData: any = {};
