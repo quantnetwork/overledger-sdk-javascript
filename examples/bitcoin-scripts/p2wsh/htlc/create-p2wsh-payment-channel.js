@@ -4,7 +4,7 @@ const sha256 = require('crypto-js/sha256');
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
-const generateHashTimeLockContractCode = require('@quantnetwork/overledger-dlt-bitcoin').generateHashTimeLockContractCode;
+const generateHashTimeLockContractCodeSHA256 = require('@quantnetwork/overledger-dlt-bitcoin').generateHashTimeLockContractCodeSHA256;
 const createHashTimeLockContractPaymentChannel = require('@quantnetwork/overledger-dlt-bitcoin').createHashTimeLockContractPaymentChannel;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -33,7 +33,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const secret = 'quantbitcoinpaymentchannel';
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);
-    const timeLock = bip65.encode({ blocks: 1932600 }); // better to call get block height later + 50 blocks
+    const timeLock = bip65.encode({ blocks: 1971323 }); // get the current block height and add the number of blocks you want your lock to last
     console.log(`Time Lock: ${timeLock}`);
 
     overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey} );
@@ -43,7 +43,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const refundPublicKey =  overledger.dlts.bitcoin.account.publicKey;
     console.log(`refundPublicKey ${refundPublicKey}`);
 
-    const currentContractCode = generateHashTimeLockContractCode(claimPublicKey, refundPublicKey, hashSecret, timeLock);
+    const currentContractCode = generateHashTimeLockContractCodeSHA256(claimPublicKey, refundPublicKey, hashSecret, timeLock);
     const p2wshPaymentChannel = createHashTimeLockContractPaymentChannel(currentContractCode, TransactionBitcoinScriptTypeOptions.P2WSH, overledger.dlts.bitcoin.addressType);
     console.log(`p2wsh ${JSON.stringify(p2wshPaymentChannel)}`);
     console.log(`p2wsh address: ${p2wshPaymentChannel.address}`);

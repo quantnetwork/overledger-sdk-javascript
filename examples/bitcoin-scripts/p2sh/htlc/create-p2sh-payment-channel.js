@@ -5,7 +5,7 @@ const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const OverledgerSearch = require('@quantnetwork/overledger-search').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
-const generateHashTimeLockContractCode = require('@quantnetwork/overledger-dlt-bitcoin').generateHashTimeLockContractCode;
+const generateHashTimeLockContractCodeHASH160 = require('@quantnetwork/overledger-dlt-bitcoin').generateHashTimeLockContractCodeHASH160;
 const createHashTimeLockContractPaymentChannel = require('@quantnetwork/overledger-dlt-bitcoin').createHashTimeLockContractPaymentChannel;
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -29,22 +29,17 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     // Connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
       dlts: [{ dlt: DltNameOptions.BITCOIN }],
-      // provider: { network: 'testnet' },
-      provider: { network: 'http://api.devnet.overledger.io/v1' },
+      provider: { network: 'testnet' },
     });
 
-    const currentBlockHeight = await overledger.search.getBlockHeightByDlt(DltNameOptions.BITCOIN);
-    console.log(currentBlockHeight.data);
     // SECRET THAT SHOULD BE STORED BY THE SIDE WHO CAN REDEEM THE SMART CONTRACT
     const secret = 'quantbitcoinpaymentchannel';
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);
-
     // TIMELOCK EXPRESSED IN BLOCK HEIGHT
-    const timeLock = bip65.encode({ blocks: currentBlockHeight.data + 5 });
-    
+    const timeLock = bip65.encode({ blocks: 1971323 }); // get the current block height and add the number of blocks you want your lock to last
     // TIMELOCK EXPRESSED IN UTC TIME
-    // const timeLock = bip65.encode({ utc: Math.floor(Date.now() / 1000) + 60 * 10});
+    // example: bip65.encode({ utc: Math.floor(Date.now() / 1000) + 60 * 10});
     console.log(`Time Lock: ${timeLock}`);
 
     overledger.dlts.bitcoin.setAccount({ privateKey: partyBBitcoinPrivateKey} );
@@ -54,7 +49,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const refundPublicKey =  overledger.dlts.bitcoin.account.publicKey;
     console.log(`refundPublicKey ${refundPublicKey}`);
 
-    const currentContractCode = generateHashTimeLockContractCode(claimPublicKey, refundPublicKey, hashSecret, timeLock);
+    const currentContractCode = generateHashTimeLockContractCodeHASH160(claimPublicKey, refundPublicKey, hashSecret, timeLock);
     console.log(`currentContractCode ${currentContractCode.toString('hex')}`);
     const p2shPaymentChannel = createHashTimeLockContractPaymentChannel(currentContractCode, TransactionBitcoinScriptTypeOptions.P2SH, overledger.dlts.bitcoin.addressType);
     console.log(`p2sh ${JSON.stringify(p2shPaymentChannel)}`);

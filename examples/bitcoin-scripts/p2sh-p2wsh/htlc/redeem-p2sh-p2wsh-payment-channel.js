@@ -15,8 +15,9 @@ const bpiKey = '...';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
-const p2shp2wshSmartContractAddress = '2MwFJaijdrmy8S35o1s4n37hWV2prXsxFvG';
-const bitcoinLinkedTx = 'ed45606201bb92b807d3a152fbe6264d112d2736ea0b0a2481f0fae7403ca279'; // Add the previous transaction here
+// HTLC p2sh-p2wsh address obtained in the creation step with create-p2sh-p2wsh-payment-channel.js and funded with fund-p2sh-p2wsh-payment-channel.js
+const p2shp2wshSmartContractAddress = '2N9TUL7wpDAhuZa1VefSoW5fRevhEq6QUTa';
+const bitcoinLinkedTx = '28048cfc224142c36e213d116e2d70db174217c0dc2099d4e14996ef0267e640'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
@@ -56,29 +57,28 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: p2shp2wshSmartContractAddress,
           amount: bitcoinInputAmount,
-          scriptPubKey: 'a9142be4567959db4393dff7985524fc420a0e223d4287',
-          linkedRawTransaction: '020000000183345279d4b08f30f83e30f19ff90f549464b418fe1842d53bb266fc8016e650010000006a47304402203f8abbc0f65db1e7887d439df1b4687849a0e753a5e0416db58854931f5a4dcc02200cacc740aa0a2f5aa06098d3d4116ec6592d2c8022ce01be8162fab5690f41280121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9142be4567959db4393dff7985524fc420a0e223d428717272200000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+          scriptPubKey: 'a914b1d2f9e78b5ef2f88ed0e4c1cc1a0eb8cd89d8f587',
+          linkedRawTransaction: '020000000163f775489655da550fcd17a4af9996652f97eb2583f5ab3d97a0f07ff5c05671010000006b483045022100e5ac44f38e7221d0dfd10e573ae8d6dd55b1140b4adaeed9a5e924a7285dbeaf0220580252968e177585972dd86089b119ebcc8b8cdc6ba33e63cdeb791181222b790121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a914b1d2f9e78b5ef2f88ed0e4c1cc1a0eb8cd89d8f587668a1900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
           smartContract: {
             id: p2shp2wshSmartContractAddress,
-            // type: ??
             functionCall: [{
               functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
               functionName: TransactionBitcoinFunctionOptions.REDEEM_HTLC, // The function name must be given
               inputParams: [
                 {
-                  type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                  type: { selectedType: BitcoinTypeOptions.HEX_STRING },
                   name: 'redeemScript', // Name of parameter
-                  value: '0020426ddef1361f6cf4721aa0d34be8546c2b285dd27978ecf139b40655afb9d67d', // Value of the boolean array
+                  value: '0020dc786f99f014d20e197e35c5c262b3dcb9e348d38b4005de964666df60b27f32',
                 },
                 {
-                  type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                  type: { selectedType: BitcoinTypeOptions.HEX_STRING },
                   name: 'witnessScript', // Name of parameter
-                  value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167047aad2201b17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
+                  value: 'a820f74c6f2402bbde893ca7a6e199bee59a6da22c737069451c0b48c3d84d4426a6876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703e2141eb17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
                 },
                 {
-                  type: { selectedType: BitcoinTypeOptions.STRING }, // First parameter is a boolean array
+                  type: { selectedType: BitcoinTypeOptions.STRING }, 
                   name: 'preimage', // Name of parameter
-                  value: 'quantbitcoinpaymentchannel', // Value of the boolean array
+                  value: 'quantbitcoinpaymentchannel',
                 }
               ]
             }
@@ -124,4 +124,3 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
   }
 })();
 
-// https://blockstream.info/testnet/tx/c23a24eb6c21f1f5b0520dd83a4b2e6e9b0bb733650269f838e11382f5d55ac4

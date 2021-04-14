@@ -16,15 +16,15 @@ const bpiKey = '...';
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 const partyABitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
-const bitcoinLinkedTx = 'd664ba4449a59e80bd4ecb05ebaa1d4b6161602b2f184b8e5596fac3dae52d76'; // Add the previous transaction here
-const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
-const bitcoinInputAmount = 1640807; // set equal to the number of satoshis in your first input
+const bitcoinLinkedTx = '28048cfc224142c36e213d116e2d70db174217c0dc2099d4e14996ef0267e640'; // Add the previous transaction here
+const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
+const bitcoinInputAmount = 1673830; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 1628607; // set equal to the number of satoshis to send back to yourself 
+const bitcoinChangeAmount = 1661630; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 
-// mutisig account paricipants
+// multisig account paricipants
 const partyB1BitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
 const partyB1BitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 
@@ -69,14 +69,14 @@ const accountParty3 = {privateKey: partyB3BitcoinPrivateKey, address: partyB3Bit
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
-          linkedRawTransaction: '020000000176b73060732dc8738e199d053ba5ea8605d1a93e694b9a2056dc99f7e9fca169010000006b483045022100a619069eaf26bad03d615b1e7d62c230821168f4f5057ed23234174744d4923102206842885565bf5918b7214da3158cc3c6dcaac3084495d875b8ced08c63d0b6090121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff0167091900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+          linkedRawTransaction: '020000000163f775489655da550fcd17a4af9996652f97eb2583f5ab3d97a0f07ff5c05671010000006b483045022100e5ac44f38e7221d0dfd10e573ae8d6dd55b1140b4adaeed9a5e924a7285dbeaf0220580252968e177585972dd86089b119ebcc8b8cdc6ba33e63cdeb791181222b790121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a914b1d2f9e78b5ef2f88ed0e4c1cc1a0eb8cd89d8f587668a1900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
           scriptPubKey: '76a91400406a26567183b9b3e42e5fed00f70a2d11428188ac',
           amount: bitcoinInputAmount
         }
       ],
       txOutputs: [ // Set as many outputs as required
         {  
-          toAddress: multisigAccount.address,
+          toAddress: multisigAccount.multisigAddress,
           amount: bitcoinPartyBAmount 
         },
         {

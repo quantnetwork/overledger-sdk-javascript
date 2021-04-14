@@ -9,21 +9,20 @@ const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-b
 //  ---------------------------------------------------------
 const mappId = '...';
 const bpiKey = '...';
-
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 const partyABitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
-const bitcoinLinkedTx = '930dd72c18649465e03d3b2e6cf42ed2319bc623f5bfc247cc3bc8612ee331f2'; // Add the previous transaction here
-const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
-const bitcoinInputAmount = 1776932; // set equal to the number of satoshis in your first input
+const bitcoinLinkedTx = '36523f16f710cc11638679913b5a46f2b109afcb568cc4091ec842b13cf21c69'; // Add the previous transaction here
+const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
+const bitcoinInputAmount = 1710430; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 1764732; // set equal to the number of satoshis to send back to yourself 
+const bitcoinChangeAmount = 1698230; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
-// Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = 'tb1q9vm99heg4vweazp8rh52nfzhs097ptv8g9frdlmeky66xsc3sl5qp25lwe';
+// HTLC p2wsh address obtained in the creation step with create-p2wsh-payment-channel.js
+const partyBBitcoinAddress = 'tb1qypyqgyc6p2hxevducll2kncs3ythv4vf7vvlpds2h36efgzlgk2q244r4q';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -47,15 +46,13 @@ const partyBBitcoinAddress = 'tb1q9vm99heg4vweazp8rh52nfzhs097ptv8g9frdlmeky66xs
       dlt: DltNameOptions.BITCOIN,
       type: TransactionTypeOptions.UTXO,
       subType: {name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER},
-      // scriptType: { name: ''} // TRANSFER TYPE ???
       message: transactionMessage,
-            // The following parameters are from the TransactionUtxoRequest object:
       txInputs: [ // Set as many inputs as required in order to fund your outputs
         {
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
-          linkedRawTransaction: '020000000001014810c78a79833f6b4767d81d1e60a8b7c880251e688f3924c8304ec64f1eb1ef000000001716001425a1c451d6ea2022ab64409f00c4d43d5e786f73feffffff02241d1b00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac341110270200000017a91475f2058a85140d52002b149508447c67f7ce23ed870247304402203818e8a5eaa33bd1a946894822fa2d0b631941a6941b158eecabd80450cd174502203567ec9129703ff2e9d1f162e93f22d218e72a3a59b2fbe13a6bf95773d556930121021503873293486ee6aff50bcd91d30a001e27b8f76151969d7312119bdd202943c00f1d00',
+          linkedRawTransaction: '0200000001d25b5d6caaafe5cfdb9a504f8ceea1f1407678b66915e5024b96c65ee8f913d5010000006b483045022100e495d10c4b29f97023017b8e3172534ebff0eb5b4bec2dea864ba9829b223f3b02207adc44d12df7e436575ddf1fe0626d088f13c30a046faf42813c7def7e0675dc0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a9140f9f1ed5ec59f95fd386190756608b82bccb7129875e191a00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
           scriptPubKey: '76a91400406a26567183b9b3e42e5fed00f70a2d11428188ac',
           amount: bitcoinInputAmount 
         }
@@ -97,5 +94,3 @@ const partyBBitcoinAddress = 'tb1q9vm99heg4vweazp8rh52nfzhs097ptv8g9frdlmeky66xs
     console.error('error:', e);
   }
 })();
-
-// https://blockstream.info/testnet/tx/10179dbe986c6e6018b059361fef827b4e8f284ce020bcac3bcc3b073517add5

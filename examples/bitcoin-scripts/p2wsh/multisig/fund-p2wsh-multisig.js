@@ -3,7 +3,6 @@ const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
-const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -11,20 +10,21 @@ const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dl
 const mappId = '...';
 const bpiKey = '...';
 
+
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 const partyABitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
-const bitcoinLinkedTx = '5eb54d6b5c725e09216ebcb0efb4442a8fca49c062b392274cf03d8a6ec48c11'; // Add the previous transaction here
+const bitcoinLinkedTx = 'f9e0820b9aba24e7d24ab8df375bfe8614403f9f9cf085080b2213acf2fc93ea'; // Add the previous transaction here
 const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
-const bitcoinInputAmount = 1665207; // set equal to the number of satoshis in your first input
+const bitcoinInputAmount = 1698230; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 1653007; // set equal to the number of satoshis to send back to yourself 
+const bitcoinChangeAmount = 1686030; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 
-// mutisig account paricipants
+// multisig account paricipants
 const partyB1BitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
 const partyB1BitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 
@@ -69,14 +69,14 @@ const accountParty3 = {privateKey: partyB3BitcoinPrivateKey, address: partyB3Bit
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
-          linkedRawTransaction: '0200000001a37b0abae10075175984e381bff2b3b77931fa0cf5e1d27d5d9abbb7b542f43e010000006a473044022063fde40ca6ca2c601441e4780309d347df31068d2a52c07e3194b61c7a51cac70220527c8f153e0d849e86b6ddd1ac7ea9a4ef76d58f1e4fe7d77e90a937d0798a510121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff02102700000000000017a9140f9f1ed5ec59f95fd386190756608b82bccb712987b7681900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+          linkedRawTransaction: '0200000001691cf23cb142c81e09c48c56cbaf09b1f2465a3b9179866311cc10f7163f5236010000006a473044022028f9449f289d21d74f111538235e5dc4fb1533c6966bbeb96be9a9e7f3a94f530220421e087f28f32b2ef66c486f5b362115640d9c021e491b4b98165597199cac1d0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff031027000000000000220020204804131a0aae6cb1bcc7feab4f108917765589f319f0b60abc7594a05f4594b6e91900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
           scriptPubKey: '76a91400406a26567183b9b3e42e5fed00f70a2d11428188ac',
           amount: bitcoinInputAmount
         }
       ],
       txOutputs: [ // Set as many outputs as required
         {  
-          toAddress: multisigAccount.address,
+          toAddress: multisigAccount.multisigAddress,
           amount: bitcoinPartyBAmount 
         },
         {

@@ -14,7 +14,9 @@ const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFuncti
 const mappId = '...';
 const bpiKey = '...';
 
-const bitcoinLinkedTx = '69a1fce9f799dc56209a4b693ea9d10586eaa53b059d198e73c82d736030b776'; // Add the previous transaction here
+
+// UTXO resulting from running the script fund-p2wsh-multisig.js
+const bitcoinLinkedTx = '7156c0f57ff0a0973dabf58325eb972f659699afa417cd0f55da55964875f763'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
@@ -63,26 +65,25 @@ const accountParty3 = {privateKey: partyB3BitcoinPrivateKey, address: partyB3Bit
         { 
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
-          fromAddress: multisigAccount.address,
+          fromAddress: multisigAccount.multisigAddress,
           amount: bitcoinInputAmount,
           scriptPubKey: multisigAccount.script,
-          linkedRawTransaction: '0200000001118cc46e8a3df04c2792b362c049ca8f2a44b4efb0bc6e21095e725c6b4db55e010000006b483045022100d0b68891aca10818c5629fa7d51f8a79951355996d5e7f312324c648508614a20220738de0603103ff667e2594ac8f0198b83da0605017e010b579e7717594221aa20121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff021027000000000000220020747a5f2f5822fa03b1ac4b4a83a74bf31f552c719d48b194d7d9246e7ff2cef30f391900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+          linkedRawTransaction: '0200000001ea93fcf2ac13220b0885f09c9f3f401486fe5b37dfb84ad2e724ba9a0b82e0f9010000006a473044022022e9d30ab5a44bd909469a62d278e0c85266ea96c8df632f2e1fcfbad12e9df602203d6ab244f108ba7100e25aa92076feaece092ff58a4dd2a7557dd32932642d4d0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff031027000000000000220020747a5f2f5822fa03b1ac4b4a83a74bf31f552c719d48b194d7d9246e7ff2cef30eba1900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
           smartContract: {
-            id: multisigAccount.address,
-            // type: ??
+            id: multisigAccount.multisigAddress,
             functionCall: [{
               functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
               functionName: TransactionBitcoinFunctionOptions.REDEEM_P2MS, // The function name must be given
               inputParams: [
                 {
-                  type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                  type: { selectedType: BitcoinTypeOptions.HEX_STRING },
                   name: 'witnessScript', // Name of parameter
-                  value: multisigAccount.witnessScript, // Value of the boolean array
+                  value: multisigAccount.witnessScript,
                 },
                 {
-                  type: { selectedType: BitcoinTypeOptions.ARRAY_HEX_STRING }, // First parameter is a boolean array
+                  type: { selectedType: BitcoinTypeOptions.ARRAY_HEX_STRING },
                   name: 'coSigners', // Name of parameter
-                  value: [partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey], // Value of the boolean array
+                  value: [partyB2BitcoinPrivateKey, partyB3BitcoinPrivateKey],
                 }
               ]
             }
@@ -128,4 +129,3 @@ const accountParty3 = {privateKey: partyB3BitcoinPrivateKey, address: partyB3Bit
   }
 })();
 
-// https://blockstream.info/testnet/address/tb1qw3a97t6cytaq8vdvfd9g8f6t7v042tr3n4ytr9xhmyjxulljemesd4tuez

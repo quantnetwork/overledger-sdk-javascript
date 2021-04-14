@@ -15,15 +15,15 @@ const bpiKey = '...';
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
 const partyABitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
-const bitcoinLinkedTx = '50e61680fc66b23bd54218fe18b46494540ff99ff1303ef8308fb0d479523483'; // Add the previous transaction here
+const bitcoinLinkedTx = '7156c0f57ff0a0973dabf58325eb972f659699afa417cd0f55da55964875f763'; // Add the previous transaction here
 const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
-const bitcoinInputAmount = 2250431; // set equal to the number of satoshis in your first input
+const bitcoinInputAmount = 1686030; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 10000; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 2238231; // set equal to the number of satoshis to send back to yourself 
+const bitcoinChangeAmount = 1673830; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
-// Now provide three other addresses that you will be transfering value too
-const partyBBitcoinAddress = '2MwFJaijdrmy8S35o1s4n37hWV2prXsxFvG';
+// HTLC p2sh-p2wsh address obtained in the creation step with create-p2sh-p2wsh-payment-channel.js
+const partyBBitcoinAddress = '2N9TUL7wpDAhuZa1VefSoW5fRevhEq6QUTa';
 
 //  ---------------------------------------------------------
 //  -------------- END VARIABLES TO UPDATE ------------------
@@ -47,7 +47,6 @@ const partyBBitcoinAddress = '2MwFJaijdrmy8S35o1s4n37hWV2prXsxFvG';
       dlt: DltNameOptions.BITCOIN,
       type: TransactionTypeOptions.UTXO,
       subType: {name: TransactionBitcoinSubTypeOptions.VALUE_TRANSFER},
-      // scriptType: { name: ''} // TRANSFER TYPE ???
       message: transactionMessage,
             // The following parameters are from the TransactionUtxoRequest object:
       txInputs: [ // Set as many inputs as required in order to fund your outputs
@@ -55,7 +54,7 @@ const partyBBitcoinAddress = '2MwFJaijdrmy8S35o1s4n37hWV2prXsxFvG';
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
           fromAddress: partyABitcoinAddress,
-          linkedRawTransaction: '020000000001016d4ae9bed6eedb06a01061a091e975cb867676a6beaf99720105c131ea47efab0000000000feffffff02616ca6220200000017a91471fb5fc4abf7793de27699b9682a32fb4fea1f5c87bf562200000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac0247304402203555d3017a3f571c41e6e57237e0b7d0415f2f4360d234efed6e109ca5bedfee02202e63a43dd32f90dd25ff9cd925c557ff73f08d8457d16670e87ead01646534fa012102e0b896a8fc8e56bf0383afebde060907cc9fdd3915b310d2f18d0af19103ddb96c101d00',
+          linkedRawTransaction: '0200000001ea93fcf2ac13220b0885f09c9f3f401486fe5b37dfb84ad2e724ba9a0b82e0f9010000006a473044022022e9d30ab5a44bd909469a62d278e0c85266ea96c8df632f2e1fcfbad12e9df602203d6ab244f108ba7100e25aa92076feaece092ff58a4dd2a7557dd32932642d4d0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff031027000000000000220020747a5f2f5822fa03b1ac4b4a83a74bf31f552c719d48b194d7d9246e7ff2cef30eba1900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
           scriptPubKey: '76a91400406a26567183b9b3e42e5fed00f70a2d11428188ac',
           amount: bitcoinInputAmount
         }

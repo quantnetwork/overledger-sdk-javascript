@@ -13,17 +13,18 @@ const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFuncti
 const mappId = '...';
 const bpiKey = '...';
 
-// Paste in your bitcoin, ethereum and XRP ledger private keys.
+// Paste in your bitcoin private keys.
 
-const p2shSmartContractAddress = '2N7e3LqaLXAzip8KjarkPR34BZHaY36Svu1';
-const bitcoinLinkedTx = 'b35f1b9ad4cd854d0325d78ef7bb8f0c3aa336e63c8e1aab8a98b6f7aae0ec30'; // Add the previous transaction here
+
+// HTLC p2sh address obtained in the creation step with create-p2sh-payment-channel.js and funded with fund-p2sh-payment-channel.js
+const p2shSmartContractAddress = '2Mwqagt3TqrSfnYvp3oqubL264hiPNnpy1e';
+// UTXO obtained to fund p2shSmartContractAddress by running fund-p2sh-payment-channel.js
+const bitcoinLinkedTx = 'd513f9e85ec6964b02e51569b6787640f1a1ee8c4f509adbcfe5afaa6c5d5bd2'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
 const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send back to yourself 
 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
-// const nLocktime = bip65.encode({ blocks: 1935633 });
-// Now provide three other addresses that you will be transfering value too
 const partyBBitcoinAddress = 'mxvHBCNoT8mCP7MFaERVuBy9GMzmHcR9hj';
 const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDyLaAdn';
 
@@ -58,8 +59,8 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
             linkedIndex: bitcoinLinkedIndex,
             fromAddress: p2shSmartContractAddress,
             amount: bitcoinInputAmount,
-            scriptPubKey: 'a9149de2710b8e9a2813475ba0870df8a9e9ac02d99587',
-            linkedRawTransaction: '0200000001e186a9188521688d38da69c1dd4550007fd318ed5c2ef62d486863ef1d2b8a0f0100000069463043021f6187acfdd693ab7d84a140fee16b4fddf33c76f7f0d72017be75c5a12d64880220174866de190713cb0cb37d7ea9b9383c995efa5c717f61bede6b5cf742935ee70121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a9149de2710b8e9a2813475ba0870df8a9e9ac02d9958747c61b00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
+            scriptPubKey: 'a914325fecdf3b31c673c7eff61b44ea7da77234984887',
+            linkedRawTransaction: '02000000013c44cd14f918e7d92cca176de0df26ffda47b573768647a935eee1b2b521f5b3010000006b483045022100f37b98aace237222d6807595599f4a071acc37432ebc07aef17c4909de6b78ed0220223d9fa0d3a9ba98b736963eebd6ac83487d68cf52295ec56d59073536e13e040121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a914325fecdf3b31c673c7eff61b44ea7da7723498488706491a00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
             smartContract: {
               id: p2shSmartContractAddress,
               // type: ??
@@ -70,7 +71,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
                   {
                     type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
                     name: 'redeemScript', // Name of parameter
-                    value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703128d1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
+                    value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f1670373141eb17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
                   },
                   {
                     type: { selectedType: BitcoinTypeOptions.STRING }, // First parameter is a boolean array
@@ -87,10 +88,6 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
           {
             toAddress: partyBBitcoinAddress,
             amount: bitcoinPartyBAmount
-          },
-          {
-            toAddress: partyBBitcoinAddress, // This is the change address
-            amount: bitcoinChangeAmount
           }
         ],
         extraFields: {
@@ -121,4 +118,3 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
   }
 })();
 
-// https://blockstream.info/testnet/tx/b2d0d40cccccb97ece5a449af5d543fdc5acc0f6b2b1ce48d4f96403c4821e6f

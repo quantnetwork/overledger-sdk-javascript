@@ -13,10 +13,13 @@ const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFuncti
 const mappId = '...';
 const bpiKey = '...';
 
-// Paste in your bitcoin, ethereum and XRP ledger private keys.
 
+
+
+// HTLC p2wsh address obtained in the creation step with create-p2wsh-payment-channel.js and funded with fund-p2wsh-payment-channel.js
 const p2wshSmartContractAddress = 'tb1q9vm99heg4vweazp8rh52nfzhs097ptv8g9frdlmeky66xsc3sl5qp25lwe';
-const bitcoinLinkedTx = '10179dbe986c6e6018b059361fef827b4e8f284ce020bcac3bcc3b073517add5'; // Add the previous transaction here
+// UTXO obtained to fund p2wshSmartContractAddress by running fund-p2wsh-payment-channel.js
+const bitcoinLinkedTx = 'f9e0820b9aba24e7d24ab8df375bfe8614403f9f9cf085080b2213acf2fc93ea'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
@@ -57,24 +60,23 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
             linkedIndex: bitcoinLinkedIndex,
             fromAddress: p2wshSmartContractAddress,
             amount: bitcoinInputAmount,
-            scriptPubKey: '00202b3652df28ab1d9e88271de8a9a45783cbe0ad87415236ff79b135a3431187e8',
-            linkedRawTransaction: '0200000001f231e32e61c83bcc47c2bff523c69b31d22ef46c2e3b3de0659464182cd70d93000000006b483045022100d6d32c14f56170d6eee8bfcb31287b01df176efb4fc25c285c8a9e928b5de8c002206d81c804bbc7e0a951fdad12b3a7e68526a19f13f666668d5db84b668948dc390121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff0210270000000000002200202b3652df28ab1d9e88271de8a9a45783cbe0ad87415236ff79b135a3431187e87ced1a00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000',
+            scriptPubKey: '0020204804131a0aae6cb1bcc7feab4f108917765589f319f0b60abc7594a05f4594',
+            linkedRawTransaction: '0200000001691cf23cb142c81e09c48c56cbaf09b1f2465a3b9179866311cc10f7163f5236010000006a473044022028f9449f289d21d74f111538235e5dc4fb1533c6966bbeb96be9a9e7f3a94f530220421e087f28f32b2ef66c486f5b362115640d9c021e491b4b98165597199cac1d0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff031027000000000000220020204804131a0aae6cb1bcc7feab4f108917765589f319f0b60abc7594a05f4594b6e91900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
             smartContract: {
               id: p2wshSmartContractAddress,
-              // type: ??
               functionCall: [{
                 functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
                 functionName: TransactionBitcoinFunctionOptions.REDEEM_HTLC, // The function name must be given
                 inputParams: [
                   {
-                    type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                    type: { selectedType: BitcoinTypeOptions.HEX_STRING },
                     name: 'witnessScript', // Name of parameter
-                    value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167038c0b1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
+                    value: 'a820f74c6f2402bbde893ca7a6e199bee59a6da22c737069451c0b48c3d84d4426a6876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f167037b141eb17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
                   },
                   {
                     type: { selectedType: BitcoinTypeOptions.STRING }, // First parameter is a boolean array
                     name: 'preimage', // Name of parameter
-                    value: 'quantbitcoinpaymentchannel', // Value of the boolean array
+                    value: 'quantbitcoinpaymentchannel',
                   }
                 ]
               }
