@@ -15,16 +15,18 @@ const mappId = '...';
 const bpiKey = '...';
 
 
-// Paste in your bitcoin, ethereum and XRP ledger private keys.
+// Paste in your bitcoin ledger private keys.
 
-const p2shSmartContractAddress = '2N53nd5TvmWNrYDRtMnpfzBWprSZdwcnjKe';
-const bitcoinLinkedTx = '1b328a0f78cc84020c1efebd6b1c2300a96d5beeb26316e4550c5015833aa78d'; // Add the previous transaction here
+// HTLC p2sh address obtained in the creation step with create-p2sh-payment-channel.js and funded with fund-p2sh-payment-channel.js
+const p2shSmartContractAddress = '2Mxhht2R2AmJSuVrEpPLStsqTPtyw8L1fK5';
+// UTXO obtained to fund p2shSmartContractAddress by running fund-p2sh-payment-channel.js
+const bitcoinLinkedTx = '22c28b435a7f3f29c13112941ea8df8ee8eb3e3a8b3cbec8ae750ae586251c15'; // Add the previous transaction here
 const bitcoinLinkedIndex = '0'; // Add the linked transaction index here
 const bitcoinInputAmount = 10000; // set equal to the number of satoshis in your first input
 const bitcoinPartyBAmount = 7800; // set equal to the number of satoshis to send to party B
 const bitcoinChangeAmount = 0; // set equal to the number of satoshis to send back to yourself 
 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
-const nLocktime = bip65.encode({ blocks: 1936697 }); // will be taken at the transaction level
+const nLocktime = bip65.encode({ blocks: 1971431 }); // will be taken at the transaction level
 
 // Now provide three other addresses that you will be transfering value too
 const partyBBitcoinAddress = 'mfYHTfMs5ptQpWoefcdt9RWi3WTWGeSB7J';
@@ -60,21 +62,20 @@ const partyBBitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDAp
             linkedIndex: bitcoinLinkedIndex,
             fromAddress: p2shSmartContractAddress,
             amount: bitcoinInputAmount,
-            scriptPubKey: 'a9148177c279b23935dff24d76c7592f1436d0ad7d0187',
-            linkedRawTransaction: '020000000130ece0aaf7b6988aab1a8e3ce636a33a0c8fbbf78ed725034d85cdd49a1b5fb3010000006b483045022100c9f2034cdc28e21dc945c39730055ff7a3bed3f114ad7206622b1821c943c3320220135f3c2341c4b413c28beb0a58087e7c2b7bfd63a3db19892f9b230c42dd2dcb0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a9148177c279b23935dff24d76c7592f1436d0ad7d01879f961b00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
+            scriptPubKey: 'a9143bdaba2142325845c8e3b0ce35e5da2903911dc187',
+            linkedRawTransaction: '0200000001cd970289413ca0af6e35a6707511e70df45d56b513a979cd1422610dbb4c9c0c010000006a4730440220496a83abff2a081dab4c2cc09a4eb90d8a92b1285450c29cbf3a6b82743b278302206145254b41e296fb27d75c41dbe8f241a3f73ddc91bd2333fd542dac5bb4168d0121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a9143bdaba2142325845c8e3b0ce35e5da2903911dc187162b1900000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
             linkedTxLockTime: nLocktime,
             linkedTxSequence: 0xfffffffe,
             smartContract: {
               id: p2shSmartContractAddress,
-              // type: ??
               functionCall: [{
                 functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
                 functionName: TransactionBitcoinFunctionOptions.CANCEL_HTLC,
                 inputParams: [
                   {
-                    type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                    type: { selectedType: BitcoinTypeOptions.HEX_STRING },
                     name: 'redeemScript', // Name of parameter
-                    value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703398d1db17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
+                    value: 'a914c1678ba6b9cb17819bdca55c3d0e2aae4d4a97d9876321037475473e1e509bfd85dd7384d95dcb817b71f353b0e3d73616517747e98a26f16703e7141eb17521035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db3222168ac', // Value of the boolean array
                   }
                 ]
               }
@@ -119,7 +120,5 @@ const partyBBitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDAp
     console.error('error:', e);
   }
 })();
-
-//  https://blockstream.info/testnet/tx/08bb5b7933afdfad045d09aa8e7786f0fe885bc3fc1b993b1a4ed54261d4ba4b
 
 // non-final until the lock time is reached

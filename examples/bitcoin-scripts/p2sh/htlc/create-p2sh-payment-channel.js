@@ -14,7 +14,7 @@ const createHashTimeLockContractPaymentChannel = require('@quantnetwork/overledg
 const mappId = '...';
 const bpiKey = '...';
 
-// Paste in your bitcoin, ethereum and XRP ledger private keys.
+// Paste in your bitcoin private keys.
 
 // For Bitcoin you can generate an account using `OverledgerSDK.dlts.bitcoin.createAccount` then fund the address at the Bitcoin Testnet Faucet.
 const partyABitcoinPrivateKey = 'cUk9izv1EPDSB2CJ7sf6RdVa6BDUWUBN8icE2LVW5ixvDApqBReT';
@@ -37,7 +37,7 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
     const hashSecret = sha256(secret).toString();
     console.log(`Hash Secret: ${hashSecret}`);
     // TIMELOCK EXPRESSED IN BLOCK HEIGHT
-    const timeLock = bip65.encode({ blocks: 1971323 }); // get the current block height and add the number of blocks you want your lock to last
+    const timeLock = bip65.encode({ blocks: 1971431 }); // get the current block height and add the number of blocks you want your lock to last
     // TIMELOCK EXPRESSED IN UTC TIME
     // example: bip65.encode({ utc: Math.floor(Date.now() / 1000) + 60 * 10});
     console.log(`Time Lock: ${timeLock}`);
