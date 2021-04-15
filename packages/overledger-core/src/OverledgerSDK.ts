@@ -105,7 +105,7 @@ class OverledgerSDK {
 
       return {
         dlt: data.dlt,
-        fromAddress: this.dlts[data.dlt].account.address,
+        fromAddress: this.dlts[data.dlt].account ? this.dlts[data.dlt].account.address : this.dlts[data.dlt].multisigAccount.multisigAddress,
         signedTransaction: {
           signatures: ['not used'],
           transactions: [signedTransaction],

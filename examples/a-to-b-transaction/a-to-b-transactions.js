@@ -8,8 +8,8 @@ const TransactionXRPSubTypeOptions = require('@quantnetwork/overledger-dlt-rippl
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
 //  ---------------------------------------------------------
-const mappId = '';
-const bpiKey = '';
+const mappId = '...';
+const bpiKey = '...';
 
 // Paste in your bitcoin, ethereum and XRP ledger private keys.
 
@@ -18,11 +18,11 @@ const partyABitcoinPrivateKey = 'cNmsFjPqWCaVdhbPoHQJqDpayYdtKR9Qo81KVAEMHJwmgRV
 const partyABitcoinAddress = 'mo54poo7oLL5LvHEYwhDmYdCpqvx7j3Ks2';
 const partyAs2ndBitcoinPrivateKey = 'cVRJipj585NeirnEt2q2CYrvonQLzQNRNQsh1vMaSAqXJTN5bQDR';
 const partyAs2ndBitcoinAddress = 'mgRvRj22C38dusBc8xqViKn168CCgHFzgv'; // Nominate a Bitcoin address you own for the change to be returned to
-const bitcoinLinkedTx = '6a23a5b1cda511b8004c67cd873aa84d704ead7b313ef565c50918dead03f0d8'; // Add the previous transaction here
+const bitcoinLinkedTx = 'c2485af29ef5906e2fdee405e9ed6285a57ef7cf672246a9082fc206cf0220af'; // Add the previous transaction here
 const bitcoinLinkedIndex = '1'; // Add the linked transaction index here
-const bitcoinInputAmount = 2500; // set equal to the number of satoshis in your first input
-const bitcoinPartyBAmount = 200; // set equal to the number of satoshis to send to party B
-const bitcoinChangeAmount = 100; // set equal to the number of satoshis to send back to yourself 
+const bitcoinInputAmount = 95400; // set equal to the number of satoshis in your first input
+const bitcoinPartyBAmount = 100; // set equal to the number of satoshis to send to party B
+const bitcoinChangeAmount = 93100; // set equal to the number of satoshis to send back to yourself 
                                 // ( must be equal to 'total input amount' - 'party B amount' - extraFields.feePrice )
 
 // For Ethereum you can generate an account using `OverledgerSDK.dlts.ethereum.createAccount` then fund the address at the Ropsten Testnet Faucet.
@@ -47,13 +47,15 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
   try {
     // Connect to overledger and choose which distributed ledgers to use:
     const overledger = new OverledgerSDK(mappId, bpiKey, {
-      dlts: [{ dlt: DltNameOptions.BITCOIN }, { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }],
+       dlts: [{ dlt: DltNameOptions.BITCOIN } 
+        , { dlt: DltNameOptions.ETHEREUM }, { dlt: DltNameOptions.XRP_LEDGER }
+      ],
       provider: { network: 'testnet' },
     });
     const transactionMessage = 'OVL SDK Test';
 
     // SET partyA accounts for signing;
-    overledger.dlts.bitcoin.setAccount({privateKey: partyABitcoinPrivateKey});
+    overledger.dlts.bitcoin.setAccount({privateKey: partyAs2ndBitcoinPrivateKey});
     overledger.dlts.ethereum.setAccount({privateKey: partyAEthereumPrivateKey});
     overledger.dlts.ripple.setAccount({privateKey: partyAxrpPrivateKey});
     
@@ -80,13 +82,15 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
         {
           linkedTx: bitcoinLinkedTx,
           linkedIndex: bitcoinLinkedIndex,
-          fromAddress: partyABitcoinAddress, 
+          fromAddress: partyAs2ndBitcoinAddress,
+          linkedRawTransaction: '02000000016088a9602eee7279ccfbd5d09a7340a8e5f71f9956a96598dadb0c602bf39d14010000006b483045022100f1fbcce9defd5fdaf6a8e9b486d64876f662337dc272580273dfff5be4af3bfb0220523de3bf1e8bd33fc1b31ab9915ab2985b9bed68e34a68c219e3f0f3f2449c7b012103427906c1f98722c111d046e68c49573d16b726cf8435abbb20c6d36454c43992ffffffff0364000000000000001976a91452dba4763ad74fb2736ef5743a3ed46dfe5bd87288aca8740100000000001976a9140a047ca3444ef0047984e75bada91e75acccc4fc88ac00000000000000007b6a4c784f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b20546573744f564c2053444b205465737400000000',
+          scriptPubKey: '76a9140a047ca3444ef0047984e75bada91e75acccc4fc88ac',
           amount: bitcoinInputAmount 
         }
       ],
       txOutputs: [ // Set as many outputs as required
         {
-          toAddress: partyBBitcoinAddress, 
+          toAddress: partyABitcoinAddress, 
           amount: bitcoinPartyBAmount 
         },
         {
@@ -132,7 +136,8 @@ const partyBxrpAddress = 'rKoGTTkPefCuQR31UHsfk9jKnrQHz6LtKe';
         feePrice: '12', // Minimum feePrice on XRP Ledger is 12 drops.
         maxLedgerVersion: '4294967295', // The maximum ledger version the transaction can be included in.
       },
-    },]);
+    },
+  ]);
 
     console.log("Signed transactions: ");
     console.log(JSON.stringify(signedTransactions, null, 2));

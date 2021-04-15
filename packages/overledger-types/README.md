@@ -110,6 +110,10 @@ yarn add @quantnetwork/overledger-types
 | privateKey | <code>string</code> | The private key of the account, used for signing transactions. |
 | address | <code>string</code> | The address of the account, used for receiving messages |
 | publicKey | <code>string</code> | The public key of the account. The address parameter will be a representation of this public key. |
+| isSegwit | <code>boolean</code> | Define if the account is a segwit p2wpkh account in the Bitcoin DLT |
+| isNestedSegwit | <code>boolean</code> | Define if the account is a  nested segwit account p2sh-p2wpkh in the Bitcoin DLT |
+| script | <code>string</code> | locking script or scriptPubKey, needed for a nested segwit account |
+| redeemScript | <code>string</code> | script to unlock the BTC, needed for a nested segwit account |
 | password | <code>string</code> | For some accounts, they may be protected by a password, or a password is used instead of a private key |
 | provider | <code>string</code> | If the account is stored or managed not by the user, then this person is the provider |
 

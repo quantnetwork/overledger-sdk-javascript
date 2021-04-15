@@ -1,6 +1,6 @@
 {
   "name": "@quantnetwork/overledger-types",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "description": "Quant Network Overledger types package for the JavaScript (JS) programming language.",
   "main": "dist/index.js",
   "publishConfig": {
