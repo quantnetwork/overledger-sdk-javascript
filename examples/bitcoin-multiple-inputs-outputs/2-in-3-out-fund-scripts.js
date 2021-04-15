@@ -108,7 +108,7 @@ const accountParty3 = {privateKey: party3MultisigBitcoinPrivateKey, address: par
           amount: bitcoinPartyBAmount 
         },
         {  
-          toAddress: multisigAccount.address,
+          toAddress: multisigAccount.multisigAddress,
           amount: bitcoinMultisigPartyAmount 
         },
         {  

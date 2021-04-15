@@ -87,10 +87,10 @@ class Bitcoin extends AbstractDLT {
     const inputs = new Array();
     const outputs = new Array();
     super.transactionValidation(thisTransaction);
-    let preimage;
-    let transferType;
-    let coSigners;
     thisTransaction.txInputs.forEach(txInput => {
+      let preimage;
+      let transferType;
+      let coSigners;
       const rawTransactionInput = txInput.linkedRawTransaction.toString();
       const isSegwit = rawTransactionInput.substring(8, 12) === '0001';
       const scData = this.getSmartContractParameters(txInput);

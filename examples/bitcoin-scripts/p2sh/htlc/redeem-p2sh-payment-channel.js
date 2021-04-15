@@ -63,7 +63,6 @@ const partyBBitcoinPrivateKey = 'cQYWyycWa8KXRV2Y2c82NYPjdJuSy7wpFMhauMRVNNPFxDy
             linkedRawTransaction: '02000000013c44cd14f918e7d92cca176de0df26ffda47b573768647a935eee1b2b521f5b3010000006b483045022100f37b98aace237222d6807595599f4a071acc37432ebc07aef17c4909de6b78ed0220223d9fa0d3a9ba98b736963eebd6ac83487d68cf52295ec56d59073536e13e040121035b71e0ec7329c32acf0a86eaa62e88951818021c9ff893108ef5b3103db32221ffffffff03102700000000000017a914325fecdf3b31c673c7eff61b44ea7da7723498488706491a00000000001976a91400406a26567183b9b3e42e5fed00f70a2d11428188ac00000000000000000e6a0c4f564c2053444b205465737400000000',
             smartContract: {
               id: p2shSmartContractAddress,
-              // type: ??
               functionCall: [{
                 functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
                 functionName: TransactionBitcoinFunctionOptions.REDEEM_HTLC, // The function name must be given

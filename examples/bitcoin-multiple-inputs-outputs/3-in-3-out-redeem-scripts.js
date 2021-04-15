@@ -3,15 +3,13 @@
 // outputs 
 // p2wpkh and fund multisig account and htlc contract
 
-
-//NOTE: replace @quantnetwork/ with ../../packages/ for all require statements below if you have not built the SDK yourself
-const bitcoin = require('bitcoinjs-lib');
 const OverledgerSDK = require('@quantnetwork/overledger-bundle').default;
 const DltNameOptions = require('@quantnetwork/overledger-types').DltNameOptions;
 const TransactionTypeOptions = require('@quantnetwork/overledger-types').TransactionTypeOptions;
 const TransactionBitcoinSubTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinSubTypeOptions;
-const TransactionBitcoinScriptTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinScriptTypeOptions;
 const TransactionBitcoinFunctionOptions = require('@quantnetwork/overledger-dlt-bitcoin').TransactionBitcoinFunctionOptions;
+const SCFunctionTypeOptions = require('@quantnetwork/overledger-types').SCFunctionTypeOptions;
+const BitcoinTypeOptions = require('@quantnetwork/overledger-dlt-bitcoin').BitcoinTypeOptions;
 
 //  ---------------------------------------------------------
 //  -------------- BEGIN VARIABLES TO UPDATE ----------------
@@ -103,7 +101,7 @@ const accountParty3 = {privateKey: party3MultisigBitcoinPrivateKey, address: par
             scriptPubKey: '0020fd4791ec0b4586fabe3668e72098455ad2f72d83e236a77510841907e99de98a',
             linkedRawTransaction: firstRawTransaction,
             smartContract: {
-              id: p2shSmartContractAddress,
+              id: partyHTLCAddress,
               functionCall: [{
                 functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
                 functionName: TransactionBitcoinFunctionOptions.REDEEM_HTLC, // The function name must be given
@@ -126,24 +124,23 @@ const accountParty3 = {privateKey: party3MultisigBitcoinPrivateKey, address: par
           {
             linkedTx: bitcoinFirstLinkedTx,
             linkedIndex: bitcoinMultisigLinkedIndex,
-            fromAddress: multisigAccount.address,
+            fromAddress: multisigAccount.multisigAddress,
             amount: bitcoinMultisigInputAmount,
             scriptPubKey: multisigAccount.script,
             linkedRawTransaction: firstRawTransaction,
             smartContract: {
-              id: multisigAccount.address,
-              // type: ??
+              id: multisigAccount.multisigAddress,
               functionCall: [{
                 functionType: SCFunctionTypeOptions.FUNCTION_CALL_WITH_PARAMETERS,
                 functionName: TransactionBitcoinFunctionOptions.REDEEM_P2MS, // The function name must be given
                 inputParams: [
                   {
-                    type: { selectedType: BitcoinTypeOptions.HEX_STRING }, // First parameter is a boolean array
+                    type: { selectedType: BitcoinTypeOptions.HEX_STRING },
                     name: 'witnessScript', // Name of parameter
-                    value: multisigAccount.witnessScript, // Value of the boolean array
+                    value: multisigAccount.witnessScript,
                   },
                   {
-                    type: { selectedType: BitcoinTypeOptions.ARRAY_HEX_STRING }, // First parameter is a boolean array
+                    type: { selectedType: BitcoinTypeOptions.ARRAY_HEX_STRING },
                     name: 'coSigners', // Name of parameter
                     value: [party2MultisigBitcoinPrivateKey, party3MultisigBitcoinPrivateKey]
                   }
