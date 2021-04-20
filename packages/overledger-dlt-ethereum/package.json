@@ -43,7 +43,7 @@
     "@quantnetwork/overledger-dlt-abstract": "^1.0.0-beta.5",
     "@quantnetwork/overledger-provider": "^1.0.0-beta.5",
     "@quantnetwork/overledger-types": "^1.0.0-beta.5",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "web3": "^1.2.11"
   },
   "devDependencies": {
