@@ -2,10 +2,11 @@ import { AxiosInstance, AxiosPromise } from 'axios';
 import OverledgerSearch from '@quantnetwork/overledger-search';
 import Provider, { TESTNET } from '@quantnetwork/overledger-provider';
 import AbstractDLT from '@quantnetwork/overledger-dlt-abstract';
+import {StatusRequest, SignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse  } from '@quantnetwork/overledger-types';
 import {StatusRequest, SignedTransactionRequest, UnsignedTransactionRequest, SDKOptions, DLTOptions, TransactionRequest, SequenceDataRequest, APICallWrapper, DLTAndAddress, NetworkOptions, SequenceDataResponse, FeeEstimationResponse, NodeResourceRequest } from '@quantnetwork/overledger-types';
 /**
  * @memberof module:overledger-core
-*/
+ */
 class OverledgerSDK {
   /**
    * The object storing the DLTs loaded by the Overledger SDK
@@ -18,7 +19,7 @@ class OverledgerSDK {
   provider: Provider;
   request: AxiosInstance;
   search: OverledgerSearch;
-  
+
 
   /**
    * Create the Overledger SDK
@@ -104,7 +105,7 @@ class OverledgerSDK {
 
       return {
         dlt: data.dlt,
-        fromAddress: this.dlts[data.dlt].account.address,
+        fromAddress: this.dlts[data.dlt].account ? this.dlts[data.dlt].account.address : this.dlts[data.dlt].multisigAccount.multisigAddress,
         signedTransaction: {
           signatures: ['not used'],
           transactions: [signedTransaction],
@@ -121,9 +122,9 @@ class OverledgerSDK {
    * @param {SignedTransactionRequest[]} signedTransactions Array of Overledger signed transaction data
    */
   public send(signedTransactions: SignedTransactionRequest[]): AxiosPromise<Object> {
-    
+
     const apiCall = signedTransactions.map(
-      stx => this.dlts[stx.dlt].buildSignedTransactionsApiCall(stx),
+        stx => this.dlts[stx.dlt].buildSignedTransactionsApiCall(stx),
     );
 
     return this.request.post('/transactions', this.buildWrapperApiCall(apiCall));
@@ -166,7 +167,7 @@ class OverledgerSDK {
   public callNodeResource(nodeResourceRequest: NodeResourceRequest): Object {
     try{
       return this.request.post(nodeResourceRequest.endpoint, nodeResourceRequest.resourceObject);
-      //.catch( err => err.response);  
+      //.catch( err => err.response);
     }catch(e){
       return e.response;
     }
@@ -182,12 +183,12 @@ class OverledgerSDK {
     try{
       let subStatusReqJson = JSON.stringify(subStatusRequest);
       return this.request.post('/webhook/subscribe', subStatusReqJson)
-      //.catch( err => err.response);  
+      //.catch( err => err.response);
     }catch(e){
       return e.response;
     }
   }
-  
+
   /**
    * unsubscribe status of transaction
    *
@@ -288,3 +289,4 @@ class OverledgerSDK {
 }
 
 export default OverledgerSDK;
+

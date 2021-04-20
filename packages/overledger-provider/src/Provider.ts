@@ -6,7 +6,7 @@ export const MAINNET: NetworkOptions = 'mainnet';
 
 /**
  * @memberof module:overledger-provider
-*/
+ */
 class Provider {
   mappId: string;
   bpiKey: string;
@@ -26,6 +26,7 @@ class Provider {
   }
 
   /**
+   *
    *
    * @param {string} path Request endpoint resource path
    */
@@ -54,3 +55,4 @@ class Provider {
 }
 
 export default Provider;
+

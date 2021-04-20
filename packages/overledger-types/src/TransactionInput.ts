@@ -15,9 +15,14 @@ import SmartContract from './SmartContract';
 /**
  * @memberof module:overledger-types
  */
+
 type TransactionInput = {
   linkedTx: string,
   linkedIndex: string,
+  linkedRawTransaction?: string,
+  linkedTxLockTime?: number,
+  linkedTxSequence?: number
+  scriptPubKey?: string,
   fromAddress: string,
   amount?: number,
   asset?: object,

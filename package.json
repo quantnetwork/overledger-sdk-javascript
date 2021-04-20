@@ -1,7 +1,7 @@
 {
   "name": "overledger-sdk",
   "private": true,
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "description": "Quant Network Overledger software development kit (SDK) for the JavaScript (JS) programming language.",
   "scripts": {
     "dev": "nodemon --config nodemon.json --exec yarn run build",
@@ -39,9 +39,10 @@
     "packages/*"
   ],
   "dependencies": {
-    "@quantnetwork/overledger-bundle": "^1.0.0-beta.4",
-    "@quantnetwork/overledger-dlt-abstract": "^1.0.0-beta.4",
-    "bitcoinjs-lib": "^5.1.10",
+    "@quantnetwork/overledger-bundle": "^1.0.0-beta.5",
+    "@quantnetwork/overledger-dlt-abstract": "^1.0.0-beta.5",
+    "bip65": "^1.0.3",
+    "bitcoinjs-lib": "^5.2.0",
     "coinselect": "^3.1.12",
     "crypto-js": "^4.0.0",
     "csv-writer": "^1.6.0",

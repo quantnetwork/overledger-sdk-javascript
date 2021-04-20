@@ -62,7 +62,7 @@ const smartContractDemoCode = "0x60806040523480156200001157600080fd5b50604051620
         smartContract: {
           code: smartContractDemoCode, // Put the bytecode to deploy here
           functionCall: [{
-            functionType: SCFunctionTypeOptions.CONSTRUCTOR_WITH_PARAMETERS,
+            functionType: SCFunctionTypeOptions.CONSTRUCTOR_WITH_NO_PARAMETERS,
             functionName: "", // Not needed for constructor
             inputParams: [
               {  
