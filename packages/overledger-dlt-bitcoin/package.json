@@ -40,7 +40,7 @@
     "@quantnetwork/overledger-dlt-abstract": "^1.0.0-beta.5",
     "@quantnetwork/overledger-provider": "^1.0.0-beta.5",
     "@quantnetwork/overledger-types": "^1.0.0-beta.5",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bitcoinjs-lib": "^5.2.0",
     "event-stream": "4.0.1",
     "typedarray-to-buffer": "^3.1.5"

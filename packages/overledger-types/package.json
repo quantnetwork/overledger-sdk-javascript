@@ -38,11 +38,11 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/quantnetwork/overledger-sdk-javascript#readme",
   "dependencies": {
-    "axios": "^0.19.0"
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "jest": "^24.8.0",
     "lerna": "^3.14.0",
     "nodemon": "^1.19.0",
